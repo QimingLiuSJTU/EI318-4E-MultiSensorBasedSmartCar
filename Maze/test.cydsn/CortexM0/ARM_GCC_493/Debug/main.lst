@@ -1,0 +1,3468 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_idiv
+  18              		.global	__aeabi_i2f
+  19              		.global	__aeabi_fmul
+  20              		.global	__aeabi_fdiv
+  21              		.global	__aeabi_fadd
+  22              		.global	__aeabi_f2iz
+  23              		.section	.text.InterruptHandler,"ax",%progbits
+  24              		.align	2
+  25              		.global	InterruptHandler
+  26              		.code	16
+  27              		.thumb_func
+  28              		.type	InterruptHandler, %function
+  29              	InterruptHandler:
+  30              	.LFB33:
+  31              		.file 1 ".\\main.c"
+   1:.\main.c      **** 
+   2:.\main.c      **** #include <project.h>
+   3:.\main.c      **** #include <stdio.h>
+   4:.\main.c      **** #include <stdlib.h>
+   5:.\main.c      **** 
+   6:.\main.c      **** extern uint8 const CYCODE LCD_Char_1_customFonts[];
+   7:.\main.c      **** 
+   8:.\main.c      **** //函数声明
+   9:.\main.c      **** char *IntToString(char *str, const int num);
+  10:.\main.c      **** void LCDDisplay(const char *str1, const char *str2, const char *str3, const char *str4);
+  11:.\main.c      **** void ServoPWM(int left, int right);
+  12:.\main.c      **** void InitializeComponents();
+  13:.\main.c      **** int constrain(int x);
+  14:.\main.c      **** 
+  15:.\main.c      **** //PID控制参数
+  16:.\main.c      **** const float P1 = 7;   //4
+  17:.\main.c      **** const float I1 = 0;   //0.02
+  18:.\main.c      **** const float D1 = 3;   //0.005
+  19:.\main.c      **** 
+  20:.\main.c      **** //与墙的距离的参考值, reference input, 用于与红外传感器的返回值进行比较
+  21:.\main.c      **** const int16 I_dist = 18*5; //18
+  22:.\main.c      **** 
+  23:.\main.c      **** //用于记录数据的参数
+  24:.\main.c      **** int16 dist = 0;
+  25:.\main.c      **** uint16 dFIFO[100];
+  26:.\main.c      **** int16 rR_Adjust = 0;  //右轮的PWM值调整量
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 2
+
+
+  27:.\main.c      **** int16 derror = 0;        //比例项
+  28:.\main.c      **** int16 derror1 = 0;       //上一次比例项
+  29:.\main.c      **** int16 derror_error = 0;  //微分项
+  30:.\main.c      **** int16 dSum_error = 0;    //积分项
+  31:.\main.c      **** int16 All_dist = 0;
+  32:.\main.c      **** int16 dnum = 0;
+  33:.\main.c      **** int8 dn = 1;
+  34:.\main.c      **** 
+  35:.\main.c      **** int8 i = 0;
+  36:.\main.c      **** int dis = 0;
+  37:.\main.c      **** 
+  38:.\main.c      **** //中断程序, 用于产生计时中断
+  39:.\main.c      **** CY_ISR(InterruptHandler)
+  40:.\main.c      **** {
+  32              		.loc 1 40 0
+  33              		.cfi_startproc
+  34 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  35              		.cfi_def_cfa_offset 24
+  36              		.cfi_offset 3, -24
+  37              		.cfi_offset 4, -20
+  38              		.cfi_offset 5, -16
+  39              		.cfi_offset 6, -12
+  40              		.cfi_offset 7, -8
+  41              		.cfi_offset 14, -4
+  41:.\main.c      ****     Timer_1_ReadStatusRegister();
+  42              		.loc 1 41 0
+  43 0002 FFF7FEFF 		bl	Timer_1_ReadStatusRegister
+  44              	.LVL0:
+  42:.\main.c      ****     
+  43:.\main.c      ****     if(i < 100)
+  45              		.loc 1 43 0
+  46 0006 294B     		ldr	r3, .L4
+  47 0008 1B78     		ldrb	r3, [r3]
+  48 000a 5AB2     		sxtb	r2, r3
+  49 000c 632A     		cmp	r2, #99
+  50 000e 0BDC     		bgt	.L2
+  44:.\main.c      ****     {
+  45:.\main.c      ****         dFIFO[i] = dis;
+  51              		.loc 1 45 0
+  52 0010 101C     		mov	r0, r2
+  53 0012 264A     		ldr	r2, .L4
+  54 0014 9488     		ldrh	r4, [r2, #4]
+  55 0016 4000     		lsl	r0, r0, #1
+  56 0018 2549     		ldr	r1, .L4+4
+  57 001a 4452     		strh	r4, [r0, r1]
+  46:.\main.c      ****         All_dist = All_dist + dis;              
+  58              		.loc 1 46 0
+  59 001c 1189     		ldrh	r1, [r2, #8]
+  60 001e 6118     		add	r1, r4, r1
+  61 0020 1181     		strh	r1, [r2, #8]
+  47:.\main.c      ****         ++i;
+  62              		.loc 1 47 0
+  63 0022 0133     		add	r3, r3, #1
+  64 0024 1370     		strb	r3, [r2]
+  65 0026 3FE0     		b	.L1
+  66              	.L2:
+  48:.\main.c      ****     }
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 3
+
+
+  49:.\main.c      ****     else
+  50:.\main.c      ****     {
+  51:.\main.c      ****         i = 0;
+  67              		.loc 1 51 0
+  68 0028 204C     		ldr	r4, .L4
+  69 002a 0025     		mov	r5, #0
+  70 002c 2570     		strb	r5, [r4]
+  52:.\main.c      ****         //当前的距离取100个检测值的平均值，可以减小传感器返回数值跳变�
+  53:.\main.c      ****         dist = All_dist / 100;
+  71              		.loc 1 53 0
+  72 002e 0823     		mov	r3, #8
+  73 0030 E05E     		ldrsh	r0, [r4, r3]
+  74 0032 6421     		mov	r1, #100
+  75 0034 FFF7FEFF 		bl	__aeabi_idiv
+  76              	.LVL1:
+  77 0038 86B2     		uxth	r6, r0
+  78 003a 6681     		strh	r6, [r4, #10]
+  54:.\main.c      ****         All_dist=0;
+  79              		.loc 1 54 0
+  80 003c 2581     		strh	r5, [r4, #8]
+  55:.\main.c      ****         //获取PID中的比例、积分、微分项
+  56:.\main.c      ****         derror=I_dist - dist;
+  81              		.loc 1 56 0
+  82 003e 5A23     		mov	r3, #90
+  83 0040 9E1B     		sub	r6, r3, r6
+  84 0042 B6B2     		uxth	r6, r6
+  85 0044 B0B2     		uxth	r0, r6
+  86 0046 A081     		strh	r0, [r4, #12]
+  57:.\main.c      ****         derror_error=derror-derror1;    
+  87              		.loc 1 57 0
+  88 0048 E589     		ldrh	r5, [r4, #14]
+  89 004a 751B     		sub	r5, r6, r5
+  90 004c ADB2     		uxth	r5, r5
+  91 004e 2582     		strh	r5, [r4, #16]
+  58:.\main.c      ****         derror1=derror;     
+  92              		.loc 1 58 0
+  93 0050 E081     		strh	r0, [r4, #14]
+  59:.\main.c      ****         dSum_error=dSum_error+derror;
+  94              		.loc 1 59 0
+  95 0052 638A     		ldrh	r3, [r4, #18]
+  96 0054 F618     		add	r6, r6, r3
+  97 0056 B6B2     		uxth	r6, r6
+  98 0058 6682     		strh	r6, [r4, #18]
+  60:.\main.c      ****         //通过PID公式得到右轮PWM值的调整量
+  61:.\main.c      ****         rR_Adjust=P1*derror / 5 + I1*dSum_error / 5 + D1*derror_error;  
+  99              		.loc 1 61 0
+ 100 005a 00B2     		sxth	r0, r0
+ 101 005c FFF7FEFF 		bl	__aeabi_i2f
+ 102              	.LVL2:
+ 103 0060 1449     		ldr	r1, .L4+8
+ 104 0062 FFF7FEFF 		bl	__aeabi_fmul
+ 105              	.LVL3:
+ 106 0066 1449     		ldr	r1, .L4+12
+ 107 0068 FFF7FEFF 		bl	__aeabi_fdiv
+ 108              	.LVL4:
+ 109 006c 071C     		add	r7, r0, #0
+ 110 006e 30B2     		sxth	r0, r6
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 4
+
+
+ 111 0070 FFF7FEFF 		bl	__aeabi_i2f
+ 112              	.LVL5:
+ 113 0074 0021     		mov	r1, #0
+ 114 0076 FFF7FEFF 		bl	__aeabi_fmul
+ 115              	.LVL6:
+ 116 007a 0F49     		ldr	r1, .L4+12
+ 117 007c FFF7FEFF 		bl	__aeabi_fdiv
+ 118              	.LVL7:
+ 119 0080 011C     		add	r1, r0, #0
+ 120 0082 381C     		add	r0, r7, #0
+ 121 0084 FFF7FEFF 		bl	__aeabi_fadd
+ 122              	.LVL8:
+ 123 0088 061C     		add	r6, r0, #0
+ 124 008a 28B2     		sxth	r0, r5
+ 125 008c FFF7FEFF 		bl	__aeabi_i2f
+ 126              	.LVL9:
+ 127 0090 0A49     		ldr	r1, .L4+16
+ 128 0092 FFF7FEFF 		bl	__aeabi_fmul
+ 129              	.LVL10:
+ 130 0096 011C     		add	r1, r0, #0
+ 131 0098 301C     		add	r0, r6, #0
+ 132 009a FFF7FEFF 		bl	__aeabi_fadd
+ 133              	.LVL11:
+ 134 009e FFF7FEFF 		bl	__aeabi_f2iz
+ 135              	.LVL12:
+ 136 00a2 80B2     		uxth	r0, r0
+  62:.\main.c      ****         rR_Adjust = -rR_Adjust;
+ 137              		.loc 1 62 0
+ 138 00a4 4042     		neg	r0, r0
+ 139 00a6 A082     		strh	r0, [r4, #20]
+ 140              	.L1:
+  63:.\main.c      ****     }
+  64:.\main.c      **** }
+ 141              		.loc 1 64 0
+ 142              		@ sp needed
+ 143 00a8 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 144              	.L5:
+ 145 00aa C046     		.align	2
+ 146              	.L4:
+ 147 00ac 00000000 		.word	.LANCHOR0
+ 148 00b0 00000000 		.word	dFIFO
+ 149 00b4 0000E040 		.word	1088421888
+ 150 00b8 0000A040 		.word	1084227584
+ 151 00bc 00004040 		.word	1077936128
+ 152              		.cfi_endproc
+ 153              	.LFE33:
+ 154              		.size	InterruptHandler, .-InterruptHandler
+ 155              		.section	.text.IntToString,"ax",%progbits
+ 156              		.align	2
+ 157              		.global	IntToString
+ 158              		.code	16
+ 159              		.thumb_func
+ 160              		.type	IntToString, %function
+ 161              	IntToString:
+ 162              	.LFB35:
+  65:.\main.c      **** 
+  66:.\main.c      **** //主程序
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 5
+
+
+  67:.\main.c      **** //小车共有3种state, state = 1: 直行； state = 2: 沿墙左转; state = 3: 碰撞后右转
+  68:.\main.c      **** int main()
+  69:.\main.c      **** {
+  70:.\main.c      ****     //初始化器件
+  71:.\main.c      ****     InitializeComponents();
+  72:.\main.c      ****     uint32 adc_result = 0;
+  73:.\main.c      ****     //用于存贮显示在数码版上的字符
+  74:.\main.c      ****     char string1[15],string2[15], string3[15], string4[15];
+  75:.\main.c      ****     //初始化小车状态为直行
+  76:.\main.c      ****     uint8 state = 1;
+  77:.\main.c      ****     
+  78:.\main.c      ****     for(;;)
+  79:.\main.c      ****     {               
+  80:.\main.c      ****         //获取红外传感器返回的与墙距离值
+  81:.\main.c      ****         ADC_SAR_Seq_IsEndConversion(ADC_SAR_Seq_WAIT_FOR_RESULT);         
+  82:.\main.c      ****         adc_result = ADC_SAR_Seq_GetResult16(0);   
+  83:.\main.c      ****         if(adc_result > 0x7FFF)
+  84:.\main.c      ****            adc_result = 0;                
+  85:.\main.c      ****         if(adc_result > 0)
+  86:.\main.c      ****             //担心由于数字变化范围小，调节量变化不大，调节效果不好，进�
+  87:.\main.c      ****             dis = (0.5/(0.00002*adc_result -0.00045)-2) * 5;  
+  88:.\main.c      ****         
+  89:.\main.c      ****         //小车3种状态的转化
+  90:.\main.c      ****         if (state == 1)
+  91:.\main.c      ****         {   
+  92:.\main.c      ****             //如果距离突然变得很大，从直行状态转化成沿墙左转状态
+  93:.\main.c      ****             if(dis > 38 * 5)
+  94:.\main.c      ****             {   
+  95:.\main.c      ****                 //先保持一段直行状态
+  96:.\main.c      ****                 ServoPWM(4150, 5178 + rR_Adjust);
+  97:.\main.c      ****                 CyDelay(315);
+  98:.\main.c      ****                 state = 2;
+  99:.\main.c      ****             }
+ 100:.\main.c      ****         }
+ 101:.\main.c      ****         else if (state == 2)
+ 102:.\main.c      ****         {   
+ 103:.\main.c      ****             //如果与墙距离回复到正常范围，从沿墙左转状态恢复到直行状态�
+ 104:.\main.c      ****             if (dis < 20 * 5)
+ 105:.\main.c      ****             { 
+ 106:.\main.c      ****                 dSum_error *= 0.3;
+ 107:.\main.c      ****                 state = 1;
+ 108:.\main.c      ****             }
+ 109:.\main.c      ****         }
+ 110:.\main.c      ****         else if (state == 3) 
+ 111:.\main.c      ****         {   
+ 112:.\main.c      ****             //碰撞后如果与墙距离很大，则进入沿墙左转状态，否则进入直行�
+ 113:.\main.c      ****             if(dis > 38 * 5)
+ 114:.\main.c      ****             {
+ 115:.\main.c      ****                 ServoPWM(4150, 5178 + rR_Adjust);
+ 116:.\main.c      ****                 state = 2;
+ 117:.\main.c      ****             }
+ 118:.\main.c      ****             else
+ 119:.\main.c      ****             state = 1;
+ 120:.\main.c      ****         }
+ 121:.\main.c      ****                                
+ 122:.\main.c      ****         //获取碰撞传感器的返回值
+ 123:.\main.c      ****         if(Button_Read() > 0)
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 6
+
+
+ 124:.\main.c      ****         {
+ 125:.\main.c      ****             state = 3;
+ 126:.\main.c      ****             LCDDisplay(IntToString(string1, state), IntToString(string2, derror), IntToString(strin
+ 127:.\main.c      ****         }
+ 128:.\main.c      ****         
+ 129:.\main.c      ****         //根据小车的当前状态进行电机的控制
+ 130:.\main.c      ****         switch(state)
+ 131:.\main.c      ****         {   
+ 132:.\main.c      ****             //直行state 1
+ 133:.\main.c      ****             case 1:
+ 134:.\main.c      ****                 if(rR_Adjust < 0)
+ 135:.\main.c      ****                     rR_Adjust *= 2; //需要向外拐，但是调整的不够快，所以进行了*
+ 136:.\main.c      ****                 else
+ 137:.\main.c      ****                     rR_Adjust *= 1.5; //向内拐，调整不够快，所以进行了*1.5处理    
+ 138:.\main.c      ****                 rR_Adjust = constrain(rR_Adjust); //对调整量数值进行限制
+ 139:.\main.c      ****                 ServoPWM(4100, 5178 + rR_Adjust); //控制电机PWM参数
+ 140:.\main.c      ****                 break;
+ 141:.\main.c      ****             case 2: 
+ 142:.\main.c      ****                 ServoPWM(4278, 5300 + rR_Adjust); //控制小车进行左转
+ 143:.\main.c      ****                 break;
+ 144:.\main.c      ****             case 3: 
+ 145:.\main.c      ****                 ServoPWM(5700, 4000); //先向右后方退
+ 146:.\main.c      ****                 CyDelay(450);
+ 147:.\main.c      ****                 ServoPWM(3850, 4250); //再向右转
+ 148:.\main.c      ****                 CyDelay(800);
+ 149:.\main.c      ****                 break;
+ 150:.\main.c      ****             default: 
+ 151:.\main.c      ****                 break;
+ 152:.\main.c      ****         }
+ 153:.\main.c      ****     
+ 154:.\main.c      ****         //通过LCD显示一些观察信息
+ 155:.\main.c      ****         LCDDisplay(IntToString(string1, state), IntToString(string2, derror), IntToString(string3, 
+ 156:.\main.c      ****         
+ 157:.\main.c      ****         CyDelay(100); //程序延时, 避免刷新太快
+ 158:.\main.c      ****     }
+ 159:.\main.c      ****     
+ 160:.\main.c      ****     return 0;
+ 161:.\main.c      **** }
+ 162:.\main.c      **** 
+ 163:.\main.c      **** //将数字转化成字符串函数
+ 164:.\main.c      **** char *IntToString(char *str, const int num)
+ 165:.\main.c      **** {
+ 163              		.loc 1 165 0
+ 164              		.cfi_startproc
+ 165              	.LVL13:
+ 166 0000 10B5     		push	{r4, lr}
+ 167              		.cfi_def_cfa_offset 8
+ 168              		.cfi_offset 4, -8
+ 169              		.cfi_offset 14, -4
+ 170 0002 041C     		mov	r4, r0
+ 171 0004 0A1C     		mov	r2, r1
+ 166:.\main.c      ****     sprintf(str, "%d", num);
+ 172              		.loc 1 166 0
+ 173 0006 0249     		ldr	r1, .L7
+ 174              	.LVL14:
+ 175 0008 FFF7FEFF 		bl	sprintf
+ 176              	.LVL15:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 7
+
+
+ 167:.\main.c      ****     return str;
+ 168:.\main.c      **** }
+ 177              		.loc 1 168 0
+ 178 000c 201C     		mov	r0, r4
+ 179              		@ sp needed
+ 180              	.LVL16:
+ 181 000e 10BD     		pop	{r4, pc}
+ 182              	.L8:
+ 183              		.align	2
+ 184              	.L7:
+ 185 0010 00000000 		.word	.LC2
+ 186              		.cfi_endproc
+ 187              	.LFE35:
+ 188              		.size	IntToString, .-IntToString
+ 189              		.section	.text.LCDDisplay,"ax",%progbits
+ 190              		.align	2
+ 191              		.global	LCDDisplay
+ 192              		.code	16
+ 193              		.thumb_func
+ 194              		.type	LCDDisplay, %function
+ 195              	LCDDisplay:
+ 196              	.LFB36:
+ 169:.\main.c      **** 
+ 170:.\main.c      **** //将字符显示在数码板上的函数
+ 171:.\main.c      **** void LCDDisplay(const char *str1, const char *str2, const char *str3, const char *str4)
+ 172:.\main.c      **** {
+ 197              		.loc 1 172 0
+ 198              		.cfi_startproc
+ 199              	.LVL17:
+ 200 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 201              		.cfi_def_cfa_offset 24
+ 202              		.cfi_offset 3, -24
+ 203              		.cfi_offset 4, -20
+ 204              		.cfi_offset 5, -16
+ 205              		.cfi_offset 6, -12
+ 206              		.cfi_offset 7, -8
+ 207              		.cfi_offset 14, -4
+ 208 0002 071C     		mov	r7, r0
+ 209 0004 0E1C     		mov	r6, r1
+ 210 0006 151C     		mov	r5, r2
+ 211 0008 1C1C     		mov	r4, r3
+ 173:.\main.c      ****     LCD_Char_ClearDisplay();
+ 212              		.loc 1 173 0
+ 213 000a 0120     		mov	r0, #1
+ 214              	.LVL18:
+ 215 000c FFF7FEFF 		bl	LCD_Char_WriteControl
+ 216              	.LVL19:
+ 174:.\main.c      ****     LCD_Char_Position(0, 0);
+ 217              		.loc 1 174 0
+ 218 0010 0020     		mov	r0, #0
+ 219 0012 0021     		mov	r1, #0
+ 220 0014 FFF7FEFF 		bl	LCD_Char_Position
+ 221              	.LVL20:
+ 175:.\main.c      ****     LCD_Char_PrintString(str1);
+ 222              		.loc 1 175 0
+ 223 0018 381C     		mov	r0, r7
+ 224 001a FFF7FEFF 		bl	LCD_Char_PrintString
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 8
+
+
+ 225              	.LVL21:
+ 176:.\main.c      ****     LCD_Char_Position(0, 10);
+ 226              		.loc 1 176 0
+ 227 001e 0020     		mov	r0, #0
+ 228 0020 0A21     		mov	r1, #10
+ 229 0022 FFF7FEFF 		bl	LCD_Char_Position
+ 230              	.LVL22:
+ 177:.\main.c      ****     LCD_Char_PrintString(str2);
+ 231              		.loc 1 177 0
+ 232 0026 301C     		mov	r0, r6
+ 233 0028 FFF7FEFF 		bl	LCD_Char_PrintString
+ 234              	.LVL23:
+ 178:.\main.c      ****     LCD_Char_Position(1, 0);
+ 235              		.loc 1 178 0
+ 236 002c 0120     		mov	r0, #1
+ 237 002e 0021     		mov	r1, #0
+ 238 0030 FFF7FEFF 		bl	LCD_Char_Position
+ 239              	.LVL24:
+ 179:.\main.c      ****     LCD_Char_PrintString(str3);
+ 240              		.loc 1 179 0
+ 241 0034 281C     		mov	r0, r5
+ 242 0036 FFF7FEFF 		bl	LCD_Char_PrintString
+ 243              	.LVL25:
+ 180:.\main.c      ****     LCD_Char_Position(1,10);
+ 244              		.loc 1 180 0
+ 245 003a 0120     		mov	r0, #1
+ 246 003c 0A21     		mov	r1, #10
+ 247 003e FFF7FEFF 		bl	LCD_Char_Position
+ 248              	.LVL26:
+ 181:.\main.c      ****     LCD_Char_PrintString(str4);
+ 249              		.loc 1 181 0
+ 250 0042 201C     		mov	r0, r4
+ 251 0044 FFF7FEFF 		bl	LCD_Char_PrintString
+ 252              	.LVL27:
+ 182:.\main.c      **** }
+ 253              		.loc 1 182 0
+ 254              		@ sp needed
+ 255              	.LVL28:
+ 256              	.LVL29:
+ 257              	.LVL30:
+ 258              	.LVL31:
+ 259 0048 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 260              		.cfi_endproc
+ 261              	.LFE36:
+ 262              		.size	LCDDisplay, .-LCDDisplay
+ 263 004a C046     		.section	.text.ServoPWM,"ax",%progbits
+ 264              		.align	2
+ 265              		.global	ServoPWM
+ 266              		.code	16
+ 267              		.thumb_func
+ 268              		.type	ServoPWM, %function
+ 269              	ServoPWM:
+ 270              	.LFB37:
+ 183:.\main.c      **** 
+ 184:.\main.c      **** //控制电机转速的函数
+ 185:.\main.c      **** void ServoPWM(int left, int right)
+ 186:.\main.c      **** {
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 9
+
+
+ 271              		.loc 1 186 0
+ 272              		.cfi_startproc
+ 273              	.LVL32:
+ 274 0000 10B5     		push	{r4, lr}
+ 275              		.cfi_def_cfa_offset 8
+ 276              		.cfi_offset 4, -8
+ 277              		.cfi_offset 14, -4
+ 278 0002 0C1C     		mov	r4, r1
+ 187:.\main.c      ****     PWM_1_WriteCompare(left);
+ 279              		.loc 1 187 0
+ 280 0004 FFF7FEFF 		bl	PWM_1_WriteCompare
+ 281              	.LVL33:
+ 188:.\main.c      ****     PWM_2_WriteCompare(right);
+ 282              		.loc 1 188 0
+ 283 0008 201C     		mov	r0, r4
+ 284 000a FFF7FEFF 		bl	PWM_2_WriteCompare
+ 285              	.LVL34:
+ 189:.\main.c      **** }
+ 286              		.loc 1 189 0
+ 287              		@ sp needed
+ 288              	.LVL35:
+ 289 000e 10BD     		pop	{r4, pc}
+ 290              		.cfi_endproc
+ 291              	.LFE37:
+ 292              		.size	ServoPWM, .-ServoPWM
+ 293              		.section	.text.InitializeComponents,"ax",%progbits
+ 294              		.align	2
+ 295              		.global	InitializeComponents
+ 296              		.code	16
+ 297              		.thumb_func
+ 298              		.type	InitializeComponents, %function
+ 299              	InitializeComponents:
+ 300              	.LFB38:
+ 190:.\main.c      **** 
+ 191:.\main.c      **** //初始化器件函数
+ 192:.\main.c      **** void InitializeComponents()
+ 193:.\main.c      **** {
+ 301              		.loc 1 193 0
+ 302              		.cfi_startproc
+ 303 0000 08B5     		push	{r3, lr}
+ 304              		.cfi_def_cfa_offset 8
+ 305              		.cfi_offset 3, -8
+ 306              		.cfi_offset 14, -4
+ 194:.\main.c      ****     CyGlobalIntEnable;
+ 307              		.loc 1 194 0
+ 308              	@ 194 ".\main.c" 1
+ 309 0002 62B6     		CPSIE   i
+ 310              	@ 0 "" 2
+ 195:.\main.c      ****     
+ 196:.\main.c      ****     ADC_SAR_Seq_Start();
+ 311              		.loc 1 196 0
+ 312              		.code	16
+ 313 0004 FFF7FEFF 		bl	ADC_SAR_Seq_Start
+ 314              	.LVL36:
+ 197:.\main.c      ****     ADC_SAR_Seq_StartConvert();
+ 315              		.loc 1 197 0
+ 316 0008 FFF7FEFF 		bl	ADC_SAR_Seq_StartConvert
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 10
+
+
+ 317              	.LVL37:
+ 198:.\main.c      ****     
+ 199:.\main.c      ****     LCD_Char_Start();
+ 318              		.loc 1 199 0
+ 319 000c FFF7FEFF 		bl	LCD_Char_Start
+ 320              	.LVL38:
+ 200:.\main.c      ****     LCD_Char_LoadCustomFonts(LCD_Char_customFonts);
+ 321              		.loc 1 200 0
+ 322 0010 0748     		ldr	r0, .L12
+ 323 0012 FFF7FEFF 		bl	LCD_Char_LoadCustomFonts
+ 324              	.LVL39:
+ 201:.\main.c      ****     
+ 202:.\main.c      ****     PWM_1_Start();
+ 325              		.loc 1 202 0
+ 326 0016 FFF7FEFF 		bl	PWM_1_Start
+ 327              	.LVL40:
+ 203:.\main.c      ****     PWM_2_Start();
+ 328              		.loc 1 203 0
+ 329 001a FFF7FEFF 		bl	PWM_2_Start
+ 330              	.LVL41:
+ 204:.\main.c      ****     
+ 205:.\main.c      ****     isr_1_StartEx(InterruptHandler); 
+ 331              		.loc 1 205 0
+ 332 001e 0548     		ldr	r0, .L12+4
+ 333 0020 FFF7FEFF 		bl	isr_1_StartEx
+ 334              	.LVL42:
+ 206:.\main.c      ****     Timer_1_Enable(); 
+ 335              		.loc 1 206 0
+ 336 0024 FFF7FEFF 		bl	Timer_1_Enable
+ 337              	.LVL43:
+ 207:.\main.c      ****     Timer_1_Start();
+ 338              		.loc 1 207 0
+ 339 0028 FFF7FEFF 		bl	Timer_1_Start
+ 340              	.LVL44:
+ 208:.\main.c      **** }
+ 341              		.loc 1 208 0
+ 342              		@ sp needed
+ 343 002c 08BD     		pop	{r3, pc}
+ 344              	.L13:
+ 345 002e C046     		.align	2
+ 346              	.L12:
+ 347 0030 00000000 		.word	LCD_Char_customFonts
+ 348 0034 00000000 		.word	InterruptHandler
+ 349              		.cfi_endproc
+ 350              	.LFE38:
+ 351              		.size	InitializeComponents, .-InitializeComponents
+ 352              		.section	.text.constrain,"ax",%progbits
+ 353              		.align	2
+ 354              		.global	constrain
+ 355              		.code	16
+ 356              		.thumb_func
+ 357              		.type	constrain, %function
+ 358              	constrain:
+ 359              	.LFB39:
+ 209:.\main.c      **** 
+ 210:.\main.c      **** //限制数值的保护函数
+ 211:.\main.c      **** int constrain(int x)
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 11
+
+
+ 212:.\main.c      **** {
+ 360              		.loc 1 212 0
+ 361              		.cfi_startproc
+ 362              	.LVL45:
+ 213:.\main.c      ****     if(x > 250)
+ 363              		.loc 1 213 0
+ 364 0000 FA28     		cmp	r0, #250
+ 365 0002 03DC     		bgt	.L16
+ 214:.\main.c      ****         x = 250;
+ 215:.\main.c      ****     else if(x < -250)
+ 366              		.loc 1 215 0
+ 367 0004 031C     		mov	r3, r0
+ 368 0006 FA33     		add	r3, r3, #250
+ 369 0008 04DA     		bge	.L15
+ 370 000a 01E0     		b	.L17
+ 371              	.L16:
+ 214:.\main.c      ****         x = 250;
+ 372              		.loc 1 214 0
+ 373 000c FA20     		mov	r0, #250
+ 374              	.LVL46:
+ 375 000e 01E0     		b	.L15
+ 376              	.LVL47:
+ 377              	.L17:
+ 216:.\main.c      ****         x = -250;
+ 378              		.loc 1 216 0
+ 379 0010 FA20     		mov	r0, #250
+ 380              	.LVL48:
+ 381 0012 4042     		neg	r0, r0
+ 382              	.L15:
+ 383              	.LVL49:
+ 217:.\main.c      ****     return x;
+ 218:.\main.c      **** }
+ 384              		.loc 1 218 0
+ 385              		@ sp needed
+ 386 0014 7047     		bx	lr
+ 387              		.cfi_endproc
+ 388              	.LFE39:
+ 389              		.size	constrain, .-constrain
+ 390              		.global	__aeabi_ui2d
+ 391              		.global	__aeabi_dmul
+ 392              		.global	__aeabi_dsub
+ 393              		.global	__aeabi_ddiv
+ 394              		.global	__aeabi_d2iz
+ 395              		.global	__aeabi_i2d
+ 396 0016 C046     		.section	.text.main,"ax",%progbits
+ 397              		.align	2
+ 398              		.global	main
+ 399              		.code	16
+ 400              		.thumb_func
+ 401              		.type	main, %function
+ 402              	main:
+ 403              	.LFB34:
+  69:.\main.c      ****     //初始化器件
+ 404              		.loc 1 69 0
+ 405              		.cfi_startproc
+ 406 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 407              		.cfi_def_cfa_offset 20
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 12
+
+
+ 408              		.cfi_offset 4, -20
+ 409              		.cfi_offset 5, -16
+ 410              		.cfi_offset 6, -12
+ 411              		.cfi_offset 7, -8
+ 412              		.cfi_offset 14, -4
+ 413 0002 93B0     		sub	sp, sp, #76
+ 414              		.cfi_def_cfa_offset 96
+  71:.\main.c      ****     uint32 adc_result = 0;
+ 415              		.loc 1 71 0
+ 416 0004 FFF7FEFF 		bl	InitializeComponents
+ 417              	.LVL50:
+  76:.\main.c      ****     
+ 418              		.loc 1 76 0
+ 419 0008 0124     		mov	r4, #1
+ 420              	.LVL51:
+ 421              	.L31:
+  81:.\main.c      ****         adc_result = ADC_SAR_Seq_GetResult16(0);   
+ 422              		.loc 1 81 0
+ 423 000a 0220     		mov	r0, #2
+ 424 000c FFF7FEFF 		bl	ADC_SAR_Seq_IsEndConversion
+ 425              	.LVL52:
+  82:.\main.c      ****         if(adc_result > 0x7FFF)
+ 426              		.loc 1 82 0
+ 427 0010 0020     		mov	r0, #0
+ 428 0012 FFF7FEFF 		bl	ADC_SAR_Seq_GetResult16
+ 429              	.LVL53:
+  83:.\main.c      ****            adc_result = 0;                
+ 430              		.loc 1 83 0
+ 431 0016 714B     		ldr	r3, .L34
+ 432 0018 9842     		cmp	r0, r3
+ 433 001a 00D9     		bls	.L19
+  84:.\main.c      ****         if(adc_result > 0)
+ 434              		.loc 1 84 0
+ 435 001c 0020     		mov	r0, #0
+ 436              	.LVL54:
+ 437              	.L19:
+  85:.\main.c      ****             //担心由于数字变化范围小，调节量变化不大，调节效果不好，进�
+ 438              		.loc 1 85 0
+ 439 001e 0028     		cmp	r0, #0
+ 440 0020 1CD0     		beq	.L20
+  87:.\main.c      ****         
+ 441              		.loc 1 87 0
+ 442 0022 FFF7FEFF 		bl	__aeabi_ui2d
+ 443              	.LVL55:
+ 444 0026 6E4A     		ldr	r2, .L34+4
+ 445 0028 6E4B     		ldr	r3, .L34+8
+ 446 002a FFF7FEFF 		bl	__aeabi_dmul
+ 447              	.LVL56:
+ 448 002e 6E4A     		ldr	r2, .L34+12
+ 449 0030 6E4B     		ldr	r3, .L34+16
+ 450 0032 FFF7FEFF 		bl	__aeabi_dsub
+ 451              	.LVL57:
+ 452 0036 021C     		mov	r2, r0
+ 453 0038 0B1C     		mov	r3, r1
+ 454 003a 0020     		mov	r0, #0
+ 455 003c 6C49     		ldr	r1, .L34+20
+ 456 003e FFF7FEFF 		bl	__aeabi_ddiv
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 13
+
+
+ 457              	.LVL58:
+ 458 0042 0022     		mov	r2, #0
+ 459 0044 8023     		mov	r3, #128
+ 460 0046 DB05     		lsl	r3, r3, #23
+ 461 0048 FFF7FEFF 		bl	__aeabi_dsub
+ 462              	.LVL59:
+ 463 004c 0022     		mov	r2, #0
+ 464 004e 694B     		ldr	r3, .L34+24
+ 465 0050 FFF7FEFF 		bl	__aeabi_dmul
+ 466              	.LVL60:
+ 467 0054 FFF7FEFF 		bl	__aeabi_d2iz
+ 468              	.LVL61:
+ 469 0058 674B     		ldr	r3, .L34+28
+ 470 005a 5860     		str	r0, [r3, #4]
+ 471              	.L20:
+  90:.\main.c      ****         {   
+ 472              		.loc 1 90 0
+ 473 005c 012C     		cmp	r4, #1
+ 474 005e 12D1     		bne	.L21
+  93:.\main.c      ****             {   
+ 475              		.loc 1 93 0
+ 476 0060 654B     		ldr	r3, .L34+28
+ 477 0062 5B68     		ldr	r3, [r3, #4]
+ 478 0064 BE2B     		cmp	r3, #190
+ 479 0066 34DD     		ble	.L22
+  96:.\main.c      ****                 CyDelay(315);
+ 480              		.loc 1 96 0
+ 481 0068 634B     		ldr	r3, .L34+28
+ 482 006a 1421     		mov	r1, #20
+ 483 006c 595E     		ldrsh	r1, [r3, r1]
+ 484 006e 634B     		ldr	r3, .L34+32
+ 485 0070 9C46     		mov	ip, r3
+ 486 0072 6144     		add	r1, r1, ip
+ 487 0074 6248     		ldr	r0, .L34+36
+ 488 0076 FFF7FEFF 		bl	ServoPWM
+ 489              	.LVL62:
+  97:.\main.c      ****                 state = 2;
+ 490              		.loc 1 97 0
+ 491 007a 3C20     		mov	r0, #60
+ 492 007c FF30     		add	r0, r0, #255
+ 493 007e FFF7FEFF 		bl	CyDelay
+ 494              	.LVL63:
+  98:.\main.c      ****             }
+ 495              		.loc 1 98 0
+ 496 0082 0134     		add	r4, r4, #1
+ 497 0084 25E0     		b	.L22
+ 498              	.LVL64:
+ 499              	.L21:
+ 101:.\main.c      ****         {   
+ 500              		.loc 1 101 0
+ 501 0086 022C     		cmp	r4, #2
+ 502 0088 11D1     		bne	.L23
+ 104:.\main.c      ****             { 
+ 503              		.loc 1 104 0
+ 504 008a 5B4B     		ldr	r3, .L34+28
+ 505 008c 5B68     		ldr	r3, [r3, #4]
+ 506 008e 632B     		cmp	r3, #99
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 14
+
+
+ 507 0090 1FDC     		bgt	.L22
+ 106:.\main.c      ****                 state = 1;
+ 508              		.loc 1 106 0
+ 509 0092 594C     		ldr	r4, .L34+28
+ 510              	.LVL65:
+ 511 0094 1223     		mov	r3, #18
+ 512 0096 E05E     		ldrsh	r0, [r4, r3]
+ 513 0098 FFF7FEFF 		bl	__aeabi_i2d
+ 514              	.LVL66:
+ 515 009c 594A     		ldr	r2, .L34+40
+ 516 009e 5A4B     		ldr	r3, .L34+44
+ 517 00a0 FFF7FEFF 		bl	__aeabi_dmul
+ 518              	.LVL67:
+ 519 00a4 FFF7FEFF 		bl	__aeabi_d2iz
+ 520              	.LVL68:
+ 521 00a8 6082     		strh	r0, [r4, #18]
+ 522              	.LVL69:
+ 107:.\main.c      ****             }
+ 523              		.loc 1 107 0
+ 524 00aa 0124     		mov	r4, #1
+ 525 00ac 11E0     		b	.L22
+ 526              	.LVL70:
+ 527              	.L23:
+ 110:.\main.c      ****         {   
+ 528              		.loc 1 110 0
+ 529 00ae 032C     		cmp	r4, #3
+ 530 00b0 0FD1     		bne	.L22
+ 113:.\main.c      ****             {
+ 531              		.loc 1 113 0
+ 532 00b2 514B     		ldr	r3, .L34+28
+ 533 00b4 5B68     		ldr	r3, [r3, #4]
+ 534 00b6 BE2B     		cmp	r3, #190
+ 535 00b8 0ADD     		ble	.L33
+ 115:.\main.c      ****                 state = 2;
+ 536              		.loc 1 115 0
+ 537 00ba 4F4B     		ldr	r3, .L34+28
+ 538 00bc 1421     		mov	r1, #20
+ 539 00be 595E     		ldrsh	r1, [r3, r1]
+ 540 00c0 4E4B     		ldr	r3, .L34+32
+ 541 00c2 9C46     		mov	ip, r3
+ 542 00c4 6144     		add	r1, r1, ip
+ 543 00c6 4E48     		ldr	r0, .L34+36
+ 544 00c8 FFF7FEFF 		bl	ServoPWM
+ 545              	.LVL71:
+ 116:.\main.c      ****             }
+ 546              		.loc 1 116 0
+ 547 00cc 013C     		sub	r4, r4, #1
+ 548 00ce 00E0     		b	.L22
+ 549              	.LVL72:
+ 550              	.L33:
+ 119:.\main.c      ****         }
+ 551              		.loc 1 119 0
+ 552 00d0 0124     		mov	r4, #1
+ 553              	.LVL73:
+ 554              	.L22:
+ 123:.\main.c      ****         {
+ 555              		.loc 1 123 0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 15
+
+
+ 556 00d2 FFF7FEFF 		bl	Button_Read
+ 557              	.LVL74:
+ 558 00d6 0028     		cmp	r0, #0
+ 559 00d8 1CD0     		beq	.L24
+ 560              	.LVL75:
+ 126:.\main.c      ****         }
+ 561              		.loc 1 126 0
+ 562 00da 0EA8     		add	r0, sp, #56
+ 563 00dc 0321     		mov	r1, #3
+ 564 00de FFF7FEFF 		bl	IntToString
+ 565              	.LVL76:
+ 566 00e2 071C     		mov	r7, r0
+ 567 00e4 444C     		ldr	r4, .L34+28
+ 568 00e6 0C23     		mov	r3, #12
+ 569 00e8 E15E     		ldrsh	r1, [r4, r3]
+ 570 00ea 0AA8     		add	r0, sp, #40
+ 571 00ec FFF7FEFF 		bl	IntToString
+ 572              	.LVL77:
+ 573 00f0 061C     		mov	r6, r0
+ 574 00f2 06A8     		add	r0, sp, #24
+ 575 00f4 6168     		ldr	r1, [r4, #4]
+ 576 00f6 FFF7FEFF 		bl	IntToString
+ 577              	.LVL78:
+ 578 00fa 051C     		mov	r5, r0
+ 579 00fc 1423     		mov	r3, #20
+ 580 00fe E15E     		ldrsh	r1, [r4, r3]
+ 581 0100 02A8     		add	r0, sp, #8
+ 582 0102 FFF7FEFF 		bl	IntToString
+ 583              	.LVL79:
+ 584 0106 031C     		mov	r3, r0
+ 585 0108 381C     		mov	r0, r7
+ 586 010a 311C     		mov	r1, r6
+ 587 010c 2A1C     		mov	r2, r5
+ 588 010e FFF7FEFF 		bl	LCDDisplay
+ 589              	.LVL80:
+ 125:.\main.c      ****             LCDDisplay(IntToString(string1, state), IntToString(string2, derror), IntToString(strin
+ 590              		.loc 1 125 0
+ 591 0112 0324     		mov	r4, #3
+ 592              	.LVL81:
+ 593              	.L24:
+ 130:.\main.c      ****         {   
+ 594              		.loc 1 130 0
+ 595 0114 022C     		cmp	r4, #2
+ 596 0116 25D0     		beq	.L26
+ 597 0118 032C     		cmp	r4, #3
+ 598 011a 2DD0     		beq	.L27
+ 599 011c 012C     		cmp	r4, #1
+ 600 011e 3CD1     		bne	.L25
+ 134:.\main.c      ****                     rR_Adjust *= 2; //需要向外拐，但是调整的不够快，所以进行了*
+ 601              		.loc 1 134 0
+ 602 0120 354B     		ldr	r3, .L34+28
+ 603 0122 988A     		ldrh	r0, [r3, #20]
+ 604 0124 03B2     		sxth	r3, r0
+ 605 0126 002B     		cmp	r3, #0
+ 606 0128 03DA     		bge	.L29
+ 135:.\main.c      ****                 else
+ 607              		.loc 1 135 0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 16
+
+
+ 608 012a 4000     		lsl	r0, r0, #1
+ 609 012c 324B     		ldr	r3, .L34+28
+ 610 012e 9882     		strh	r0, [r3, #20]
+ 611 0130 0AE0     		b	.L30
+ 612              	.L29:
+ 137:.\main.c      ****                 rR_Adjust = constrain(rR_Adjust); //对调整量数值进行限制
+ 613              		.loc 1 137 0
+ 614 0132 00B2     		sxth	r0, r0
+ 615 0134 FFF7FEFF 		bl	__aeabi_i2d
+ 616              	.LVL82:
+ 617 0138 0022     		mov	r2, #0
+ 618 013a 344B     		ldr	r3, .L34+48
+ 619 013c FFF7FEFF 		bl	__aeabi_dmul
+ 620              	.LVL83:
+ 621 0140 FFF7FEFF 		bl	__aeabi_d2iz
+ 622              	.LVL84:
+ 623 0144 2C4B     		ldr	r3, .L34+28
+ 624 0146 9882     		strh	r0, [r3, #20]
+ 625              	.L30:
+ 138:.\main.c      ****                 ServoPWM(4100, 5178 + rR_Adjust); //控制电机PWM参数
+ 626              		.loc 1 138 0
+ 627 0148 2B4D     		ldr	r5, .L34+28
+ 628 014a 1423     		mov	r3, #20
+ 629 014c E85E     		ldrsh	r0, [r5, r3]
+ 630 014e FFF7FEFF 		bl	constrain
+ 631              	.LVL85:
+ 632 0152 80B2     		uxth	r0, r0
+ 633 0154 A882     		strh	r0, [r5, #20]
+ 139:.\main.c      ****                 break;
+ 634              		.loc 1 139 0
+ 635 0156 00B2     		sxth	r0, r0
+ 636 0158 284B     		ldr	r3, .L34+32
+ 637 015a C118     		add	r1, r0, r3
+ 638 015c 2C48     		ldr	r0, .L34+52
+ 639 015e FFF7FEFF 		bl	ServoPWM
+ 640              	.LVL86:
+ 140:.\main.c      ****             case 2: 
+ 641              		.loc 1 140 0
+ 642 0162 1AE0     		b	.L25
+ 643              	.L26:
+ 142:.\main.c      ****                 break;
+ 644              		.loc 1 142 0
+ 645 0164 244B     		ldr	r3, .L34+28
+ 646 0166 1421     		mov	r1, #20
+ 647 0168 595E     		ldrsh	r1, [r3, r1]
+ 648 016a 2A4B     		ldr	r3, .L34+56
+ 649 016c 9C46     		mov	ip, r3
+ 650 016e 6144     		add	r1, r1, ip
+ 651 0170 2948     		ldr	r0, .L34+60
+ 652 0172 FFF7FEFF 		bl	ServoPWM
+ 653              	.LVL87:
+ 143:.\main.c      ****             case 3: 
+ 654              		.loc 1 143 0
+ 655 0176 10E0     		b	.L25
+ 656              	.L27:
+ 145:.\main.c      ****                 CyDelay(450);
+ 657              		.loc 1 145 0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 17
+
+
+ 658 0178 2848     		ldr	r0, .L34+64
+ 659 017a FA21     		mov	r1, #250
+ 660 017c 0901     		lsl	r1, r1, #4
+ 661 017e FFF7FEFF 		bl	ServoPWM
+ 662              	.LVL88:
+ 146:.\main.c      ****                 ServoPWM(3850, 4250); //再向右转
+ 663              		.loc 1 146 0
+ 664 0182 E120     		mov	r0, #225
+ 665 0184 4000     		lsl	r0, r0, #1
+ 666 0186 FFF7FEFF 		bl	CyDelay
+ 667              	.LVL89:
+ 147:.\main.c      ****                 CyDelay(800);
+ 668              		.loc 1 147 0
+ 669 018a 2548     		ldr	r0, .L34+68
+ 670 018c 2549     		ldr	r1, .L34+72
+ 671 018e FFF7FEFF 		bl	ServoPWM
+ 672              	.LVL90:
+ 148:.\main.c      ****                 break;
+ 673              		.loc 1 148 0
+ 674 0192 C820     		mov	r0, #200
+ 675 0194 8000     		lsl	r0, r0, #2
+ 676 0196 FFF7FEFF 		bl	CyDelay
+ 677              	.LVL91:
+ 678              	.L25:
+ 155:.\main.c      ****         
+ 679              		.loc 1 155 0
+ 680 019a 0EA8     		add	r0, sp, #56
+ 681 019c 211C     		mov	r1, r4
+ 682 019e FFF7FEFF 		bl	IntToString
+ 683              	.LVL92:
+ 684 01a2 071C     		mov	r7, r0
+ 685 01a4 144D     		ldr	r5, .L34+28
+ 686 01a6 0C23     		mov	r3, #12
+ 687 01a8 E95E     		ldrsh	r1, [r5, r3]
+ 688 01aa 0AA8     		add	r0, sp, #40
+ 689 01ac FFF7FEFF 		bl	IntToString
+ 690              	.LVL93:
+ 691 01b0 061C     		mov	r6, r0
+ 692 01b2 06A8     		add	r0, sp, #24
+ 693 01b4 6968     		ldr	r1, [r5, #4]
+ 694 01b6 FFF7FEFF 		bl	IntToString
+ 695              	.LVL94:
+ 696 01ba 0190     		str	r0, [sp, #4]
+ 697 01bc 1423     		mov	r3, #20
+ 698 01be E95E     		ldrsh	r1, [r5, r3]
+ 699 01c0 02A8     		add	r0, sp, #8
+ 700 01c2 FFF7FEFF 		bl	IntToString
+ 701              	.LVL95:
+ 702 01c6 031C     		mov	r3, r0
+ 703 01c8 381C     		mov	r0, r7
+ 704 01ca 311C     		mov	r1, r6
+ 705 01cc 019A     		ldr	r2, [sp, #4]
+ 706 01ce FFF7FEFF 		bl	LCDDisplay
+ 707              	.LVL96:
+ 157:.\main.c      ****     }
+ 708              		.loc 1 157 0
+ 709 01d2 6420     		mov	r0, #100
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 18
+
+
+ 710 01d4 FFF7FEFF 		bl	CyDelay
+ 711              	.LVL97:
+ 158:.\main.c      ****     
+ 712              		.loc 1 158 0
+ 713 01d8 17E7     		b	.L31
+ 714              	.L35:
+ 715 01da C046     		.align	2
+ 716              	.L34:
+ 717 01dc FF7F0000 		.word	32767
+ 718 01e0 F168E388 		.word	-1998362383
+ 719 01e4 B5F8F43E 		.word	1056241845
+ 720 01e8 92CB7F48 		.word	1216334738
+ 721 01ec BF7D3D3F 		.word	1060994495
+ 722 01f0 0000E03F 		.word	1071644672
+ 723 01f4 00001440 		.word	1075052544
+ 724 01f8 00000000 		.word	.LANCHOR0
+ 725 01fc 3A140000 		.word	5178
+ 726 0200 36100000 		.word	4150
+ 727 0204 33333333 		.word	858993459
+ 728 0208 3333D33F 		.word	1070805811
+ 729 020c 0000F83F 		.word	1073217536
+ 730 0210 04100000 		.word	4100
+ 731 0214 B4140000 		.word	5300
+ 732 0218 B6100000 		.word	4278
+ 733 021c 44160000 		.word	5700
+ 734 0220 0A0F0000 		.word	3850
+ 735 0224 9A100000 		.word	4250
+ 736              		.cfi_endproc
+ 737              	.LFE34:
+ 738              		.size	main, .-main
+ 739              		.global	dis
+ 740              		.global	i
+ 741              		.global	dn
+ 742              		.global	dnum
+ 743              		.global	All_dist
+ 744              		.global	dSum_error
+ 745              		.global	derror_error
+ 746              		.global	derror1
+ 747              		.global	derror
+ 748              		.global	rR_Adjust
+ 749              		.comm	dFIFO,200,4
+ 750              		.global	dist
+ 751              		.global	I_dist
+ 752              		.global	D1
+ 753              		.global	I1
+ 754              		.global	P1
+ 755              		.section	.rodata
+ 756              		.align	2
+ 757              		.type	I_dist, %object
+ 758              		.size	I_dist, 2
+ 759              	I_dist:
+ 760 0000 5A00     		.short	90
+ 761 0002 0000     		.space	2
+ 762              		.type	D1, %object
+ 763              		.size	D1, 4
+ 764              	D1:
+ 765 0004 00004040 		.word	1077936128
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 19
+
+
+ 766              		.type	I1, %object
+ 767              		.size	I1, 4
+ 768              	I1:
+ 769 0008 00000000 		.space	4
+ 770              		.type	P1, %object
+ 771              		.size	P1, 4
+ 772              	P1:
+ 773 000c 0000E040 		.word	1088421888
+ 774              		.data
+ 775              		.type	dn, %object
+ 776              		.size	dn, 1
+ 777              	dn:
+ 778 0000 01       		.byte	1
+ 779              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 780              		.align	2
+ 781              	.LC2:
+ 782 0000 256400   		.ascii	"%d\000"
+ 783 0003 00       		.bss
+ 784              		.align	2
+ 785              		.set	.LANCHOR0,. + 0
+ 786              		.type	i, %object
+ 787              		.size	i, 1
+ 788              	i:
+ 789 0000 00       		.space	1
+ 790 0001 000000   		.space	3
+ 791              		.type	dis, %object
+ 792              		.size	dis, 4
+ 793              	dis:
+ 794 0004 00000000 		.space	4
+ 795              		.type	All_dist, %object
+ 796              		.size	All_dist, 2
+ 797              	All_dist:
+ 798 0008 0000     		.space	2
+ 799              		.type	dist, %object
+ 800              		.size	dist, 2
+ 801              	dist:
+ 802 000a 0000     		.space	2
+ 803              		.type	derror, %object
+ 804              		.size	derror, 2
+ 805              	derror:
+ 806 000c 0000     		.space	2
+ 807              		.type	derror1, %object
+ 808              		.size	derror1, 2
+ 809              	derror1:
+ 810 000e 0000     		.space	2
+ 811              		.type	derror_error, %object
+ 812              		.size	derror_error, 2
+ 813              	derror_error:
+ 814 0010 0000     		.space	2
+ 815              		.type	dSum_error, %object
+ 816              		.size	dSum_error, 2
+ 817              	dSum_error:
+ 818 0012 0000     		.space	2
+ 819              		.type	rR_Adjust, %object
+ 820              		.size	rR_Adjust, 2
+ 821              	rR_Adjust:
+ 822 0014 0000     		.space	2
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 20
+
+
+ 823              		.type	dnum, %object
+ 824              		.size	dnum, 2
+ 825              	dnum:
+ 826 0016 0000     		.space	2
+ 827              		.text
+ 828              	.Letext0:
+ 829              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 830              		.file 3 "Generated_Source\\PSoC4/LCD_Char.h"
+ 831              		.file 4 "Generated_Source\\PSoC4/PWM_1.h"
+ 832              		.file 5 "Generated_Source\\PSoC4/PWM_2.h"
+ 833              		.file 6 "Generated_Source\\PSoC4/ADC_SAR_Seq.h"
+ 834              		.file 7 "Generated_Source\\PSoC4/isr_1.h"
+ 835              		.file 8 "Generated_Source\\PSoC4/Timer_1.h"
+ 836              		.file 9 "c:\\software\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.3\\arm-none
+ 837              		.file 10 "Generated_Source\\PSoC4/CyLib.h"
+ 838              		.file 11 "Generated_Source\\PSoC4/Button.h"
+ 839              		.section	.debug_info,"",%progbits
+ 840              	.Ldebug_info0:
+ 841 0000 72080000 		.4byte	0x872
+ 842 0004 0400     		.2byte	0x4
+ 843 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 844 000a 04       		.byte	0x4
+ 845 000b 01       		.uleb128 0x1
+ 846 000c A7010000 		.4byte	.LASF69
+ 847 0010 01       		.byte	0x1
+ 848 0011 D9030000 		.4byte	.LASF70
+ 849 0015 BD020000 		.4byte	.LASF71
+ 850 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 851 001d 00000000 		.4byte	0
+ 852 0021 00000000 		.4byte	.Ldebug_line0
+ 853 0025 02       		.uleb128 0x2
+ 854 0026 01       		.byte	0x1
+ 855 0027 06       		.byte	0x6
+ 856 0028 F1000000 		.4byte	.LASF0
+ 857 002c 02       		.uleb128 0x2
+ 858 002d 01       		.byte	0x1
+ 859 002e 08       		.byte	0x8
+ 860 002f 88010000 		.4byte	.LASF1
+ 861 0033 02       		.uleb128 0x2
+ 862 0034 02       		.byte	0x2
+ 863 0035 05       		.byte	0x5
+ 864 0036 70000000 		.4byte	.LASF2
+ 865 003a 02       		.uleb128 0x2
+ 866 003b 02       		.byte	0x2
+ 867 003c 07       		.byte	0x7
+ 868 003d 09030000 		.4byte	.LASF3
+ 869 0041 02       		.uleb128 0x2
+ 870 0042 04       		.byte	0x4
+ 871 0043 05       		.byte	0x5
+ 872 0044 53010000 		.4byte	.LASF4
+ 873 0048 02       		.uleb128 0x2
+ 874 0049 04       		.byte	0x4
+ 875 004a 07       		.byte	0x7
+ 876 004b A1030000 		.4byte	.LASF5
+ 877 004f 02       		.uleb128 0x2
+ 878 0050 08       		.byte	0x8
+ 879 0051 05       		.byte	0x5
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 21
+
+
+ 880 0052 22010000 		.4byte	.LASF6
+ 881 0056 02       		.uleb128 0x2
+ 882 0057 08       		.byte	0x8
+ 883 0058 07       		.byte	0x7
+ 884 0059 87020000 		.4byte	.LASF7
+ 885 005d 03       		.uleb128 0x3
+ 886 005e 04       		.byte	0x4
+ 887 005f 05       		.byte	0x5
+ 888 0060 696E7400 		.ascii	"int\000"
+ 889 0064 02       		.uleb128 0x2
+ 890 0065 04       		.byte	0x4
+ 891 0066 07       		.byte	0x7
+ 892 0067 A9020000 		.4byte	.LASF8
+ 893 006b 04       		.uleb128 0x4
+ 894 006c EB000000 		.4byte	.LASF9
+ 895 0070 02       		.byte	0x2
+ 896 0071 C2       		.byte	0xc2
+ 897 0072 2C000000 		.4byte	0x2c
+ 898 0076 04       		.uleb128 0x4
+ 899 0077 86030000 		.4byte	.LASF10
+ 900 007b 02       		.byte	0x2
+ 901 007c C3       		.byte	0xc3
+ 902 007d 3A000000 		.4byte	0x3a
+ 903 0081 04       		.uleb128 0x4
+ 904 0082 8D030000 		.4byte	.LASF11
+ 905 0086 02       		.byte	0x2
+ 906 0087 C4       		.byte	0xc4
+ 907 0088 48000000 		.4byte	0x48
+ 908 008c 04       		.uleb128 0x4
+ 909 008d 3D010000 		.4byte	.LASF12
+ 910 0091 02       		.byte	0x2
+ 911 0092 C5       		.byte	0xc5
+ 912 0093 25000000 		.4byte	0x25
+ 913 0097 04       		.uleb128 0x4
+ 914 0098 E5000000 		.4byte	.LASF13
+ 915 009c 02       		.byte	0x2
+ 916 009d C6       		.byte	0xc6
+ 917 009e 33000000 		.4byte	0x33
+ 918 00a2 02       		.uleb128 0x2
+ 919 00a3 04       		.byte	0x4
+ 920 00a4 04       		.byte	0x4
+ 921 00a5 1C010000 		.4byte	.LASF14
+ 922 00a9 02       		.uleb128 0x2
+ 923 00aa 08       		.byte	0x8
+ 924 00ab 04       		.byte	0x4
+ 925 00ac E2030000 		.4byte	.LASF15
+ 926 00b0 04       		.uleb128 0x4
+ 927 00b1 8C000000 		.4byte	.LASF16
+ 928 00b5 02       		.byte	0x2
+ 929 00b6 D3       		.byte	0xd3
+ 930 00b7 BB000000 		.4byte	0xbb
+ 931 00bb 02       		.uleb128 0x2
+ 932 00bc 01       		.byte	0x1
+ 933 00bd 08       		.byte	0x8
+ 934 00be 3D030000 		.4byte	.LASF17
+ 935 00c2 05       		.uleb128 0x5
+ 936 00c3 30010000 		.4byte	.LASF18
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 22
+
+
+ 937 00c7 02       		.byte	0x2
+ 938 00c8 7E01     		.2byte	0x17e
+ 939 00ca CE000000 		.4byte	0xce
+ 940 00ce 06       		.uleb128 0x6
+ 941 00cf 04       		.byte	0x4
+ 942 00d0 D4000000 		.4byte	0xd4
+ 943 00d4 07       		.uleb128 0x7
+ 944 00d5 02       		.uleb128 0x2
+ 945 00d6 04       		.byte	0x4
+ 946 00d7 07       		.byte	0x7
+ 947 00d8 83000000 		.4byte	.LASF19
+ 948 00dc 06       		.uleb128 0x6
+ 949 00dd 04       		.byte	0x4
+ 950 00de BB000000 		.4byte	0xbb
+ 951 00e2 06       		.uleb128 0x6
+ 952 00e3 04       		.byte	0x4
+ 953 00e4 E8000000 		.4byte	0xe8
+ 954 00e8 08       		.uleb128 0x8
+ 955 00e9 BB000000 		.4byte	0xbb
+ 956 00ed 09       		.uleb128 0x9
+ 957 00ee 42010000 		.4byte	.LASF20
+ 958 00f2 01       		.byte	0x1
+ 959 00f3 27       		.byte	0x27
+ 960 00f4 00000000 		.4byte	.LFB33
+ 961 00f8 C0000000 		.4byte	.LFE33-.LFB33
+ 962 00fc 01       		.uleb128 0x1
+ 963 00fd 9C       		.byte	0x9c
+ 964 00fe 0C010000 		.4byte	0x10c
+ 965 0102 0A       		.uleb128 0xa
+ 966 0103 06000000 		.4byte	.LVL0
+ 967 0107 42070000 		.4byte	0x742
+ 968 010b 00       		.byte	0
+ 969 010c 0B       		.uleb128 0xb
+ 970 010d FD000000 		.4byte	.LASF29
+ 971 0111 01       		.byte	0x1
+ 972 0112 A4       		.byte	0xa4
+ 973 0113 DC000000 		.4byte	0xdc
+ 974 0117 00000000 		.4byte	.LFB35
+ 975 011b 14000000 		.4byte	.LFE35-.LFB35
+ 976 011f 01       		.uleb128 0x1
+ 977 0120 9C       		.byte	0x9c
+ 978 0121 64010000 		.4byte	0x164
+ 979 0125 0C       		.uleb128 0xc
+ 980 0126 73747200 		.ascii	"str\000"
+ 981 012a 01       		.byte	0x1
+ 982 012b A4       		.byte	0xa4
+ 983 012c DC000000 		.4byte	0xdc
+ 984 0130 00000000 		.4byte	.LLST0
+ 985 0134 0C       		.uleb128 0xc
+ 986 0135 6E756D00 		.ascii	"num\000"
+ 987 0139 01       		.byte	0x1
+ 988 013a A4       		.byte	0xa4
+ 989 013b 64010000 		.4byte	0x164
+ 990 013f 29000000 		.4byte	.LLST1
+ 991 0143 0D       		.uleb128 0xd
+ 992 0144 0C000000 		.4byte	.LVL15
+ 993 0148 4D070000 		.4byte	0x74d
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 23
+
+
+ 994 014c 0E       		.uleb128 0xe
+ 995 014d 01       		.uleb128 0x1
+ 996 014e 52       		.byte	0x52
+ 997 014f 03       		.uleb128 0x3
+ 998 0150 F3       		.byte	0xf3
+ 999 0151 01       		.uleb128 0x1
+ 1000 0152 51       		.byte	0x51
+ 1001 0153 0E       		.uleb128 0xe
+ 1002 0154 01       		.uleb128 0x1
+ 1003 0155 51       		.byte	0x51
+ 1004 0156 05       		.uleb128 0x5
+ 1005 0157 03       		.byte	0x3
+ 1006 0158 00000000 		.4byte	.LC2
+ 1007 015c 0E       		.uleb128 0xe
+ 1008 015d 01       		.uleb128 0x1
+ 1009 015e 50       		.byte	0x50
+ 1010 015f 02       		.uleb128 0x2
+ 1011 0160 74       		.byte	0x74
+ 1012 0161 00       		.sleb128 0
+ 1013 0162 00       		.byte	0
+ 1014 0163 00       		.byte	0
+ 1015 0164 08       		.uleb128 0x8
+ 1016 0165 5D000000 		.4byte	0x5d
+ 1017 0169 0F       		.uleb128 0xf
+ 1018 016a 9C010000 		.4byte	.LASF21
+ 1019 016e 01       		.byte	0x1
+ 1020 016f AB       		.byte	0xab
+ 1021 0170 00000000 		.4byte	.LFB36
+ 1022 0174 4A000000 		.4byte	.LFE36-.LFB36
+ 1023 0178 01       		.uleb128 0x1
+ 1024 0179 9C       		.byte	0x9c
+ 1025 017a 7A020000 		.4byte	0x27a
+ 1026 017e 10       		.uleb128 0x10
+ 1027 017f B6000000 		.4byte	.LASF22
+ 1028 0183 01       		.byte	0x1
+ 1029 0184 AB       		.byte	0xab
+ 1030 0185 E2000000 		.4byte	0xe2
+ 1031 0189 55000000 		.4byte	.LLST2
+ 1032 018d 10       		.uleb128 0x10
+ 1033 018e BB000000 		.4byte	.LASF23
+ 1034 0192 01       		.byte	0x1
+ 1035 0193 AB       		.byte	0xab
+ 1036 0194 E2000000 		.4byte	0xe2
+ 1037 0198 81000000 		.4byte	.LLST3
+ 1038 019c 10       		.uleb128 0x10
+ 1039 019d C0000000 		.4byte	.LASF24
+ 1040 01a1 01       		.byte	0x1
+ 1041 01a2 AB       		.byte	0xab
+ 1042 01a3 E2000000 		.4byte	0xe2
+ 1043 01a7 AD000000 		.4byte	.LLST4
+ 1044 01ab 10       		.uleb128 0x10
+ 1045 01ac C5000000 		.4byte	.LASF25
+ 1046 01b0 01       		.byte	0x1
+ 1047 01b1 AB       		.byte	0xab
+ 1048 01b2 E2000000 		.4byte	0xe2
+ 1049 01b6 D9000000 		.4byte	.LLST5
+ 1050 01ba 11       		.uleb128 0x11
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 24
+
+
+ 1051 01bb 10000000 		.4byte	.LVL19
+ 1052 01bf 68070000 		.4byte	0x768
+ 1053 01c3 CD010000 		.4byte	0x1cd
+ 1054 01c7 0E       		.uleb128 0xe
+ 1055 01c8 01       		.uleb128 0x1
+ 1056 01c9 50       		.byte	0x50
+ 1057 01ca 01       		.uleb128 0x1
+ 1058 01cb 31       		.byte	0x31
+ 1059 01cc 00       		.byte	0
+ 1060 01cd 11       		.uleb128 0x11
+ 1061 01ce 18000000 		.4byte	.LVL20
+ 1062 01d2 79070000 		.4byte	0x779
+ 1063 01d6 E5010000 		.4byte	0x1e5
+ 1064 01da 0E       		.uleb128 0xe
+ 1065 01db 01       		.uleb128 0x1
+ 1066 01dc 51       		.byte	0x51
+ 1067 01dd 01       		.uleb128 0x1
+ 1068 01de 30       		.byte	0x30
+ 1069 01df 0E       		.uleb128 0xe
+ 1070 01e0 01       		.uleb128 0x1
+ 1071 01e1 50       		.byte	0x50
+ 1072 01e2 01       		.uleb128 0x1
+ 1073 01e3 30       		.byte	0x30
+ 1074 01e4 00       		.byte	0
+ 1075 01e5 11       		.uleb128 0x11
+ 1076 01e6 1E000000 		.4byte	.LVL21
+ 1077 01ea 8F070000 		.4byte	0x78f
+ 1078 01ee F9010000 		.4byte	0x1f9
+ 1079 01f2 0E       		.uleb128 0xe
+ 1080 01f3 01       		.uleb128 0x1
+ 1081 01f4 50       		.byte	0x50
+ 1082 01f5 02       		.uleb128 0x2
+ 1083 01f6 77       		.byte	0x77
+ 1084 01f7 00       		.sleb128 0
+ 1085 01f8 00       		.byte	0
+ 1086 01f9 11       		.uleb128 0x11
+ 1087 01fa 26000000 		.4byte	.LVL22
+ 1088 01fe 79070000 		.4byte	0x779
+ 1089 0202 11020000 		.4byte	0x211
+ 1090 0206 0E       		.uleb128 0xe
+ 1091 0207 01       		.uleb128 0x1
+ 1092 0208 51       		.byte	0x51
+ 1093 0209 01       		.uleb128 0x1
+ 1094 020a 3A       		.byte	0x3a
+ 1095 020b 0E       		.uleb128 0xe
+ 1096 020c 01       		.uleb128 0x1
+ 1097 020d 50       		.byte	0x50
+ 1098 020e 01       		.uleb128 0x1
+ 1099 020f 30       		.byte	0x30
+ 1100 0210 00       		.byte	0
+ 1101 0211 11       		.uleb128 0x11
+ 1102 0212 2C000000 		.4byte	.LVL23
+ 1103 0216 8F070000 		.4byte	0x78f
+ 1104 021a 25020000 		.4byte	0x225
+ 1105 021e 0E       		.uleb128 0xe
+ 1106 021f 01       		.uleb128 0x1
+ 1107 0220 50       		.byte	0x50
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 25
+
+
+ 1108 0221 02       		.uleb128 0x2
+ 1109 0222 76       		.byte	0x76
+ 1110 0223 00       		.sleb128 0
+ 1111 0224 00       		.byte	0
+ 1112 0225 11       		.uleb128 0x11
+ 1113 0226 34000000 		.4byte	.LVL24
+ 1114 022a 79070000 		.4byte	0x779
+ 1115 022e 3D020000 		.4byte	0x23d
+ 1116 0232 0E       		.uleb128 0xe
+ 1117 0233 01       		.uleb128 0x1
+ 1118 0234 51       		.byte	0x51
+ 1119 0235 01       		.uleb128 0x1
+ 1120 0236 30       		.byte	0x30
+ 1121 0237 0E       		.uleb128 0xe
+ 1122 0238 01       		.uleb128 0x1
+ 1123 0239 50       		.byte	0x50
+ 1124 023a 01       		.uleb128 0x1
+ 1125 023b 31       		.byte	0x31
+ 1126 023c 00       		.byte	0
+ 1127 023d 11       		.uleb128 0x11
+ 1128 023e 3A000000 		.4byte	.LVL25
+ 1129 0242 8F070000 		.4byte	0x78f
+ 1130 0246 51020000 		.4byte	0x251
+ 1131 024a 0E       		.uleb128 0xe
+ 1132 024b 01       		.uleb128 0x1
+ 1133 024c 50       		.byte	0x50
+ 1134 024d 02       		.uleb128 0x2
+ 1135 024e 75       		.byte	0x75
+ 1136 024f 00       		.sleb128 0
+ 1137 0250 00       		.byte	0
+ 1138 0251 11       		.uleb128 0x11
+ 1139 0252 42000000 		.4byte	.LVL26
+ 1140 0256 79070000 		.4byte	0x779
+ 1141 025a 69020000 		.4byte	0x269
+ 1142 025e 0E       		.uleb128 0xe
+ 1143 025f 01       		.uleb128 0x1
+ 1144 0260 51       		.byte	0x51
+ 1145 0261 01       		.uleb128 0x1
+ 1146 0262 3A       		.byte	0x3a
+ 1147 0263 0E       		.uleb128 0xe
+ 1148 0264 01       		.uleb128 0x1
+ 1149 0265 50       		.byte	0x50
+ 1150 0266 01       		.uleb128 0x1
+ 1151 0267 31       		.byte	0x31
+ 1152 0268 00       		.byte	0
+ 1153 0269 0D       		.uleb128 0xd
+ 1154 026a 48000000 		.4byte	.LVL27
+ 1155 026e 8F070000 		.4byte	0x78f
+ 1156 0272 0E       		.uleb128 0xe
+ 1157 0273 01       		.uleb128 0x1
+ 1158 0274 50       		.byte	0x50
+ 1159 0275 02       		.uleb128 0x2
+ 1160 0276 74       		.byte	0x74
+ 1161 0277 00       		.sleb128 0
+ 1162 0278 00       		.byte	0
+ 1163 0279 00       		.byte	0
+ 1164 027a 0F       		.uleb128 0xf
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 26
+
+
+ 1165 027b 34030000 		.4byte	.LASF26
+ 1166 027f 01       		.byte	0x1
+ 1167 0280 B9       		.byte	0xb9
+ 1168 0281 00000000 		.4byte	.LFB37
+ 1169 0285 10000000 		.4byte	.LFE37-.LFB37
+ 1170 0289 01       		.uleb128 0x1
+ 1171 028a 9C       		.byte	0x9c
+ 1172 028b D3020000 		.4byte	0x2d3
+ 1173 028f 10       		.uleb128 0x10
+ 1174 0290 4C030000 		.4byte	.LASF27
+ 1175 0294 01       		.byte	0x1
+ 1176 0295 B9       		.byte	0xb9
+ 1177 0296 5D000000 		.4byte	0x5d
+ 1178 029a 05010000 		.4byte	.LLST6
+ 1179 029e 10       		.uleb128 0x10
+ 1180 029f 31000000 		.4byte	.LASF28
+ 1181 02a3 01       		.byte	0x1
+ 1182 02a4 B9       		.byte	0xb9
+ 1183 02a5 5D000000 		.4byte	0x5d
+ 1184 02a9 26010000 		.4byte	.LLST7
+ 1185 02ad 11       		.uleb128 0x11
+ 1186 02ae 08000000 		.4byte	.LVL33
+ 1187 02b2 AB070000 		.4byte	0x7ab
+ 1188 02b6 C2020000 		.4byte	0x2c2
+ 1189 02ba 0E       		.uleb128 0xe
+ 1190 02bb 01       		.uleb128 0x1
+ 1191 02bc 50       		.byte	0x50
+ 1192 02bd 03       		.uleb128 0x3
+ 1193 02be F3       		.byte	0xf3
+ 1194 02bf 01       		.uleb128 0x1
+ 1195 02c0 50       		.byte	0x50
+ 1196 02c1 00       		.byte	0
+ 1197 02c2 0D       		.uleb128 0xd
+ 1198 02c3 0E000000 		.4byte	.LVL34
+ 1199 02c7 BD070000 		.4byte	0x7bd
+ 1200 02cb 0E       		.uleb128 0xe
+ 1201 02cc 01       		.uleb128 0x1
+ 1202 02cd 50       		.byte	0x50
+ 1203 02ce 02       		.uleb128 0x2
+ 1204 02cf 74       		.byte	0x74
+ 1205 02d0 00       		.sleb128 0
+ 1206 02d1 00       		.byte	0
+ 1207 02d2 00       		.byte	0
+ 1208 02d3 12       		.uleb128 0x12
+ 1209 02d4 00000000 		.4byte	.LASF72
+ 1210 02d8 01       		.byte	0x1
+ 1211 02d9 C0       		.byte	0xc0
+ 1212 02da 00000000 		.4byte	.LFB38
+ 1213 02de 38000000 		.4byte	.LFE38-.LFB38
+ 1214 02e2 01       		.uleb128 0x1
+ 1215 02e3 9C       		.byte	0x9c
+ 1216 02e4 48030000 		.4byte	0x348
+ 1217 02e8 0A       		.uleb128 0xa
+ 1218 02e9 08000000 		.4byte	.LVL36
+ 1219 02ed CF070000 		.4byte	0x7cf
+ 1220 02f1 0A       		.uleb128 0xa
+ 1221 02f2 0C000000 		.4byte	.LVL37
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 27
+
+
+ 1222 02f6 D6070000 		.4byte	0x7d6
+ 1223 02fa 0A       		.uleb128 0xa
+ 1224 02fb 10000000 		.4byte	.LVL38
+ 1225 02ff DD070000 		.4byte	0x7dd
+ 1226 0303 0A       		.uleb128 0xa
+ 1227 0304 16000000 		.4byte	.LVL39
+ 1228 0308 E4070000 		.4byte	0x7e4
+ 1229 030c 0A       		.uleb128 0xa
+ 1230 030d 1A000000 		.4byte	.LVL40
+ 1231 0311 00080000 		.4byte	0x800
+ 1232 0315 0A       		.uleb128 0xa
+ 1233 0316 1E000000 		.4byte	.LVL41
+ 1234 031a 08080000 		.4byte	0x808
+ 1235 031e 11       		.uleb128 0x11
+ 1236 031f 24000000 		.4byte	.LVL42
+ 1237 0323 10080000 		.4byte	0x810
+ 1238 0327 35030000 		.4byte	0x335
+ 1239 032b 0E       		.uleb128 0xe
+ 1240 032c 01       		.uleb128 0x1
+ 1241 032d 50       		.byte	0x50
+ 1242 032e 05       		.uleb128 0x5
+ 1243 032f 03       		.byte	0x3
+ 1244 0330 00000000 		.4byte	InterruptHandler
+ 1245 0334 00       		.byte	0
+ 1246 0335 0A       		.uleb128 0xa
+ 1247 0336 28000000 		.4byte	.LVL43
+ 1248 033a 21080000 		.4byte	0x821
+ 1249 033e 0A       		.uleb128 0xa
+ 1250 033f 2C000000 		.4byte	.LVL44
+ 1251 0343 28080000 		.4byte	0x828
+ 1252 0347 00       		.byte	0
+ 1253 0348 0B       		.uleb128 0xb
+ 1254 0349 AC000000 		.4byte	.LASF30
+ 1255 034d 01       		.byte	0x1
+ 1256 034e D3       		.byte	0xd3
+ 1257 034f 5D000000 		.4byte	0x5d
+ 1258 0353 00000000 		.4byte	.LFB39
+ 1259 0357 16000000 		.4byte	.LFE39-.LFB39
+ 1260 035b 01       		.uleb128 0x1
+ 1261 035c 9C       		.byte	0x9c
+ 1262 035d 6F030000 		.4byte	0x36f
+ 1263 0361 0C       		.uleb128 0xc
+ 1264 0362 7800     		.ascii	"x\000"
+ 1265 0364 01       		.byte	0x1
+ 1266 0365 D3       		.byte	0xd3
+ 1267 0366 5D000000 		.4byte	0x5d
+ 1268 036a 52010000 		.4byte	.LLST8
+ 1269 036e 00       		.byte	0
+ 1270 036f 13       		.uleb128 0x13
+ 1271 0370 A7000000 		.4byte	.LASF31
+ 1272 0374 01       		.byte	0x1
+ 1273 0375 44       		.byte	0x44
+ 1274 0376 5D000000 		.4byte	0x5d
+ 1275 037a 00000000 		.4byte	.LFB34
+ 1276 037e 28020000 		.4byte	.LFE34-.LFB34
+ 1277 0382 01       		.uleb128 0x1
+ 1278 0383 9C       		.byte	0x9c
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 28
+
+
+ 1279 0384 EE050000 		.4byte	0x5ee
+ 1280 0388 14       		.uleb128 0x14
+ 1281 0389 9E020000 		.4byte	.LASF32
+ 1282 038d 01       		.byte	0x1
+ 1283 038e 48       		.byte	0x48
+ 1284 038f 81000000 		.4byte	0x81
+ 1285 0393 97010000 		.4byte	.LLST9
+ 1286 0397 15       		.uleb128 0x15
+ 1287 0398 B3030000 		.4byte	.LASF33
+ 1288 039c 01       		.byte	0x1
+ 1289 039d 4A       		.byte	0x4a
+ 1290 039e EE050000 		.4byte	0x5ee
+ 1291 03a2 02       		.uleb128 0x2
+ 1292 03a3 91       		.byte	0x91
+ 1293 03a4 58       		.sleb128 -40
+ 1294 03a5 15       		.uleb128 0x15
+ 1295 03a6 BB030000 		.4byte	.LASF34
+ 1296 03aa 01       		.byte	0x1
+ 1297 03ab 4A       		.byte	0x4a
+ 1298 03ac EE050000 		.4byte	0x5ee
+ 1299 03b0 02       		.uleb128 0x2
+ 1300 03b1 91       		.byte	0x91
+ 1301 03b2 48       		.sleb128 -56
+ 1302 03b3 15       		.uleb128 0x15
+ 1303 03b4 C3030000 		.4byte	.LASF35
+ 1304 03b8 01       		.byte	0x1
+ 1305 03b9 4A       		.byte	0x4a
+ 1306 03ba EE050000 		.4byte	0x5ee
+ 1307 03be 03       		.uleb128 0x3
+ 1308 03bf 91       		.byte	0x91
+ 1309 03c0 B87F     		.sleb128 -72
+ 1310 03c2 15       		.uleb128 0x15
+ 1311 03c3 CB030000 		.4byte	.LASF36
+ 1312 03c7 01       		.byte	0x1
+ 1313 03c8 4A       		.byte	0x4a
+ 1314 03c9 EE050000 		.4byte	0x5ee
+ 1315 03cd 03       		.uleb128 0x3
+ 1316 03ce 91       		.byte	0x91
+ 1317 03cf A87F     		.sleb128 -88
+ 1318 03d1 14       		.uleb128 0x14
+ 1319 03d2 96010000 		.4byte	.LASF37
+ 1320 03d6 01       		.byte	0x1
+ 1321 03d7 4C       		.byte	0x4c
+ 1322 03d8 6B000000 		.4byte	0x6b
+ 1323 03dc B6010000 		.4byte	.LLST10
+ 1324 03e0 0A       		.uleb128 0xa
+ 1325 03e1 08000000 		.4byte	.LVL50
+ 1326 03e5 D3020000 		.4byte	0x2d3
+ 1327 03e9 11       		.uleb128 0x11
+ 1328 03ea 10000000 		.4byte	.LVL52
+ 1329 03ee 2F080000 		.4byte	0x82f
+ 1330 03f2 FC030000 		.4byte	0x3fc
+ 1331 03f6 0E       		.uleb128 0xe
+ 1332 03f7 01       		.uleb128 0x1
+ 1333 03f8 50       		.byte	0x50
+ 1334 03f9 01       		.uleb128 0x1
+ 1335 03fa 32       		.byte	0x32
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 29
+
+
+ 1336 03fb 00       		.byte	0
+ 1337 03fc 11       		.uleb128 0x11
+ 1338 03fd 16000000 		.4byte	.LVL53
+ 1339 0401 44080000 		.4byte	0x844
+ 1340 0405 0F040000 		.4byte	0x40f
+ 1341 0409 0E       		.uleb128 0xe
+ 1342 040a 01       		.uleb128 0x1
+ 1343 040b 50       		.byte	0x50
+ 1344 040c 01       		.uleb128 0x1
+ 1345 040d 30       		.byte	0x30
+ 1346 040e 00       		.byte	0
+ 1347 040f 11       		.uleb128 0x11
+ 1348 0410 7A000000 		.4byte	.LVL62
+ 1349 0414 7A020000 		.4byte	0x27a
+ 1350 0418 24040000 		.4byte	0x424
+ 1351 041c 0E       		.uleb128 0xe
+ 1352 041d 01       		.uleb128 0x1
+ 1353 041e 50       		.byte	0x50
+ 1354 041f 03       		.uleb128 0x3
+ 1355 0420 0A       		.byte	0xa
+ 1356 0421 3610     		.2byte	0x1036
+ 1357 0423 00       		.byte	0
+ 1358 0424 11       		.uleb128 0x11
+ 1359 0425 82000000 		.4byte	.LVL63
+ 1360 0429 59080000 		.4byte	0x859
+ 1361 042d 39040000 		.4byte	0x439
+ 1362 0431 0E       		.uleb128 0xe
+ 1363 0432 01       		.uleb128 0x1
+ 1364 0433 50       		.byte	0x50
+ 1365 0434 03       		.uleb128 0x3
+ 1366 0435 0A       		.byte	0xa
+ 1367 0436 3B01     		.2byte	0x13b
+ 1368 0438 00       		.byte	0
+ 1369 0439 11       		.uleb128 0x11
+ 1370 043a CC000000 		.4byte	.LVL71
+ 1371 043e 7A020000 		.4byte	0x27a
+ 1372 0442 4E040000 		.4byte	0x44e
+ 1373 0446 0E       		.uleb128 0xe
+ 1374 0447 01       		.uleb128 0x1
+ 1375 0448 50       		.byte	0x50
+ 1376 0449 03       		.uleb128 0x3
+ 1377 044a 0A       		.byte	0xa
+ 1378 044b 3610     		.2byte	0x1036
+ 1379 044d 00       		.byte	0
+ 1380 044e 0A       		.uleb128 0xa
+ 1381 044f D6000000 		.4byte	.LVL74
+ 1382 0453 6A080000 		.4byte	0x86a
+ 1383 0457 11       		.uleb128 0x11
+ 1384 0458 E2000000 		.4byte	.LVL76
+ 1385 045c 0C010000 		.4byte	0x10c
+ 1386 0460 70040000 		.4byte	0x470
+ 1387 0464 0E       		.uleb128 0xe
+ 1388 0465 01       		.uleb128 0x1
+ 1389 0466 51       		.byte	0x51
+ 1390 0467 01       		.uleb128 0x1
+ 1391 0468 33       		.byte	0x33
+ 1392 0469 0E       		.uleb128 0xe
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 30
+
+
+ 1393 046a 01       		.uleb128 0x1
+ 1394 046b 50       		.byte	0x50
+ 1395 046c 02       		.uleb128 0x2
+ 1396 046d 91       		.byte	0x91
+ 1397 046e 58       		.sleb128 -40
+ 1398 046f 00       		.byte	0
+ 1399 0470 11       		.uleb128 0x11
+ 1400 0471 F0000000 		.4byte	.LVL77
+ 1401 0475 0C010000 		.4byte	0x10c
+ 1402 0479 84040000 		.4byte	0x484
+ 1403 047d 0E       		.uleb128 0xe
+ 1404 047e 01       		.uleb128 0x1
+ 1405 047f 50       		.byte	0x50
+ 1406 0480 02       		.uleb128 0x2
+ 1407 0481 91       		.byte	0x91
+ 1408 0482 48       		.sleb128 -56
+ 1409 0483 00       		.byte	0
+ 1410 0484 11       		.uleb128 0x11
+ 1411 0485 FA000000 		.4byte	.LVL78
+ 1412 0489 0C010000 		.4byte	0x10c
+ 1413 048d 99040000 		.4byte	0x499
+ 1414 0491 0E       		.uleb128 0xe
+ 1415 0492 01       		.uleb128 0x1
+ 1416 0493 50       		.byte	0x50
+ 1417 0494 03       		.uleb128 0x3
+ 1418 0495 91       		.byte	0x91
+ 1419 0496 B87F     		.sleb128 -72
+ 1420 0498 00       		.byte	0
+ 1421 0499 11       		.uleb128 0x11
+ 1422 049a 06010000 		.4byte	.LVL79
+ 1423 049e 0C010000 		.4byte	0x10c
+ 1424 04a2 AE040000 		.4byte	0x4ae
+ 1425 04a6 0E       		.uleb128 0xe
+ 1426 04a7 01       		.uleb128 0x1
+ 1427 04a8 50       		.byte	0x50
+ 1428 04a9 03       		.uleb128 0x3
+ 1429 04aa 91       		.byte	0x91
+ 1430 04ab A87F     		.sleb128 -88
+ 1431 04ad 00       		.byte	0
+ 1432 04ae 11       		.uleb128 0x11
+ 1433 04af 12010000 		.4byte	.LVL80
+ 1434 04b3 69010000 		.4byte	0x169
+ 1435 04b7 CE040000 		.4byte	0x4ce
+ 1436 04bb 0E       		.uleb128 0xe
+ 1437 04bc 01       		.uleb128 0x1
+ 1438 04bd 52       		.byte	0x52
+ 1439 04be 02       		.uleb128 0x2
+ 1440 04bf 75       		.byte	0x75
+ 1441 04c0 00       		.sleb128 0
+ 1442 04c1 0E       		.uleb128 0xe
+ 1443 04c2 01       		.uleb128 0x1
+ 1444 04c3 51       		.byte	0x51
+ 1445 04c4 02       		.uleb128 0x2
+ 1446 04c5 76       		.byte	0x76
+ 1447 04c6 00       		.sleb128 0
+ 1448 04c7 0E       		.uleb128 0xe
+ 1449 04c8 01       		.uleb128 0x1
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 31
+
+
+ 1450 04c9 50       		.byte	0x50
+ 1451 04ca 02       		.uleb128 0x2
+ 1452 04cb 77       		.byte	0x77
+ 1453 04cc 00       		.sleb128 0
+ 1454 04cd 00       		.byte	0
+ 1455 04ce 0A       		.uleb128 0xa
+ 1456 04cf 52010000 		.4byte	.LVL85
+ 1457 04d3 48030000 		.4byte	0x348
+ 1458 04d7 11       		.uleb128 0x11
+ 1459 04d8 62010000 		.4byte	.LVL86
+ 1460 04dc 7A020000 		.4byte	0x27a
+ 1461 04e0 EC040000 		.4byte	0x4ec
+ 1462 04e4 0E       		.uleb128 0xe
+ 1463 04e5 01       		.uleb128 0x1
+ 1464 04e6 50       		.byte	0x50
+ 1465 04e7 03       		.uleb128 0x3
+ 1466 04e8 0A       		.byte	0xa
+ 1467 04e9 0410     		.2byte	0x1004
+ 1468 04eb 00       		.byte	0
+ 1469 04ec 11       		.uleb128 0x11
+ 1470 04ed 76010000 		.4byte	.LVL87
+ 1471 04f1 7A020000 		.4byte	0x27a
+ 1472 04f5 01050000 		.4byte	0x501
+ 1473 04f9 0E       		.uleb128 0xe
+ 1474 04fa 01       		.uleb128 0x1
+ 1475 04fb 50       		.byte	0x50
+ 1476 04fc 03       		.uleb128 0x3
+ 1477 04fd 0A       		.byte	0xa
+ 1478 04fe B610     		.2byte	0x10b6
+ 1479 0500 00       		.byte	0
+ 1480 0501 11       		.uleb128 0x11
+ 1481 0502 82010000 		.4byte	.LVL88
+ 1482 0506 7A020000 		.4byte	0x27a
+ 1483 050a 1D050000 		.4byte	0x51d
+ 1484 050e 0E       		.uleb128 0xe
+ 1485 050f 01       		.uleb128 0x1
+ 1486 0510 51       		.byte	0x51
+ 1487 0511 03       		.uleb128 0x3
+ 1488 0512 0A       		.byte	0xa
+ 1489 0513 A00F     		.2byte	0xfa0
+ 1490 0515 0E       		.uleb128 0xe
+ 1491 0516 01       		.uleb128 0x1
+ 1492 0517 50       		.byte	0x50
+ 1493 0518 03       		.uleb128 0x3
+ 1494 0519 0A       		.byte	0xa
+ 1495 051a 4416     		.2byte	0x1644
+ 1496 051c 00       		.byte	0
+ 1497 051d 11       		.uleb128 0x11
+ 1498 051e 8A010000 		.4byte	.LVL89
+ 1499 0522 59080000 		.4byte	0x859
+ 1500 0526 32050000 		.4byte	0x532
+ 1501 052a 0E       		.uleb128 0xe
+ 1502 052b 01       		.uleb128 0x1
+ 1503 052c 50       		.byte	0x50
+ 1504 052d 03       		.uleb128 0x3
+ 1505 052e 0A       		.byte	0xa
+ 1506 052f C201     		.2byte	0x1c2
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 32
+
+
+ 1507 0531 00       		.byte	0
+ 1508 0532 11       		.uleb128 0x11
+ 1509 0533 92010000 		.4byte	.LVL90
+ 1510 0537 7A020000 		.4byte	0x27a
+ 1511 053b 4E050000 		.4byte	0x54e
+ 1512 053f 0E       		.uleb128 0xe
+ 1513 0540 01       		.uleb128 0x1
+ 1514 0541 51       		.byte	0x51
+ 1515 0542 03       		.uleb128 0x3
+ 1516 0543 0A       		.byte	0xa
+ 1517 0544 9A10     		.2byte	0x109a
+ 1518 0546 0E       		.uleb128 0xe
+ 1519 0547 01       		.uleb128 0x1
+ 1520 0548 50       		.byte	0x50
+ 1521 0549 03       		.uleb128 0x3
+ 1522 054a 0A       		.byte	0xa
+ 1523 054b 0A0F     		.2byte	0xf0a
+ 1524 054d 00       		.byte	0
+ 1525 054e 11       		.uleb128 0x11
+ 1526 054f 9A010000 		.4byte	.LVL91
+ 1527 0553 59080000 		.4byte	0x859
+ 1528 0557 63050000 		.4byte	0x563
+ 1529 055b 0E       		.uleb128 0xe
+ 1530 055c 01       		.uleb128 0x1
+ 1531 055d 50       		.byte	0x50
+ 1532 055e 03       		.uleb128 0x3
+ 1533 055f 0A       		.byte	0xa
+ 1534 0560 2003     		.2byte	0x320
+ 1535 0562 00       		.byte	0
+ 1536 0563 11       		.uleb128 0x11
+ 1537 0564 A2010000 		.4byte	.LVL92
+ 1538 0568 0C010000 		.4byte	0x10c
+ 1539 056c 7D050000 		.4byte	0x57d
+ 1540 0570 0E       		.uleb128 0xe
+ 1541 0571 01       		.uleb128 0x1
+ 1542 0572 51       		.byte	0x51
+ 1543 0573 02       		.uleb128 0x2
+ 1544 0574 74       		.byte	0x74
+ 1545 0575 00       		.sleb128 0
+ 1546 0576 0E       		.uleb128 0xe
+ 1547 0577 01       		.uleb128 0x1
+ 1548 0578 50       		.byte	0x50
+ 1549 0579 02       		.uleb128 0x2
+ 1550 057a 91       		.byte	0x91
+ 1551 057b 58       		.sleb128 -40
+ 1552 057c 00       		.byte	0
+ 1553 057d 11       		.uleb128 0x11
+ 1554 057e B0010000 		.4byte	.LVL93
+ 1555 0582 0C010000 		.4byte	0x10c
+ 1556 0586 91050000 		.4byte	0x591
+ 1557 058a 0E       		.uleb128 0xe
+ 1558 058b 01       		.uleb128 0x1
+ 1559 058c 50       		.byte	0x50
+ 1560 058d 02       		.uleb128 0x2
+ 1561 058e 91       		.byte	0x91
+ 1562 058f 48       		.sleb128 -56
+ 1563 0590 00       		.byte	0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 33
+
+
+ 1564 0591 11       		.uleb128 0x11
+ 1565 0592 BA010000 		.4byte	.LVL94
+ 1566 0596 0C010000 		.4byte	0x10c
+ 1567 059a A6050000 		.4byte	0x5a6
+ 1568 059e 0E       		.uleb128 0xe
+ 1569 059f 01       		.uleb128 0x1
+ 1570 05a0 50       		.byte	0x50
+ 1571 05a1 03       		.uleb128 0x3
+ 1572 05a2 91       		.byte	0x91
+ 1573 05a3 B87F     		.sleb128 -72
+ 1574 05a5 00       		.byte	0
+ 1575 05a6 11       		.uleb128 0x11
+ 1576 05a7 C6010000 		.4byte	.LVL95
+ 1577 05ab 0C010000 		.4byte	0x10c
+ 1578 05af BB050000 		.4byte	0x5bb
+ 1579 05b3 0E       		.uleb128 0xe
+ 1580 05b4 01       		.uleb128 0x1
+ 1581 05b5 50       		.byte	0x50
+ 1582 05b6 03       		.uleb128 0x3
+ 1583 05b7 91       		.byte	0x91
+ 1584 05b8 A87F     		.sleb128 -88
+ 1585 05ba 00       		.byte	0
+ 1586 05bb 11       		.uleb128 0x11
+ 1587 05bc D2010000 		.4byte	.LVL96
+ 1588 05c0 69010000 		.4byte	0x169
+ 1589 05c4 DD050000 		.4byte	0x5dd
+ 1590 05c8 0E       		.uleb128 0xe
+ 1591 05c9 01       		.uleb128 0x1
+ 1592 05ca 52       		.byte	0x52
+ 1593 05cb 04       		.uleb128 0x4
+ 1594 05cc 91       		.byte	0x91
+ 1595 05cd A47F     		.sleb128 -92
+ 1596 05cf 06       		.byte	0x6
+ 1597 05d0 0E       		.uleb128 0xe
+ 1598 05d1 01       		.uleb128 0x1
+ 1599 05d2 51       		.byte	0x51
+ 1600 05d3 02       		.uleb128 0x2
+ 1601 05d4 76       		.byte	0x76
+ 1602 05d5 00       		.sleb128 0
+ 1603 05d6 0E       		.uleb128 0xe
+ 1604 05d7 01       		.uleb128 0x1
+ 1605 05d8 50       		.byte	0x50
+ 1606 05d9 02       		.uleb128 0x2
+ 1607 05da 77       		.byte	0x77
+ 1608 05db 00       		.sleb128 0
+ 1609 05dc 00       		.byte	0
+ 1610 05dd 0D       		.uleb128 0xd
+ 1611 05de D8010000 		.4byte	.LVL97
+ 1612 05e2 59080000 		.4byte	0x859
+ 1613 05e6 0E       		.uleb128 0xe
+ 1614 05e7 01       		.uleb128 0x1
+ 1615 05e8 50       		.byte	0x50
+ 1616 05e9 02       		.uleb128 0x2
+ 1617 05ea 08       		.byte	0x8
+ 1618 05eb 64       		.byte	0x64
+ 1619 05ec 00       		.byte	0
+ 1620 05ed 00       		.byte	0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 34
+
+
+ 1621 05ee 16       		.uleb128 0x16
+ 1622 05ef BB000000 		.4byte	0xbb
+ 1623 05f3 FE050000 		.4byte	0x5fe
+ 1624 05f7 17       		.uleb128 0x17
+ 1625 05f8 D5000000 		.4byte	0xd5
+ 1626 05fc 0E       		.byte	0xe
+ 1627 05fd 00       		.byte	0
+ 1628 05fe 16       		.uleb128 0x16
+ 1629 05ff 6B000000 		.4byte	0x6b
+ 1630 0603 0E060000 		.4byte	0x60e
+ 1631 0607 17       		.uleb128 0x17
+ 1632 0608 D5000000 		.4byte	0xd5
+ 1633 060c 3F       		.byte	0x3f
+ 1634 060d 00       		.byte	0
+ 1635 060e 18       		.uleb128 0x18
+ 1636 060f 92000000 		.4byte	.LASF38
+ 1637 0613 03       		.byte	0x3
+ 1638 0614 77       		.byte	0x77
+ 1639 0615 19060000 		.4byte	0x619
+ 1640 0619 08       		.uleb128 0x8
+ 1641 061a FE050000 		.4byte	0x5fe
+ 1642 061e 19       		.uleb128 0x19
+ 1643 061f 503100   		.ascii	"P1\000"
+ 1644 0622 01       		.byte	0x1
+ 1645 0623 10       		.byte	0x10
+ 1646 0624 2E060000 		.4byte	0x62e
+ 1647 0628 05       		.uleb128 0x5
+ 1648 0629 03       		.byte	0x3
+ 1649 062a 00000000 		.4byte	P1
+ 1650 062e 08       		.uleb128 0x8
+ 1651 062f A2000000 		.4byte	0xa2
+ 1652 0633 19       		.uleb128 0x19
+ 1653 0634 493100   		.ascii	"I1\000"
+ 1654 0637 01       		.byte	0x1
+ 1655 0638 11       		.byte	0x11
+ 1656 0639 2E060000 		.4byte	0x62e
+ 1657 063d 05       		.uleb128 0x5
+ 1658 063e 03       		.byte	0x3
+ 1659 063f 00000000 		.4byte	I1
+ 1660 0643 19       		.uleb128 0x19
+ 1661 0644 443100   		.ascii	"D1\000"
+ 1662 0647 01       		.byte	0x1
+ 1663 0648 12       		.byte	0x12
+ 1664 0649 2E060000 		.4byte	0x62e
+ 1665 064d 05       		.uleb128 0x5
+ 1666 064e 03       		.byte	0x3
+ 1667 064f 00000000 		.4byte	D1
+ 1668 0653 1A       		.uleb128 0x1a
+ 1669 0654 B6020000 		.4byte	.LASF39
+ 1670 0658 01       		.byte	0x1
+ 1671 0659 15       		.byte	0x15
+ 1672 065a 64060000 		.4byte	0x664
+ 1673 065e 05       		.uleb128 0x5
+ 1674 065f 03       		.byte	0x3
+ 1675 0660 00000000 		.4byte	I_dist
+ 1676 0664 08       		.uleb128 0x8
+ 1677 0665 97000000 		.4byte	0x97
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 35
+
+
+ 1678 0669 1A       		.uleb128 0x1a
+ 1679 066a 52000000 		.4byte	.LASF40
+ 1680 066e 01       		.byte	0x1
+ 1681 066f 18       		.byte	0x18
+ 1682 0670 97000000 		.4byte	0x97
+ 1683 0674 05       		.uleb128 0x5
+ 1684 0675 03       		.byte	0x3
+ 1685 0676 00000000 		.4byte	dist
+ 1686 067a 16       		.uleb128 0x16
+ 1687 067b 76000000 		.4byte	0x76
+ 1688 067f 8A060000 		.4byte	0x68a
+ 1689 0683 17       		.uleb128 0x17
+ 1690 0684 D5000000 		.4byte	0xd5
+ 1691 0688 63       		.byte	0x63
+ 1692 0689 00       		.byte	0
+ 1693 068a 1A       		.uleb128 0x1a
+ 1694 068b D3030000 		.4byte	.LASF41
+ 1695 068f 01       		.byte	0x1
+ 1696 0690 19       		.byte	0x19
+ 1697 0691 7A060000 		.4byte	0x67a
+ 1698 0695 05       		.uleb128 0x5
+ 1699 0696 03       		.byte	0x3
+ 1700 0697 00000000 		.4byte	dFIFO
+ 1701 069b 1A       		.uleb128 0x1a
+ 1702 069c 42030000 		.4byte	.LASF42
+ 1703 06a0 01       		.byte	0x1
+ 1704 06a1 1A       		.byte	0x1a
+ 1705 06a2 97000000 		.4byte	0x97
+ 1706 06a6 05       		.uleb128 0x5
+ 1707 06a7 03       		.byte	0x3
+ 1708 06a8 00000000 		.4byte	rR_Adjust
+ 1709 06ac 1A       		.uleb128 0x1a
+ 1710 06ad 69020000 		.4byte	.LASF43
+ 1711 06b1 01       		.byte	0x1
+ 1712 06b2 1B       		.byte	0x1b
+ 1713 06b3 97000000 		.4byte	0x97
+ 1714 06b7 05       		.uleb128 0x5
+ 1715 06b8 03       		.byte	0x3
+ 1716 06b9 00000000 		.4byte	derror
+ 1717 06bd 1A       		.uleb128 0x1a
+ 1718 06be 5C010000 		.4byte	.LASF44
+ 1719 06c2 01       		.byte	0x1
+ 1720 06c3 1C       		.byte	0x1c
+ 1721 06c4 97000000 		.4byte	0x97
+ 1722 06c8 05       		.uleb128 0x5
+ 1723 06c9 03       		.byte	0x3
+ 1724 06ca 00000000 		.4byte	derror1
+ 1725 06ce 1A       		.uleb128 0x1a
+ 1726 06cf 94030000 		.4byte	.LASF45
+ 1727 06d3 01       		.byte	0x1
+ 1728 06d4 1D       		.byte	0x1d
+ 1729 06d5 97000000 		.4byte	0x97
+ 1730 06d9 05       		.uleb128 0x5
+ 1731 06da 03       		.byte	0x3
+ 1732 06db 00000000 		.4byte	derror_error
+ 1733 06df 1A       		.uleb128 0x1a
+ 1734 06e0 E9030000 		.4byte	.LASF46
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 36
+
+
+ 1735 06e4 01       		.byte	0x1
+ 1736 06e5 1E       		.byte	0x1e
+ 1737 06e6 97000000 		.4byte	0x97
+ 1738 06ea 05       		.uleb128 0x5
+ 1739 06eb 03       		.byte	0x3
+ 1740 06ec 00000000 		.4byte	dSum_error
+ 1741 06f0 1A       		.uleb128 0x1a
+ 1742 06f1 7A000000 		.4byte	.LASF47
+ 1743 06f5 01       		.byte	0x1
+ 1744 06f6 1F       		.byte	0x1f
+ 1745 06f7 97000000 		.4byte	0x97
+ 1746 06fb 05       		.uleb128 0x5
+ 1747 06fc 03       		.byte	0x3
+ 1748 06fd 00000000 		.4byte	All_dist
+ 1749 0701 1A       		.uleb128 0x1a
+ 1750 0702 82020000 		.4byte	.LASF48
+ 1751 0706 01       		.byte	0x1
+ 1752 0707 20       		.byte	0x20
+ 1753 0708 97000000 		.4byte	0x97
+ 1754 070c 05       		.uleb128 0x5
+ 1755 070d 03       		.byte	0x3
+ 1756 070e 00000000 		.4byte	dnum
+ 1757 0712 19       		.uleb128 0x19
+ 1758 0713 646E00   		.ascii	"dn\000"
+ 1759 0716 01       		.byte	0x1
+ 1760 0717 21       		.byte	0x21
+ 1761 0718 8C000000 		.4byte	0x8c
+ 1762 071c 05       		.uleb128 0x5
+ 1763 071d 03       		.byte	0x3
+ 1764 071e 00000000 		.4byte	dn
+ 1765 0722 19       		.uleb128 0x19
+ 1766 0723 6900     		.ascii	"i\000"
+ 1767 0725 01       		.byte	0x1
+ 1768 0726 23       		.byte	0x23
+ 1769 0727 8C000000 		.4byte	0x8c
+ 1770 072b 05       		.uleb128 0x5
+ 1771 072c 03       		.byte	0x3
+ 1772 072d 00000000 		.4byte	i
+ 1773 0731 19       		.uleb128 0x19
+ 1774 0732 64697300 		.ascii	"dis\000"
+ 1775 0736 01       		.byte	0x1
+ 1776 0737 24       		.byte	0x24
+ 1777 0738 5D000000 		.4byte	0x5d
+ 1778 073c 05       		.uleb128 0x5
+ 1779 073d 03       		.byte	0x3
+ 1780 073e 00000000 		.4byte	dis
+ 1781 0742 1B       		.uleb128 0x1b
+ 1782 0743 CA000000 		.4byte	.LASF67
+ 1783 0747 08       		.byte	0x8
+ 1784 0748 5E       		.byte	0x5e
+ 1785 0749 6B000000 		.4byte	0x6b
+ 1786 074d 1C       		.uleb128 0x1c
+ 1787 074e 61020000 		.4byte	.LASF63
+ 1788 0752 09       		.byte	0x9
+ 1789 0753 DE       		.byte	0xde
+ 1790 0754 5D000000 		.4byte	0x5d
+ 1791 0758 68070000 		.4byte	0x768
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 37
+
+
+ 1792 075c 1D       		.uleb128 0x1d
+ 1793 075d DC000000 		.4byte	0xdc
+ 1794 0761 1D       		.uleb128 0x1d
+ 1795 0762 E2000000 		.4byte	0xe2
+ 1796 0766 1E       		.uleb128 0x1e
+ 1797 0767 00       		.byte	0
+ 1798 0768 1F       		.uleb128 0x1f
+ 1799 0769 64010000 		.4byte	.LASF49
+ 1800 076d 03       		.byte	0x3
+ 1801 076e 3A       		.byte	0x3a
+ 1802 076f 79070000 		.4byte	0x779
+ 1803 0773 1D       		.uleb128 0x1d
+ 1804 0774 6B000000 		.4byte	0x6b
+ 1805 0778 00       		.byte	0
+ 1806 0779 1F       		.uleb128 0x1f
+ 1807 077a 70020000 		.4byte	.LASF50
+ 1808 077e 03       		.byte	0x3
+ 1809 077f 3D       		.byte	0x3d
+ 1810 0780 8F070000 		.4byte	0x78f
+ 1811 0784 1D       		.uleb128 0x1d
+ 1812 0785 6B000000 		.4byte	0x6b
+ 1813 0789 1D       		.uleb128 0x1d
+ 1814 078a 6B000000 		.4byte	0x6b
+ 1815 078e 00       		.byte	0
+ 1816 078f 1F       		.uleb128 0x1f
+ 1817 0790 63030000 		.4byte	.LASF51
+ 1818 0794 03       		.byte	0x3
+ 1819 0795 3C       		.byte	0x3c
+ 1820 0796 A0070000 		.4byte	0x7a0
+ 1821 079a 1D       		.uleb128 0x1d
+ 1822 079b A0070000 		.4byte	0x7a0
+ 1823 079f 00       		.byte	0
+ 1824 07a0 06       		.uleb128 0x6
+ 1825 07a1 04       		.byte	0x4
+ 1826 07a2 A6070000 		.4byte	0x7a6
+ 1827 07a6 08       		.uleb128 0x8
+ 1828 07a7 B0000000 		.4byte	0xb0
+ 1829 07ab 20       		.uleb128 0x20
+ 1830 07ac 35020000 		.4byte	.LASF52
+ 1831 07b0 04       		.byte	0x4
+ 1832 07b1 5401     		.2byte	0x154
+ 1833 07b3 BD070000 		.4byte	0x7bd
+ 1834 07b7 1D       		.uleb128 0x1d
+ 1835 07b8 81000000 		.4byte	0x81
+ 1836 07bc 00       		.byte	0
+ 1837 07bd 20       		.uleb128 0x20
+ 1838 07be 09010000 		.4byte	.LASF53
+ 1839 07c2 05       		.byte	0x5
+ 1840 07c3 5401     		.2byte	0x154
+ 1841 07c5 CF070000 		.4byte	0x7cf
+ 1842 07c9 1D       		.uleb128 0x1d
+ 1843 07ca 81000000 		.4byte	0x81
+ 1844 07ce 00       		.byte	0
+ 1845 07cf 21       		.uleb128 0x21
+ 1846 07d0 51030000 		.4byte	.LASF54
+ 1847 07d4 06       		.byte	0x6
+ 1848 07d5 98       		.byte	0x98
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 38
+
+
+ 1849 07d6 21       		.uleb128 0x21
+ 1850 07d7 48020000 		.4byte	.LASF55
+ 1851 07db 06       		.byte	0x6
+ 1852 07dc 9C       		.byte	0x9c
+ 1853 07dd 21       		.uleb128 0x21
+ 1854 07de EE020000 		.4byte	.LASF56
+ 1855 07e2 03       		.byte	0x3
+ 1856 07e3 38       		.byte	0x38
+ 1857 07e4 1F       		.uleb128 0x1f
+ 1858 07e5 57000000 		.4byte	.LASF57
+ 1859 07e9 03       		.byte	0x3
+ 1860 07ea 48       		.byte	0x48
+ 1861 07eb F5070000 		.4byte	0x7f5
+ 1862 07ef 1D       		.uleb128 0x1d
+ 1863 07f0 F5070000 		.4byte	0x7f5
+ 1864 07f4 00       		.byte	0
+ 1865 07f5 06       		.uleb128 0x6
+ 1866 07f6 04       		.byte	0x4
+ 1867 07f7 FB070000 		.4byte	0x7fb
+ 1868 07fb 08       		.uleb128 0x8
+ 1869 07fc 6B000000 		.4byte	0x6b
+ 1870 0800 22       		.uleb128 0x22
+ 1871 0801 46000000 		.4byte	.LASF58
+ 1872 0805 04       		.byte	0x4
+ 1873 0806 3101     		.2byte	0x131
+ 1874 0808 22       		.uleb128 0x22
+ 1875 0809 FD020000 		.4byte	.LASF59
+ 1876 080d 05       		.byte	0x5
+ 1877 080e 3101     		.2byte	0x131
+ 1878 0810 1F       		.uleb128 0x1f
+ 1879 0811 7A010000 		.4byte	.LASF60
+ 1880 0815 07       		.byte	0x7
+ 1881 0816 18       		.byte	0x18
+ 1882 0817 21080000 		.4byte	0x821
+ 1883 081b 1D       		.uleb128 0x1d
+ 1884 081c C2000000 		.4byte	0xc2
+ 1885 0820 00       		.byte	0
+ 1886 0821 21       		.uleb128 0x21
+ 1887 0822 37000000 		.4byte	.LASF61
+ 1888 0826 08       		.byte	0x8
+ 1889 0827 8B       		.byte	0x8b
+ 1890 0828 21       		.uleb128 0x21
+ 1891 0829 78030000 		.4byte	.LASF62
+ 1892 082d 08       		.byte	0x8
+ 1893 082e 5A       		.byte	0x5a
+ 1894 082f 1C       		.uleb128 0x1c
+ 1895 0830 15000000 		.4byte	.LASF64
+ 1896 0834 06       		.byte	0x6
+ 1897 0835 9E       		.byte	0x9e
+ 1898 0836 81000000 		.4byte	0x81
+ 1899 083a 44080000 		.4byte	0x844
+ 1900 083e 1D       		.uleb128 0x1d
+ 1901 083f 81000000 		.4byte	0x81
+ 1902 0843 00       		.byte	0
+ 1903 0844 1C       		.uleb128 0x1c
+ 1904 0845 1C030000 		.4byte	.LASF65
+ 1905 0849 06       		.byte	0x6
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 39
+
+
+ 1906 084a 9F       		.byte	0x9f
+ 1907 084b 97000000 		.4byte	0x97
+ 1908 084f 59080000 		.4byte	0x859
+ 1909 0853 1D       		.uleb128 0x1d
+ 1910 0854 81000000 		.4byte	0x81
+ 1911 0858 00       		.byte	0
+ 1912 0859 1F       		.uleb128 0x1f
+ 1913 085a F4030000 		.4byte	.LASF66
+ 1914 085e 0A       		.byte	0xa
+ 1915 085f 57       		.byte	0x57
+ 1916 0860 6A080000 		.4byte	0x86a
+ 1917 0864 1D       		.uleb128 0x1d
+ 1918 0865 81000000 		.4byte	0x81
+ 1919 0869 00       		.byte	0
+ 1920 086a 1B       		.uleb128 0x1b
+ 1921 086b FC030000 		.4byte	.LASF68
+ 1922 086f 0B       		.byte	0xb
+ 1923 0870 20       		.byte	0x20
+ 1924 0871 6B000000 		.4byte	0x6b
+ 1925 0875 00       		.byte	0
+ 1926              		.section	.debug_abbrev,"",%progbits
+ 1927              	.Ldebug_abbrev0:
+ 1928 0000 01       		.uleb128 0x1
+ 1929 0001 11       		.uleb128 0x11
+ 1930 0002 01       		.byte	0x1
+ 1931 0003 25       		.uleb128 0x25
+ 1932 0004 0E       		.uleb128 0xe
+ 1933 0005 13       		.uleb128 0x13
+ 1934 0006 0B       		.uleb128 0xb
+ 1935 0007 03       		.uleb128 0x3
+ 1936 0008 0E       		.uleb128 0xe
+ 1937 0009 1B       		.uleb128 0x1b
+ 1938 000a 0E       		.uleb128 0xe
+ 1939 000b 55       		.uleb128 0x55
+ 1940 000c 17       		.uleb128 0x17
+ 1941 000d 11       		.uleb128 0x11
+ 1942 000e 01       		.uleb128 0x1
+ 1943 000f 10       		.uleb128 0x10
+ 1944 0010 17       		.uleb128 0x17
+ 1945 0011 00       		.byte	0
+ 1946 0012 00       		.byte	0
+ 1947 0013 02       		.uleb128 0x2
+ 1948 0014 24       		.uleb128 0x24
+ 1949 0015 00       		.byte	0
+ 1950 0016 0B       		.uleb128 0xb
+ 1951 0017 0B       		.uleb128 0xb
+ 1952 0018 3E       		.uleb128 0x3e
+ 1953 0019 0B       		.uleb128 0xb
+ 1954 001a 03       		.uleb128 0x3
+ 1955 001b 0E       		.uleb128 0xe
+ 1956 001c 00       		.byte	0
+ 1957 001d 00       		.byte	0
+ 1958 001e 03       		.uleb128 0x3
+ 1959 001f 24       		.uleb128 0x24
+ 1960 0020 00       		.byte	0
+ 1961 0021 0B       		.uleb128 0xb
+ 1962 0022 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 40
+
+
+ 1963 0023 3E       		.uleb128 0x3e
+ 1964 0024 0B       		.uleb128 0xb
+ 1965 0025 03       		.uleb128 0x3
+ 1966 0026 08       		.uleb128 0x8
+ 1967 0027 00       		.byte	0
+ 1968 0028 00       		.byte	0
+ 1969 0029 04       		.uleb128 0x4
+ 1970 002a 16       		.uleb128 0x16
+ 1971 002b 00       		.byte	0
+ 1972 002c 03       		.uleb128 0x3
+ 1973 002d 0E       		.uleb128 0xe
+ 1974 002e 3A       		.uleb128 0x3a
+ 1975 002f 0B       		.uleb128 0xb
+ 1976 0030 3B       		.uleb128 0x3b
+ 1977 0031 0B       		.uleb128 0xb
+ 1978 0032 49       		.uleb128 0x49
+ 1979 0033 13       		.uleb128 0x13
+ 1980 0034 00       		.byte	0
+ 1981 0035 00       		.byte	0
+ 1982 0036 05       		.uleb128 0x5
+ 1983 0037 16       		.uleb128 0x16
+ 1984 0038 00       		.byte	0
+ 1985 0039 03       		.uleb128 0x3
+ 1986 003a 0E       		.uleb128 0xe
+ 1987 003b 3A       		.uleb128 0x3a
+ 1988 003c 0B       		.uleb128 0xb
+ 1989 003d 3B       		.uleb128 0x3b
+ 1990 003e 05       		.uleb128 0x5
+ 1991 003f 49       		.uleb128 0x49
+ 1992 0040 13       		.uleb128 0x13
+ 1993 0041 00       		.byte	0
+ 1994 0042 00       		.byte	0
+ 1995 0043 06       		.uleb128 0x6
+ 1996 0044 0F       		.uleb128 0xf
+ 1997 0045 00       		.byte	0
+ 1998 0046 0B       		.uleb128 0xb
+ 1999 0047 0B       		.uleb128 0xb
+ 2000 0048 49       		.uleb128 0x49
+ 2001 0049 13       		.uleb128 0x13
+ 2002 004a 00       		.byte	0
+ 2003 004b 00       		.byte	0
+ 2004 004c 07       		.uleb128 0x7
+ 2005 004d 15       		.uleb128 0x15
+ 2006 004e 00       		.byte	0
+ 2007 004f 27       		.uleb128 0x27
+ 2008 0050 19       		.uleb128 0x19
+ 2009 0051 00       		.byte	0
+ 2010 0052 00       		.byte	0
+ 2011 0053 08       		.uleb128 0x8
+ 2012 0054 26       		.uleb128 0x26
+ 2013 0055 00       		.byte	0
+ 2014 0056 49       		.uleb128 0x49
+ 2015 0057 13       		.uleb128 0x13
+ 2016 0058 00       		.byte	0
+ 2017 0059 00       		.byte	0
+ 2018 005a 09       		.uleb128 0x9
+ 2019 005b 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 41
+
+
+ 2020 005c 01       		.byte	0x1
+ 2021 005d 3F       		.uleb128 0x3f
+ 2022 005e 19       		.uleb128 0x19
+ 2023 005f 03       		.uleb128 0x3
+ 2024 0060 0E       		.uleb128 0xe
+ 2025 0061 3A       		.uleb128 0x3a
+ 2026 0062 0B       		.uleb128 0xb
+ 2027 0063 3B       		.uleb128 0x3b
+ 2028 0064 0B       		.uleb128 0xb
+ 2029 0065 27       		.uleb128 0x27
+ 2030 0066 19       		.uleb128 0x19
+ 2031 0067 11       		.uleb128 0x11
+ 2032 0068 01       		.uleb128 0x1
+ 2033 0069 12       		.uleb128 0x12
+ 2034 006a 06       		.uleb128 0x6
+ 2035 006b 40       		.uleb128 0x40
+ 2036 006c 18       		.uleb128 0x18
+ 2037 006d 9642     		.uleb128 0x2116
+ 2038 006f 19       		.uleb128 0x19
+ 2039 0070 01       		.uleb128 0x1
+ 2040 0071 13       		.uleb128 0x13
+ 2041 0072 00       		.byte	0
+ 2042 0073 00       		.byte	0
+ 2043 0074 0A       		.uleb128 0xa
+ 2044 0075 898201   		.uleb128 0x4109
+ 2045 0078 00       		.byte	0
+ 2046 0079 11       		.uleb128 0x11
+ 2047 007a 01       		.uleb128 0x1
+ 2048 007b 31       		.uleb128 0x31
+ 2049 007c 13       		.uleb128 0x13
+ 2050 007d 00       		.byte	0
+ 2051 007e 00       		.byte	0
+ 2052 007f 0B       		.uleb128 0xb
+ 2053 0080 2E       		.uleb128 0x2e
+ 2054 0081 01       		.byte	0x1
+ 2055 0082 3F       		.uleb128 0x3f
+ 2056 0083 19       		.uleb128 0x19
+ 2057 0084 03       		.uleb128 0x3
+ 2058 0085 0E       		.uleb128 0xe
+ 2059 0086 3A       		.uleb128 0x3a
+ 2060 0087 0B       		.uleb128 0xb
+ 2061 0088 3B       		.uleb128 0x3b
+ 2062 0089 0B       		.uleb128 0xb
+ 2063 008a 27       		.uleb128 0x27
+ 2064 008b 19       		.uleb128 0x19
+ 2065 008c 49       		.uleb128 0x49
+ 2066 008d 13       		.uleb128 0x13
+ 2067 008e 11       		.uleb128 0x11
+ 2068 008f 01       		.uleb128 0x1
+ 2069 0090 12       		.uleb128 0x12
+ 2070 0091 06       		.uleb128 0x6
+ 2071 0092 40       		.uleb128 0x40
+ 2072 0093 18       		.uleb128 0x18
+ 2073 0094 9742     		.uleb128 0x2117
+ 2074 0096 19       		.uleb128 0x19
+ 2075 0097 01       		.uleb128 0x1
+ 2076 0098 13       		.uleb128 0x13
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 42
+
+
+ 2077 0099 00       		.byte	0
+ 2078 009a 00       		.byte	0
+ 2079 009b 0C       		.uleb128 0xc
+ 2080 009c 05       		.uleb128 0x5
+ 2081 009d 00       		.byte	0
+ 2082 009e 03       		.uleb128 0x3
+ 2083 009f 08       		.uleb128 0x8
+ 2084 00a0 3A       		.uleb128 0x3a
+ 2085 00a1 0B       		.uleb128 0xb
+ 2086 00a2 3B       		.uleb128 0x3b
+ 2087 00a3 0B       		.uleb128 0xb
+ 2088 00a4 49       		.uleb128 0x49
+ 2089 00a5 13       		.uleb128 0x13
+ 2090 00a6 02       		.uleb128 0x2
+ 2091 00a7 17       		.uleb128 0x17
+ 2092 00a8 00       		.byte	0
+ 2093 00a9 00       		.byte	0
+ 2094 00aa 0D       		.uleb128 0xd
+ 2095 00ab 898201   		.uleb128 0x4109
+ 2096 00ae 01       		.byte	0x1
+ 2097 00af 11       		.uleb128 0x11
+ 2098 00b0 01       		.uleb128 0x1
+ 2099 00b1 31       		.uleb128 0x31
+ 2100 00b2 13       		.uleb128 0x13
+ 2101 00b3 00       		.byte	0
+ 2102 00b4 00       		.byte	0
+ 2103 00b5 0E       		.uleb128 0xe
+ 2104 00b6 8A8201   		.uleb128 0x410a
+ 2105 00b9 00       		.byte	0
+ 2106 00ba 02       		.uleb128 0x2
+ 2107 00bb 18       		.uleb128 0x18
+ 2108 00bc 9142     		.uleb128 0x2111
+ 2109 00be 18       		.uleb128 0x18
+ 2110 00bf 00       		.byte	0
+ 2111 00c0 00       		.byte	0
+ 2112 00c1 0F       		.uleb128 0xf
+ 2113 00c2 2E       		.uleb128 0x2e
+ 2114 00c3 01       		.byte	0x1
+ 2115 00c4 3F       		.uleb128 0x3f
+ 2116 00c5 19       		.uleb128 0x19
+ 2117 00c6 03       		.uleb128 0x3
+ 2118 00c7 0E       		.uleb128 0xe
+ 2119 00c8 3A       		.uleb128 0x3a
+ 2120 00c9 0B       		.uleb128 0xb
+ 2121 00ca 3B       		.uleb128 0x3b
+ 2122 00cb 0B       		.uleb128 0xb
+ 2123 00cc 27       		.uleb128 0x27
+ 2124 00cd 19       		.uleb128 0x19
+ 2125 00ce 11       		.uleb128 0x11
+ 2126 00cf 01       		.uleb128 0x1
+ 2127 00d0 12       		.uleb128 0x12
+ 2128 00d1 06       		.uleb128 0x6
+ 2129 00d2 40       		.uleb128 0x40
+ 2130 00d3 18       		.uleb128 0x18
+ 2131 00d4 9742     		.uleb128 0x2117
+ 2132 00d6 19       		.uleb128 0x19
+ 2133 00d7 01       		.uleb128 0x1
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 43
+
+
+ 2134 00d8 13       		.uleb128 0x13
+ 2135 00d9 00       		.byte	0
+ 2136 00da 00       		.byte	0
+ 2137 00db 10       		.uleb128 0x10
+ 2138 00dc 05       		.uleb128 0x5
+ 2139 00dd 00       		.byte	0
+ 2140 00de 03       		.uleb128 0x3
+ 2141 00df 0E       		.uleb128 0xe
+ 2142 00e0 3A       		.uleb128 0x3a
+ 2143 00e1 0B       		.uleb128 0xb
+ 2144 00e2 3B       		.uleb128 0x3b
+ 2145 00e3 0B       		.uleb128 0xb
+ 2146 00e4 49       		.uleb128 0x49
+ 2147 00e5 13       		.uleb128 0x13
+ 2148 00e6 02       		.uleb128 0x2
+ 2149 00e7 17       		.uleb128 0x17
+ 2150 00e8 00       		.byte	0
+ 2151 00e9 00       		.byte	0
+ 2152 00ea 11       		.uleb128 0x11
+ 2153 00eb 898201   		.uleb128 0x4109
+ 2154 00ee 01       		.byte	0x1
+ 2155 00ef 11       		.uleb128 0x11
+ 2156 00f0 01       		.uleb128 0x1
+ 2157 00f1 31       		.uleb128 0x31
+ 2158 00f2 13       		.uleb128 0x13
+ 2159 00f3 01       		.uleb128 0x1
+ 2160 00f4 13       		.uleb128 0x13
+ 2161 00f5 00       		.byte	0
+ 2162 00f6 00       		.byte	0
+ 2163 00f7 12       		.uleb128 0x12
+ 2164 00f8 2E       		.uleb128 0x2e
+ 2165 00f9 01       		.byte	0x1
+ 2166 00fa 3F       		.uleb128 0x3f
+ 2167 00fb 19       		.uleb128 0x19
+ 2168 00fc 03       		.uleb128 0x3
+ 2169 00fd 0E       		.uleb128 0xe
+ 2170 00fe 3A       		.uleb128 0x3a
+ 2171 00ff 0B       		.uleb128 0xb
+ 2172 0100 3B       		.uleb128 0x3b
+ 2173 0101 0B       		.uleb128 0xb
+ 2174 0102 11       		.uleb128 0x11
+ 2175 0103 01       		.uleb128 0x1
+ 2176 0104 12       		.uleb128 0x12
+ 2177 0105 06       		.uleb128 0x6
+ 2178 0106 40       		.uleb128 0x40
+ 2179 0107 18       		.uleb128 0x18
+ 2180 0108 9742     		.uleb128 0x2117
+ 2181 010a 19       		.uleb128 0x19
+ 2182 010b 01       		.uleb128 0x1
+ 2183 010c 13       		.uleb128 0x13
+ 2184 010d 00       		.byte	0
+ 2185 010e 00       		.byte	0
+ 2186 010f 13       		.uleb128 0x13
+ 2187 0110 2E       		.uleb128 0x2e
+ 2188 0111 01       		.byte	0x1
+ 2189 0112 3F       		.uleb128 0x3f
+ 2190 0113 19       		.uleb128 0x19
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 44
+
+
+ 2191 0114 03       		.uleb128 0x3
+ 2192 0115 0E       		.uleb128 0xe
+ 2193 0116 3A       		.uleb128 0x3a
+ 2194 0117 0B       		.uleb128 0xb
+ 2195 0118 3B       		.uleb128 0x3b
+ 2196 0119 0B       		.uleb128 0xb
+ 2197 011a 49       		.uleb128 0x49
+ 2198 011b 13       		.uleb128 0x13
+ 2199 011c 11       		.uleb128 0x11
+ 2200 011d 01       		.uleb128 0x1
+ 2201 011e 12       		.uleb128 0x12
+ 2202 011f 06       		.uleb128 0x6
+ 2203 0120 40       		.uleb128 0x40
+ 2204 0121 18       		.uleb128 0x18
+ 2205 0122 9642     		.uleb128 0x2116
+ 2206 0124 19       		.uleb128 0x19
+ 2207 0125 01       		.uleb128 0x1
+ 2208 0126 13       		.uleb128 0x13
+ 2209 0127 00       		.byte	0
+ 2210 0128 00       		.byte	0
+ 2211 0129 14       		.uleb128 0x14
+ 2212 012a 34       		.uleb128 0x34
+ 2213 012b 00       		.byte	0
+ 2214 012c 03       		.uleb128 0x3
+ 2215 012d 0E       		.uleb128 0xe
+ 2216 012e 3A       		.uleb128 0x3a
+ 2217 012f 0B       		.uleb128 0xb
+ 2218 0130 3B       		.uleb128 0x3b
+ 2219 0131 0B       		.uleb128 0xb
+ 2220 0132 49       		.uleb128 0x49
+ 2221 0133 13       		.uleb128 0x13
+ 2222 0134 02       		.uleb128 0x2
+ 2223 0135 17       		.uleb128 0x17
+ 2224 0136 00       		.byte	0
+ 2225 0137 00       		.byte	0
+ 2226 0138 15       		.uleb128 0x15
+ 2227 0139 34       		.uleb128 0x34
+ 2228 013a 00       		.byte	0
+ 2229 013b 03       		.uleb128 0x3
+ 2230 013c 0E       		.uleb128 0xe
+ 2231 013d 3A       		.uleb128 0x3a
+ 2232 013e 0B       		.uleb128 0xb
+ 2233 013f 3B       		.uleb128 0x3b
+ 2234 0140 0B       		.uleb128 0xb
+ 2235 0141 49       		.uleb128 0x49
+ 2236 0142 13       		.uleb128 0x13
+ 2237 0143 02       		.uleb128 0x2
+ 2238 0144 18       		.uleb128 0x18
+ 2239 0145 00       		.byte	0
+ 2240 0146 00       		.byte	0
+ 2241 0147 16       		.uleb128 0x16
+ 2242 0148 01       		.uleb128 0x1
+ 2243 0149 01       		.byte	0x1
+ 2244 014a 49       		.uleb128 0x49
+ 2245 014b 13       		.uleb128 0x13
+ 2246 014c 01       		.uleb128 0x1
+ 2247 014d 13       		.uleb128 0x13
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 45
+
+
+ 2248 014e 00       		.byte	0
+ 2249 014f 00       		.byte	0
+ 2250 0150 17       		.uleb128 0x17
+ 2251 0151 21       		.uleb128 0x21
+ 2252 0152 00       		.byte	0
+ 2253 0153 49       		.uleb128 0x49
+ 2254 0154 13       		.uleb128 0x13
+ 2255 0155 2F       		.uleb128 0x2f
+ 2256 0156 0B       		.uleb128 0xb
+ 2257 0157 00       		.byte	0
+ 2258 0158 00       		.byte	0
+ 2259 0159 18       		.uleb128 0x18
+ 2260 015a 34       		.uleb128 0x34
+ 2261 015b 00       		.byte	0
+ 2262 015c 03       		.uleb128 0x3
+ 2263 015d 0E       		.uleb128 0xe
+ 2264 015e 3A       		.uleb128 0x3a
+ 2265 015f 0B       		.uleb128 0xb
+ 2266 0160 3B       		.uleb128 0x3b
+ 2267 0161 0B       		.uleb128 0xb
+ 2268 0162 49       		.uleb128 0x49
+ 2269 0163 13       		.uleb128 0x13
+ 2270 0164 3F       		.uleb128 0x3f
+ 2271 0165 19       		.uleb128 0x19
+ 2272 0166 3C       		.uleb128 0x3c
+ 2273 0167 19       		.uleb128 0x19
+ 2274 0168 00       		.byte	0
+ 2275 0169 00       		.byte	0
+ 2276 016a 19       		.uleb128 0x19
+ 2277 016b 34       		.uleb128 0x34
+ 2278 016c 00       		.byte	0
+ 2279 016d 03       		.uleb128 0x3
+ 2280 016e 08       		.uleb128 0x8
+ 2281 016f 3A       		.uleb128 0x3a
+ 2282 0170 0B       		.uleb128 0xb
+ 2283 0171 3B       		.uleb128 0x3b
+ 2284 0172 0B       		.uleb128 0xb
+ 2285 0173 49       		.uleb128 0x49
+ 2286 0174 13       		.uleb128 0x13
+ 2287 0175 3F       		.uleb128 0x3f
+ 2288 0176 19       		.uleb128 0x19
+ 2289 0177 02       		.uleb128 0x2
+ 2290 0178 18       		.uleb128 0x18
+ 2291 0179 00       		.byte	0
+ 2292 017a 00       		.byte	0
+ 2293 017b 1A       		.uleb128 0x1a
+ 2294 017c 34       		.uleb128 0x34
+ 2295 017d 00       		.byte	0
+ 2296 017e 03       		.uleb128 0x3
+ 2297 017f 0E       		.uleb128 0xe
+ 2298 0180 3A       		.uleb128 0x3a
+ 2299 0181 0B       		.uleb128 0xb
+ 2300 0182 3B       		.uleb128 0x3b
+ 2301 0183 0B       		.uleb128 0xb
+ 2302 0184 49       		.uleb128 0x49
+ 2303 0185 13       		.uleb128 0x13
+ 2304 0186 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 46
+
+
+ 2305 0187 19       		.uleb128 0x19
+ 2306 0188 02       		.uleb128 0x2
+ 2307 0189 18       		.uleb128 0x18
+ 2308 018a 00       		.byte	0
+ 2309 018b 00       		.byte	0
+ 2310 018c 1B       		.uleb128 0x1b
+ 2311 018d 2E       		.uleb128 0x2e
+ 2312 018e 00       		.byte	0
+ 2313 018f 3F       		.uleb128 0x3f
+ 2314 0190 19       		.uleb128 0x19
+ 2315 0191 03       		.uleb128 0x3
+ 2316 0192 0E       		.uleb128 0xe
+ 2317 0193 3A       		.uleb128 0x3a
+ 2318 0194 0B       		.uleb128 0xb
+ 2319 0195 3B       		.uleb128 0x3b
+ 2320 0196 0B       		.uleb128 0xb
+ 2321 0197 27       		.uleb128 0x27
+ 2322 0198 19       		.uleb128 0x19
+ 2323 0199 49       		.uleb128 0x49
+ 2324 019a 13       		.uleb128 0x13
+ 2325 019b 3C       		.uleb128 0x3c
+ 2326 019c 19       		.uleb128 0x19
+ 2327 019d 00       		.byte	0
+ 2328 019e 00       		.byte	0
+ 2329 019f 1C       		.uleb128 0x1c
+ 2330 01a0 2E       		.uleb128 0x2e
+ 2331 01a1 01       		.byte	0x1
+ 2332 01a2 3F       		.uleb128 0x3f
+ 2333 01a3 19       		.uleb128 0x19
+ 2334 01a4 03       		.uleb128 0x3
+ 2335 01a5 0E       		.uleb128 0xe
+ 2336 01a6 3A       		.uleb128 0x3a
+ 2337 01a7 0B       		.uleb128 0xb
+ 2338 01a8 3B       		.uleb128 0x3b
+ 2339 01a9 0B       		.uleb128 0xb
+ 2340 01aa 27       		.uleb128 0x27
+ 2341 01ab 19       		.uleb128 0x19
+ 2342 01ac 49       		.uleb128 0x49
+ 2343 01ad 13       		.uleb128 0x13
+ 2344 01ae 3C       		.uleb128 0x3c
+ 2345 01af 19       		.uleb128 0x19
+ 2346 01b0 01       		.uleb128 0x1
+ 2347 01b1 13       		.uleb128 0x13
+ 2348 01b2 00       		.byte	0
+ 2349 01b3 00       		.byte	0
+ 2350 01b4 1D       		.uleb128 0x1d
+ 2351 01b5 05       		.uleb128 0x5
+ 2352 01b6 00       		.byte	0
+ 2353 01b7 49       		.uleb128 0x49
+ 2354 01b8 13       		.uleb128 0x13
+ 2355 01b9 00       		.byte	0
+ 2356 01ba 00       		.byte	0
+ 2357 01bb 1E       		.uleb128 0x1e
+ 2358 01bc 18       		.uleb128 0x18
+ 2359 01bd 00       		.byte	0
+ 2360 01be 00       		.byte	0
+ 2361 01bf 00       		.byte	0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 47
+
+
+ 2362 01c0 1F       		.uleb128 0x1f
+ 2363 01c1 2E       		.uleb128 0x2e
+ 2364 01c2 01       		.byte	0x1
+ 2365 01c3 3F       		.uleb128 0x3f
+ 2366 01c4 19       		.uleb128 0x19
+ 2367 01c5 03       		.uleb128 0x3
+ 2368 01c6 0E       		.uleb128 0xe
+ 2369 01c7 3A       		.uleb128 0x3a
+ 2370 01c8 0B       		.uleb128 0xb
+ 2371 01c9 3B       		.uleb128 0x3b
+ 2372 01ca 0B       		.uleb128 0xb
+ 2373 01cb 27       		.uleb128 0x27
+ 2374 01cc 19       		.uleb128 0x19
+ 2375 01cd 3C       		.uleb128 0x3c
+ 2376 01ce 19       		.uleb128 0x19
+ 2377 01cf 01       		.uleb128 0x1
+ 2378 01d0 13       		.uleb128 0x13
+ 2379 01d1 00       		.byte	0
+ 2380 01d2 00       		.byte	0
+ 2381 01d3 20       		.uleb128 0x20
+ 2382 01d4 2E       		.uleb128 0x2e
+ 2383 01d5 01       		.byte	0x1
+ 2384 01d6 3F       		.uleb128 0x3f
+ 2385 01d7 19       		.uleb128 0x19
+ 2386 01d8 03       		.uleb128 0x3
+ 2387 01d9 0E       		.uleb128 0xe
+ 2388 01da 3A       		.uleb128 0x3a
+ 2389 01db 0B       		.uleb128 0xb
+ 2390 01dc 3B       		.uleb128 0x3b
+ 2391 01dd 05       		.uleb128 0x5
+ 2392 01de 27       		.uleb128 0x27
+ 2393 01df 19       		.uleb128 0x19
+ 2394 01e0 3C       		.uleb128 0x3c
+ 2395 01e1 19       		.uleb128 0x19
+ 2396 01e2 01       		.uleb128 0x1
+ 2397 01e3 13       		.uleb128 0x13
+ 2398 01e4 00       		.byte	0
+ 2399 01e5 00       		.byte	0
+ 2400 01e6 21       		.uleb128 0x21
+ 2401 01e7 2E       		.uleb128 0x2e
+ 2402 01e8 00       		.byte	0
+ 2403 01e9 3F       		.uleb128 0x3f
+ 2404 01ea 19       		.uleb128 0x19
+ 2405 01eb 03       		.uleb128 0x3
+ 2406 01ec 0E       		.uleb128 0xe
+ 2407 01ed 3A       		.uleb128 0x3a
+ 2408 01ee 0B       		.uleb128 0xb
+ 2409 01ef 3B       		.uleb128 0x3b
+ 2410 01f0 0B       		.uleb128 0xb
+ 2411 01f1 27       		.uleb128 0x27
+ 2412 01f2 19       		.uleb128 0x19
+ 2413 01f3 3C       		.uleb128 0x3c
+ 2414 01f4 19       		.uleb128 0x19
+ 2415 01f5 00       		.byte	0
+ 2416 01f6 00       		.byte	0
+ 2417 01f7 22       		.uleb128 0x22
+ 2418 01f8 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 48
+
+
+ 2419 01f9 00       		.byte	0
+ 2420 01fa 3F       		.uleb128 0x3f
+ 2421 01fb 19       		.uleb128 0x19
+ 2422 01fc 03       		.uleb128 0x3
+ 2423 01fd 0E       		.uleb128 0xe
+ 2424 01fe 3A       		.uleb128 0x3a
+ 2425 01ff 0B       		.uleb128 0xb
+ 2426 0200 3B       		.uleb128 0x3b
+ 2427 0201 05       		.uleb128 0x5
+ 2428 0202 27       		.uleb128 0x27
+ 2429 0203 19       		.uleb128 0x19
+ 2430 0204 3C       		.uleb128 0x3c
+ 2431 0205 19       		.uleb128 0x19
+ 2432 0206 00       		.byte	0
+ 2433 0207 00       		.byte	0
+ 2434 0208 00       		.byte	0
+ 2435              		.section	.debug_loc,"",%progbits
+ 2436              	.Ldebug_loc0:
+ 2437              	.LLST0:
+ 2438 0000 00000000 		.4byte	.LVL13
+ 2439 0004 0B000000 		.4byte	.LVL15-1
+ 2440 0008 0100     		.2byte	0x1
+ 2441 000a 50       		.byte	0x50
+ 2442 000b 0B000000 		.4byte	.LVL15-1
+ 2443 000f 0E000000 		.4byte	.LVL16
+ 2444 0013 0100     		.2byte	0x1
+ 2445 0015 54       		.byte	0x54
+ 2446 0016 0E000000 		.4byte	.LVL16
+ 2447 001a 14000000 		.4byte	.LFE35
+ 2448 001e 0100     		.2byte	0x1
+ 2449 0020 50       		.byte	0x50
+ 2450 0021 00000000 		.4byte	0
+ 2451 0025 00000000 		.4byte	0
+ 2452              	.LLST1:
+ 2453 0029 00000000 		.4byte	.LVL13
+ 2454 002d 08000000 		.4byte	.LVL14
+ 2455 0031 0100     		.2byte	0x1
+ 2456 0033 51       		.byte	0x51
+ 2457 0034 08000000 		.4byte	.LVL14
+ 2458 0038 0B000000 		.4byte	.LVL15-1
+ 2459 003c 0100     		.2byte	0x1
+ 2460 003e 52       		.byte	0x52
+ 2461 003f 0B000000 		.4byte	.LVL15-1
+ 2462 0043 14000000 		.4byte	.LFE35
+ 2463 0047 0400     		.2byte	0x4
+ 2464 0049 F3       		.byte	0xf3
+ 2465 004a 01       		.uleb128 0x1
+ 2466 004b 51       		.byte	0x51
+ 2467 004c 9F       		.byte	0x9f
+ 2468 004d 00000000 		.4byte	0
+ 2469 0051 00000000 		.4byte	0
+ 2470              	.LLST2:
+ 2471 0055 00000000 		.4byte	.LVL17
+ 2472 0059 0C000000 		.4byte	.LVL18
+ 2473 005d 0100     		.2byte	0x1
+ 2474 005f 50       		.byte	0x50
+ 2475 0060 0C000000 		.4byte	.LVL18
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 49
+
+
+ 2476 0064 48000000 		.4byte	.LVL31
+ 2477 0068 0100     		.2byte	0x1
+ 2478 006a 57       		.byte	0x57
+ 2479 006b 48000000 		.4byte	.LVL31
+ 2480 006f 4A000000 		.4byte	.LFE36
+ 2481 0073 0400     		.2byte	0x4
+ 2482 0075 F3       		.byte	0xf3
+ 2483 0076 01       		.uleb128 0x1
+ 2484 0077 50       		.byte	0x50
+ 2485 0078 9F       		.byte	0x9f
+ 2486 0079 00000000 		.4byte	0
+ 2487 007d 00000000 		.4byte	0
+ 2488              	.LLST3:
+ 2489 0081 00000000 		.4byte	.LVL17
+ 2490 0085 0F000000 		.4byte	.LVL19-1
+ 2491 0089 0100     		.2byte	0x1
+ 2492 008b 51       		.byte	0x51
+ 2493 008c 0F000000 		.4byte	.LVL19-1
+ 2494 0090 48000000 		.4byte	.LVL30
+ 2495 0094 0100     		.2byte	0x1
+ 2496 0096 56       		.byte	0x56
+ 2497 0097 48000000 		.4byte	.LVL30
+ 2498 009b 4A000000 		.4byte	.LFE36
+ 2499 009f 0400     		.2byte	0x4
+ 2500 00a1 F3       		.byte	0xf3
+ 2501 00a2 01       		.uleb128 0x1
+ 2502 00a3 51       		.byte	0x51
+ 2503 00a4 9F       		.byte	0x9f
+ 2504 00a5 00000000 		.4byte	0
+ 2505 00a9 00000000 		.4byte	0
+ 2506              	.LLST4:
+ 2507 00ad 00000000 		.4byte	.LVL17
+ 2508 00b1 0F000000 		.4byte	.LVL19-1
+ 2509 00b5 0100     		.2byte	0x1
+ 2510 00b7 52       		.byte	0x52
+ 2511 00b8 0F000000 		.4byte	.LVL19-1
+ 2512 00bc 48000000 		.4byte	.LVL29
+ 2513 00c0 0100     		.2byte	0x1
+ 2514 00c2 55       		.byte	0x55
+ 2515 00c3 48000000 		.4byte	.LVL29
+ 2516 00c7 4A000000 		.4byte	.LFE36
+ 2517 00cb 0400     		.2byte	0x4
+ 2518 00cd F3       		.byte	0xf3
+ 2519 00ce 01       		.uleb128 0x1
+ 2520 00cf 52       		.byte	0x52
+ 2521 00d0 9F       		.byte	0x9f
+ 2522 00d1 00000000 		.4byte	0
+ 2523 00d5 00000000 		.4byte	0
+ 2524              	.LLST5:
+ 2525 00d9 00000000 		.4byte	.LVL17
+ 2526 00dd 0F000000 		.4byte	.LVL19-1
+ 2527 00e1 0100     		.2byte	0x1
+ 2528 00e3 53       		.byte	0x53
+ 2529 00e4 0F000000 		.4byte	.LVL19-1
+ 2530 00e8 48000000 		.4byte	.LVL28
+ 2531 00ec 0100     		.2byte	0x1
+ 2532 00ee 54       		.byte	0x54
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 50
+
+
+ 2533 00ef 48000000 		.4byte	.LVL28
+ 2534 00f3 4A000000 		.4byte	.LFE36
+ 2535 00f7 0400     		.2byte	0x4
+ 2536 00f9 F3       		.byte	0xf3
+ 2537 00fa 01       		.uleb128 0x1
+ 2538 00fb 53       		.byte	0x53
+ 2539 00fc 9F       		.byte	0x9f
+ 2540 00fd 00000000 		.4byte	0
+ 2541 0101 00000000 		.4byte	0
+ 2542              	.LLST6:
+ 2543 0105 00000000 		.4byte	.LVL32
+ 2544 0109 07000000 		.4byte	.LVL33-1
+ 2545 010d 0100     		.2byte	0x1
+ 2546 010f 50       		.byte	0x50
+ 2547 0110 07000000 		.4byte	.LVL33-1
+ 2548 0114 10000000 		.4byte	.LFE37
+ 2549 0118 0400     		.2byte	0x4
+ 2550 011a F3       		.byte	0xf3
+ 2551 011b 01       		.uleb128 0x1
+ 2552 011c 50       		.byte	0x50
+ 2553 011d 9F       		.byte	0x9f
+ 2554 011e 00000000 		.4byte	0
+ 2555 0122 00000000 		.4byte	0
+ 2556              	.LLST7:
+ 2557 0126 00000000 		.4byte	.LVL32
+ 2558 012a 07000000 		.4byte	.LVL33-1
+ 2559 012e 0100     		.2byte	0x1
+ 2560 0130 51       		.byte	0x51
+ 2561 0131 07000000 		.4byte	.LVL33-1
+ 2562 0135 0E000000 		.4byte	.LVL35
+ 2563 0139 0100     		.2byte	0x1
+ 2564 013b 54       		.byte	0x54
+ 2565 013c 0E000000 		.4byte	.LVL35
+ 2566 0140 10000000 		.4byte	.LFE37
+ 2567 0144 0400     		.2byte	0x4
+ 2568 0146 F3       		.byte	0xf3
+ 2569 0147 01       		.uleb128 0x1
+ 2570 0148 51       		.byte	0x51
+ 2571 0149 9F       		.byte	0x9f
+ 2572 014a 00000000 		.4byte	0
+ 2573 014e 00000000 		.4byte	0
+ 2574              	.LLST8:
+ 2575 0152 00000000 		.4byte	.LVL45
+ 2576 0156 0E000000 		.4byte	.LVL46
+ 2577 015a 0100     		.2byte	0x1
+ 2578 015c 50       		.byte	0x50
+ 2579 015d 0E000000 		.4byte	.LVL46
+ 2580 0161 10000000 		.4byte	.LVL47
+ 2581 0165 0400     		.2byte	0x4
+ 2582 0167 F3       		.byte	0xf3
+ 2583 0168 01       		.uleb128 0x1
+ 2584 0169 50       		.byte	0x50
+ 2585 016a 9F       		.byte	0x9f
+ 2586 016b 10000000 		.4byte	.LVL47
+ 2587 016f 12000000 		.4byte	.LVL48
+ 2588 0173 0100     		.2byte	0x1
+ 2589 0175 50       		.byte	0x50
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 51
+
+
+ 2590 0176 12000000 		.4byte	.LVL48
+ 2591 017a 14000000 		.4byte	.LVL49
+ 2592 017e 0400     		.2byte	0x4
+ 2593 0180 F3       		.byte	0xf3
+ 2594 0181 01       		.uleb128 0x1
+ 2595 0182 50       		.byte	0x50
+ 2596 0183 9F       		.byte	0x9f
+ 2597 0184 14000000 		.4byte	.LVL49
+ 2598 0188 16000000 		.4byte	.LFE39
+ 2599 018c 0100     		.2byte	0x1
+ 2600 018e 50       		.byte	0x50
+ 2601 018f 00000000 		.4byte	0
+ 2602 0193 00000000 		.4byte	0
+ 2603              	.LLST9:
+ 2604 0197 08000000 		.4byte	.LVL50
+ 2605 019b 0A000000 		.4byte	.LVL51
+ 2606 019f 0200     		.2byte	0x2
+ 2607 01a1 30       		.byte	0x30
+ 2608 01a2 9F       		.byte	0x9f
+ 2609 01a3 16000000 		.4byte	.LVL53
+ 2610 01a7 25000000 		.4byte	.LVL55-1
+ 2611 01ab 0100     		.2byte	0x1
+ 2612 01ad 50       		.byte	0x50
+ 2613 01ae 00000000 		.4byte	0
+ 2614 01b2 00000000 		.4byte	0
+ 2615              	.LLST10:
+ 2616 01b6 08000000 		.4byte	.LVL50
+ 2617 01ba 0A000000 		.4byte	.LVL51
+ 2618 01be 0200     		.2byte	0x2
+ 2619 01c0 31       		.byte	0x31
+ 2620 01c1 9F       		.byte	0x9f
+ 2621 01c2 0A000000 		.4byte	.LVL51
+ 2622 01c6 82000000 		.4byte	.LVL63
+ 2623 01ca 0100     		.2byte	0x1
+ 2624 01cc 54       		.byte	0x54
+ 2625 01cd 82000000 		.4byte	.LVL63
+ 2626 01d1 86000000 		.4byte	.LVL64
+ 2627 01d5 0200     		.2byte	0x2
+ 2628 01d7 32       		.byte	0x32
+ 2629 01d8 9F       		.byte	0x9f
+ 2630 01d9 86000000 		.4byte	.LVL64
+ 2631 01dd 94000000 		.4byte	.LVL65
+ 2632 01e1 0100     		.2byte	0x1
+ 2633 01e3 54       		.byte	0x54
+ 2634 01e4 AA000000 		.4byte	.LVL69
+ 2635 01e8 AE000000 		.4byte	.LVL70
+ 2636 01ec 0200     		.2byte	0x2
+ 2637 01ee 31       		.byte	0x31
+ 2638 01ef 9F       		.byte	0x9f
+ 2639 01f0 AE000000 		.4byte	.LVL70
+ 2640 01f4 CC000000 		.4byte	.LVL71
+ 2641 01f8 0100     		.2byte	0x1
+ 2642 01fa 54       		.byte	0x54
+ 2643 01fb CC000000 		.4byte	.LVL71
+ 2644 01ff D0000000 		.4byte	.LVL72
+ 2645 0203 0200     		.2byte	0x2
+ 2646 0205 32       		.byte	0x32
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 52
+
+
+ 2647 0206 9F       		.byte	0x9f
+ 2648 0207 D0000000 		.4byte	.LVL72
+ 2649 020b DA000000 		.4byte	.LVL75
+ 2650 020f 0100     		.2byte	0x1
+ 2651 0211 54       		.byte	0x54
+ 2652 0212 DA000000 		.4byte	.LVL75
+ 2653 0216 14010000 		.4byte	.LVL81
+ 2654 021a 0200     		.2byte	0x2
+ 2655 021c 33       		.byte	0x33
+ 2656 021d 9F       		.byte	0x9f
+ 2657 021e 14010000 		.4byte	.LVL81
+ 2658 0222 28020000 		.4byte	.LFE34
+ 2659 0226 0100     		.2byte	0x1
+ 2660 0228 54       		.byte	0x54
+ 2661 0229 00000000 		.4byte	0
+ 2662 022d 00000000 		.4byte	0
+ 2663              		.section	.debug_aranges,"",%progbits
+ 2664 0000 4C000000 		.4byte	0x4c
+ 2665 0004 0200     		.2byte	0x2
+ 2666 0006 00000000 		.4byte	.Ldebug_info0
+ 2667 000a 04       		.byte	0x4
+ 2668 000b 00       		.byte	0
+ 2669 000c 0000     		.2byte	0
+ 2670 000e 0000     		.2byte	0
+ 2671 0010 00000000 		.4byte	.LFB33
+ 2672 0014 C0000000 		.4byte	.LFE33-.LFB33
+ 2673 0018 00000000 		.4byte	.LFB35
+ 2674 001c 14000000 		.4byte	.LFE35-.LFB35
+ 2675 0020 00000000 		.4byte	.LFB36
+ 2676 0024 4A000000 		.4byte	.LFE36-.LFB36
+ 2677 0028 00000000 		.4byte	.LFB37
+ 2678 002c 10000000 		.4byte	.LFE37-.LFB37
+ 2679 0030 00000000 		.4byte	.LFB38
+ 2680 0034 38000000 		.4byte	.LFE38-.LFB38
+ 2681 0038 00000000 		.4byte	.LFB39
+ 2682 003c 16000000 		.4byte	.LFE39-.LFB39
+ 2683 0040 00000000 		.4byte	.LFB34
+ 2684 0044 28020000 		.4byte	.LFE34-.LFB34
+ 2685 0048 00000000 		.4byte	0
+ 2686 004c 00000000 		.4byte	0
+ 2687              		.section	.debug_ranges,"",%progbits
+ 2688              	.Ldebug_ranges0:
+ 2689 0000 00000000 		.4byte	.LFB33
+ 2690 0004 C0000000 		.4byte	.LFE33
+ 2691 0008 00000000 		.4byte	.LFB35
+ 2692 000c 14000000 		.4byte	.LFE35
+ 2693 0010 00000000 		.4byte	.LFB36
+ 2694 0014 4A000000 		.4byte	.LFE36
+ 2695 0018 00000000 		.4byte	.LFB37
+ 2696 001c 10000000 		.4byte	.LFE37
+ 2697 0020 00000000 		.4byte	.LFB38
+ 2698 0024 38000000 		.4byte	.LFE38
+ 2699 0028 00000000 		.4byte	.LFB39
+ 2700 002c 16000000 		.4byte	.LFE39
+ 2701 0030 00000000 		.4byte	.LFB34
+ 2702 0034 28020000 		.4byte	.LFE34
+ 2703 0038 00000000 		.4byte	0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 53
+
+
+ 2704 003c 00000000 		.4byte	0
+ 2705              		.section	.debug_line,"",%progbits
+ 2706              	.Ldebug_line0:
+ 2707 0000 E0010000 		.section	.debug_str,"MS",%progbits,1
+ 2707      02000F01 
+ 2707      00000201 
+ 2707      FB0E0D00 
+ 2707      01010101 
+ 2708              	.LASF72:
+ 2709 0000 496E6974 		.ascii	"InitializeComponents\000"
+ 2709      69616C69 
+ 2709      7A65436F 
+ 2709      6D706F6E 
+ 2709      656E7473 
+ 2710              	.LASF64:
+ 2711 0015 4144435F 		.ascii	"ADC_SAR_Seq_IsEndConversion\000"
+ 2711      5341525F 
+ 2711      5365715F 
+ 2711      4973456E 
+ 2711      64436F6E 
+ 2712              	.LASF28:
+ 2713 0031 72696768 		.ascii	"right\000"
+ 2713      7400
+ 2714              	.LASF61:
+ 2715 0037 54696D65 		.ascii	"Timer_1_Enable\000"
+ 2715      725F315F 
+ 2715      456E6162 
+ 2715      6C6500
+ 2716              	.LASF58:
+ 2717 0046 50574D5F 		.ascii	"PWM_1_Start\000"
+ 2717      315F5374 
+ 2717      61727400 
+ 2718              	.LASF40:
+ 2719 0052 64697374 		.ascii	"dist\000"
+ 2719      00
+ 2720              	.LASF57:
+ 2721 0057 4C43445F 		.ascii	"LCD_Char_LoadCustomFonts\000"
+ 2721      43686172 
+ 2721      5F4C6F61 
+ 2721      64437573 
+ 2721      746F6D46 
+ 2722              	.LASF2:
+ 2723 0070 73686F72 		.ascii	"short int\000"
+ 2723      7420696E 
+ 2723      7400
+ 2724              	.LASF47:
+ 2725 007a 416C6C5F 		.ascii	"All_dist\000"
+ 2725      64697374 
+ 2725      00
+ 2726              	.LASF19:
+ 2727 0083 73697A65 		.ascii	"sizetype\000"
+ 2727      74797065 
+ 2727      00
+ 2728              	.LASF16:
+ 2729 008c 63686172 		.ascii	"char8\000"
+ 2729      3800
+ 2730              	.LASF38:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 54
+
+
+ 2731 0092 4C43445F 		.ascii	"LCD_Char_customFonts\000"
+ 2731      43686172 
+ 2731      5F637573 
+ 2731      746F6D46 
+ 2731      6F6E7473 
+ 2732              	.LASF31:
+ 2733 00a7 6D61696E 		.ascii	"main\000"
+ 2733      00
+ 2734              	.LASF30:
+ 2735 00ac 636F6E73 		.ascii	"constrain\000"
+ 2735      74726169 
+ 2735      6E00
+ 2736              	.LASF22:
+ 2737 00b6 73747231 		.ascii	"str1\000"
+ 2737      00
+ 2738              	.LASF23:
+ 2739 00bb 73747232 		.ascii	"str2\000"
+ 2739      00
+ 2740              	.LASF24:
+ 2741 00c0 73747233 		.ascii	"str3\000"
+ 2741      00
+ 2742              	.LASF25:
+ 2743 00c5 73747234 		.ascii	"str4\000"
+ 2743      00
+ 2744              	.LASF67:
+ 2745 00ca 54696D65 		.ascii	"Timer_1_ReadStatusRegister\000"
+ 2745      725F315F 
+ 2745      52656164 
+ 2745      53746174 
+ 2745      75735265 
+ 2746              	.LASF13:
+ 2747 00e5 696E7431 		.ascii	"int16\000"
+ 2747      3600
+ 2748              	.LASF9:
+ 2749 00eb 75696E74 		.ascii	"uint8\000"
+ 2749      3800
+ 2750              	.LASF0:
+ 2751 00f1 7369676E 		.ascii	"signed char\000"
+ 2751      65642063 
+ 2751      68617200 
+ 2752              	.LASF29:
+ 2753 00fd 496E7454 		.ascii	"IntToString\000"
+ 2753      6F537472 
+ 2753      696E6700 
+ 2754              	.LASF53:
+ 2755 0109 50574D5F 		.ascii	"PWM_2_WriteCompare\000"
+ 2755      325F5772 
+ 2755      69746543 
+ 2755      6F6D7061 
+ 2755      726500
+ 2756              	.LASF14:
+ 2757 011c 666C6F61 		.ascii	"float\000"
+ 2757      7400
+ 2758              	.LASF6:
+ 2759 0122 6C6F6E67 		.ascii	"long long int\000"
+ 2759      206C6F6E 
+ 2759      6720696E 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 55
+
+
+ 2759      7400
+ 2760              	.LASF18:
+ 2761 0130 63796973 		.ascii	"cyisraddress\000"
+ 2761      72616464 
+ 2761      72657373 
+ 2761      00
+ 2762              	.LASF12:
+ 2763 013d 696E7438 		.ascii	"int8\000"
+ 2763      00
+ 2764              	.LASF20:
+ 2765 0142 496E7465 		.ascii	"InterruptHandler\000"
+ 2765      72727570 
+ 2765      7448616E 
+ 2765      646C6572 
+ 2765      00
+ 2766              	.LASF4:
+ 2767 0153 6C6F6E67 		.ascii	"long int\000"
+ 2767      20696E74 
+ 2767      00
+ 2768              	.LASF44:
+ 2769 015c 64657272 		.ascii	"derror1\000"
+ 2769      6F723100 
+ 2770              	.LASF49:
+ 2771 0164 4C43445F 		.ascii	"LCD_Char_WriteControl\000"
+ 2771      43686172 
+ 2771      5F577269 
+ 2771      7465436F 
+ 2771      6E74726F 
+ 2772              	.LASF60:
+ 2773 017a 6973725F 		.ascii	"isr_1_StartEx\000"
+ 2773      315F5374 
+ 2773      61727445 
+ 2773      7800
+ 2774              	.LASF1:
+ 2775 0188 756E7369 		.ascii	"unsigned char\000"
+ 2775      676E6564 
+ 2775      20636861 
+ 2775      7200
+ 2776              	.LASF37:
+ 2777 0196 73746174 		.ascii	"state\000"
+ 2777      6500
+ 2778              	.LASF21:
+ 2779 019c 4C434444 		.ascii	"LCDDisplay\000"
+ 2779      6973706C 
+ 2779      617900
+ 2780              	.LASF69:
+ 2781 01a7 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2781      4320342E 
+ 2781      392E3320 
+ 2781      32303135 
+ 2781      30333033 
+ 2782 01da 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 2782      20726576 
+ 2782      6973696F 
+ 2782      6E203232 
+ 2782      31323230 
+ 2783 020d 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 56
+
+
+ 2783      66756E63 
+ 2783      74696F6E 
+ 2783      2D736563 
+ 2783      74696F6E 
+ 2784              	.LASF52:
+ 2785 0235 50574D5F 		.ascii	"PWM_1_WriteCompare\000"
+ 2785      315F5772 
+ 2785      69746543 
+ 2785      6F6D7061 
+ 2785      726500
+ 2786              	.LASF55:
+ 2787 0248 4144435F 		.ascii	"ADC_SAR_Seq_StartConvert\000"
+ 2787      5341525F 
+ 2787      5365715F 
+ 2787      53746172 
+ 2787      74436F6E 
+ 2788              	.LASF63:
+ 2789 0261 73707269 		.ascii	"sprintf\000"
+ 2789      6E746600 
+ 2790              	.LASF43:
+ 2791 0269 64657272 		.ascii	"derror\000"
+ 2791      6F7200
+ 2792              	.LASF50:
+ 2793 0270 4C43445F 		.ascii	"LCD_Char_Position\000"
+ 2793      43686172 
+ 2793      5F506F73 
+ 2793      6974696F 
+ 2793      6E00
+ 2794              	.LASF48:
+ 2795 0282 646E756D 		.ascii	"dnum\000"
+ 2795      00
+ 2796              	.LASF7:
+ 2797 0287 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2797      206C6F6E 
+ 2797      6720756E 
+ 2797      7369676E 
+ 2797      65642069 
+ 2798              	.LASF32:
+ 2799 029e 6164635F 		.ascii	"adc_result\000"
+ 2799      72657375 
+ 2799      6C7400
+ 2800              	.LASF8:
+ 2801 02a9 756E7369 		.ascii	"unsigned int\000"
+ 2801      676E6564 
+ 2801      20696E74 
+ 2801      00
+ 2802              	.LASF39:
+ 2803 02b6 495F6469 		.ascii	"I_dist\000"
+ 2803      737400
+ 2804              	.LASF71:
+ 2805 02bd 433A5C54 		.ascii	"C:\\Three2\\8_KeChuang4E(2-8)\\code\\Maze\\test.cyd"
+ 2805      68726565 
+ 2805      325C385F 
+ 2805      4B654368 
+ 2805      75616E67 
+ 2806 02eb 736E00   		.ascii	"sn\000"
+ 2807              	.LASF56:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 57
+
+
+ 2808 02ee 4C43445F 		.ascii	"LCD_Char_Start\000"
+ 2808      43686172 
+ 2808      5F537461 
+ 2808      727400
+ 2809              	.LASF59:
+ 2810 02fd 50574D5F 		.ascii	"PWM_2_Start\000"
+ 2810      325F5374 
+ 2810      61727400 
+ 2811              	.LASF3:
+ 2812 0309 73686F72 		.ascii	"short unsigned int\000"
+ 2812      7420756E 
+ 2812      7369676E 
+ 2812      65642069 
+ 2812      6E7400
+ 2813              	.LASF65:
+ 2814 031c 4144435F 		.ascii	"ADC_SAR_Seq_GetResult16\000"
+ 2814      5341525F 
+ 2814      5365715F 
+ 2814      47657452 
+ 2814      6573756C 
+ 2815              	.LASF26:
+ 2816 0334 53657276 		.ascii	"ServoPWM\000"
+ 2816      6F50574D 
+ 2816      00
+ 2817              	.LASF17:
+ 2818 033d 63686172 		.ascii	"char\000"
+ 2818      00
+ 2819              	.LASF42:
+ 2820 0342 72525F41 		.ascii	"rR_Adjust\000"
+ 2820      646A7573 
+ 2820      7400
+ 2821              	.LASF27:
+ 2822 034c 6C656674 		.ascii	"left\000"
+ 2822      00
+ 2823              	.LASF54:
+ 2824 0351 4144435F 		.ascii	"ADC_SAR_Seq_Start\000"
+ 2824      5341525F 
+ 2824      5365715F 
+ 2824      53746172 
+ 2824      7400
+ 2825              	.LASF51:
+ 2826 0363 4C43445F 		.ascii	"LCD_Char_PrintString\000"
+ 2826      43686172 
+ 2826      5F507269 
+ 2826      6E745374 
+ 2826      72696E67 
+ 2827              	.LASF62:
+ 2828 0378 54696D65 		.ascii	"Timer_1_Start\000"
+ 2828      725F315F 
+ 2828      53746172 
+ 2828      7400
+ 2829              	.LASF10:
+ 2830 0386 75696E74 		.ascii	"uint16\000"
+ 2830      313600
+ 2831              	.LASF11:
+ 2832 038d 75696E74 		.ascii	"uint32\000"
+ 2832      333200
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccSOJpsr.s 			page 58
+
+
+ 2833              	.LASF45:
+ 2834 0394 64657272 		.ascii	"derror_error\000"
+ 2834      6F725F65 
+ 2834      72726F72 
+ 2834      00
+ 2835              	.LASF5:
+ 2836 03a1 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2836      20756E73 
+ 2836      69676E65 
+ 2836      6420696E 
+ 2836      7400
+ 2837              	.LASF33:
+ 2838 03b3 73747269 		.ascii	"string1\000"
+ 2838      6E673100 
+ 2839              	.LASF34:
+ 2840 03bb 73747269 		.ascii	"string2\000"
+ 2840      6E673200 
+ 2841              	.LASF35:
+ 2842 03c3 73747269 		.ascii	"string3\000"
+ 2842      6E673300 
+ 2843              	.LASF36:
+ 2844 03cb 73747269 		.ascii	"string4\000"
+ 2844      6E673400 
+ 2845              	.LASF41:
+ 2846 03d3 64464946 		.ascii	"dFIFO\000"
+ 2846      4F00
+ 2847              	.LASF70:
+ 2848 03d9 2E5C6D61 		.ascii	".\\main.c\000"
+ 2848      696E2E63 
+ 2848      00
+ 2849              	.LASF15:
+ 2850 03e2 646F7562 		.ascii	"double\000"
+ 2850      6C6500
+ 2851              	.LASF46:
+ 2852 03e9 6453756D 		.ascii	"dSum_error\000"
+ 2852      5F657272 
+ 2852      6F7200
+ 2853              	.LASF66:
+ 2854 03f4 43794465 		.ascii	"CyDelay\000"
+ 2854      6C617900 
+ 2855              	.LASF68:
+ 2856 03fc 42757474 		.ascii	"Button_Read\000"
+ 2856      6F6E5F52 
+ 2856      65616400 
+ 2857              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

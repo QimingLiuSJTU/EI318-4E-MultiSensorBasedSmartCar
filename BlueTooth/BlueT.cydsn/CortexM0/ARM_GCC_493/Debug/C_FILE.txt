@@ -1,0 +1,1 @@
+'C:\Three2\8_KeChuang4E(2-8)\code\BlueT\BlueT.cydsn\main.c' -o .o -T C_FILE -I 'C:\Three2\8_KeChuang4E(2-8)\code\BlueT\BlueT.cydsn' -I 'C:\Three2\8_KeChuang4E(2-8)\code\BlueT\BlueT.cydsn\Generated_Source\PSoC4' -f 'C:\Three2\8_KeChuang4E(2-8)\code\BlueT\BlueT.cydsn\CortexM0\ARM_GCC_493\Debug\.deps\C_FILE.d'

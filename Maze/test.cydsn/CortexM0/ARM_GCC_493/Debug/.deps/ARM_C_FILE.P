@@ -1,0 +1,180 @@
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/ADC_SAR_Seq.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/ADC_SAR_Seq_INT.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_INT.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/cyapicallbacks.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_INT.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/cyapicallbacks.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/ADC_SAR_Seq_IRQ.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_IRQ.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_IRQ.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/cyapicallbacks.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_IRQ.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_IRQ.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/ADC_SAR_Seq_PM.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_PM.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_PM.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/ADC_SAR_Seq_intClock.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_intClock.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_intClock.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_intClock.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/ADC_SAR_Seq_intClock.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/Button.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Button.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Button.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Button_aliases.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cypins.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Button.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Button.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Button_aliases.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cypins.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/Clock_1.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Clock_1.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Clock_1.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Clock_1.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Clock_1.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/Cm0Start.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Cm0Start.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/cyapicallbacks.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Cm0Start.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/CyFlash.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyFlash.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyFlash.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyFlash.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyFlash.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/CyLFClk.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/CyLib.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyFlash.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/LCD_Char.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/LCD_Char_BarGraph.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_BarGraph.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_BarGraph.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/LCD_Char_LCDPort.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_LCDPort.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_LCDPort.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_LCDPort_aliases.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cypins.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_LCDPort.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_LCDPort.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_LCDPort_aliases.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/LCD_Char_PM.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_PM.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/LCD_Char_PM.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/POT.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/POT.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/POT.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/POT_aliases.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cypins.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/POT.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/POT.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/POT_aliases.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/PWM_1.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_1.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_1.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_1.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_1.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/PWM_1_PM.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_1.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_1_PM.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_1_PM.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/PWM_2.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_2.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_2.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_2.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_2.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/PWM_2_PM.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_2.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_2_PM.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_2_PM.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/PWM_OUT1.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT1.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT1.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT1_aliases.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cypins.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT1.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT1.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT1_aliases.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/PWM_OUT2.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT2.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT2.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT2_aliases.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cypins.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT2.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT2.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/PWM_OUT2_aliases.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/Timer_1.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Timer_1.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Timer_1.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Timer_1.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Timer_1.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/Timer_1_PM.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Timer_1.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Timer_1_PM.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/Timer_1_PM.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/cyPm.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyPm.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyPm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyPm.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyPm.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/cyfitter_cfg.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter_cfg.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter_cfg.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/cymetadata.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cymetadata.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cymetadata.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/cyutils.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyutils.c 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyutils.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/isr_1.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/CyLib.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/isr_1.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/isr_1.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/cyapicallbacks.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/isr_1.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/isr_1.h : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/CortexM0/ARM_GCC_493/Debug/timer_clock.o : C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/cytypes.h C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/timer_clock.c C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/timer_clock.h 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/timer_clock.c : 
+
+C:/Three2/8_KeChuang4E(2-8)/code/test1/test.cydsn/Generated_Source/PSoC4/timer_clock.h : 
+

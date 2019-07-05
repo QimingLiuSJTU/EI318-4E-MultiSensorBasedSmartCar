@@ -1,0 +1,1390 @@
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"LCD_Char_1_BarGraph.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.LCD_Char_1_LoadCustomFonts,"ax",%progbits
+  18              		.align	2
+  19              		.global	LCD_Char_1_LoadCustomFonts
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	LCD_Char_1_LoadCustomFonts, %function
+  23              	LCD_Char_1_LoadCustomFonts:
+  24              	.LFB0:
+  25              		.file 1 ".\\Generated_Source\\PSoC4\\LCD_Char_1_BarGraph.c"
+   1:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * File Name: LCD_Char_1_BarGraph.c
+   3:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Version 2.10
+   4:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *
+   5:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Description:
+   6:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  This file provides the custom character data and API for creating and using
+   7:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  bar graphs with the Character LCD component.
+   8:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *
+   9:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Note:
+  10:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *
+  11:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** ********************************************************************************
+  12:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+  13:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * You may use this file only in accordance with the license, terms, conditions,
+  14:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  15:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * the software package with which this file was provided.
+  16:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *******************************************************************************/
+  17:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  18:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** #include "LCD_Char_1.h"
+  19:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  20:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  21:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** uint8 const CYCODE LCD_Char_1_customFonts[] = \
+  22:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** {
+  23:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_0   */
+  24:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u, \
+  25:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_1   */
+  26:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x10u,    0x10u,    0x10u,    0x10u,    0x10u,    0x10u,    0x10u,    0x10u, \
+  27:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_2   */
+  28:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x18u,    0x18u,    0x18u,    0x18u,    0x18u,    0x18u,    0x18u,    0x18u, \
+  29:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_3   */
+  30:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x1Cu,    0x1Cu,    0x1Cu,    0x1Cu,    0x1Cu,    0x1Cu,    0x1Cu,    0x1Cu, \
+  31:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_4   */
+  32:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x1Eu,    0x1Eu,    0x1Eu,    0x1Eu,    0x1Eu,    0x1Eu,    0x1Eu,    0x1Eu, \
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 2
+
+
+  33:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_5   */
+  34:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x1Fu,    0x1Fu,    0x1Fu,    0x1Fu,    0x1Fu,    0x1Fu,    0x1Fu,    0x1Fu, \
+  35:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_6   */
+  36:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u, \
+  37:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Character LCD_Char_1_CUSTOM_7   */
+  38:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u,    0x00u \
+  39:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** };
+  40:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  41:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  42:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** /*******************************************************************************
+  43:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Function Name: LCD_Char_1_LoadCustomFonts
+  44:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** ********************************************************************************
+  45:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *
+  46:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Summary:
+  47:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  Loads 8 custom font characters into the LCD Module for use.  Cannot use
+  48:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  characters from two different font sets at once, but font sets can be
+  49:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  switched out during runtime.
+  50:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *
+  51:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Parameters:
+  52:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  customData:  pointer to a constant array of 64 bytes representing 8 custom
+  53:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *               font characters.
+  54:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Return:
+  55:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  None.
+  56:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *
+  57:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** * Theory:
+  58:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  Prior to using this function user need to import the pointer to custom
+  59:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  font array to your project by writting the following in the source code file
+  60:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  where custom font will be used:
+  61:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *       extern uint8 const CYCODE LCD_Char_customFonts[];
+  62:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  This function is not automatically called by the Start() routine and must be
+  63:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *  called manually by the user.
+  64:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** *******************************************************************************/
+  65:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** void LCD_Char_1_LoadCustomFonts(uint8 const customData[]) 
+  66:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** {
+  26              		.loc 1 66 0
+  27              		.cfi_startproc
+  28              	.LVL0:
+  29 0000 38B5     		push	{r3, r4, r5, lr}
+  30              		.cfi_def_cfa_offset 16
+  31              		.cfi_offset 3, -16
+  32              		.cfi_offset 4, -12
+  33              		.cfi_offset 5, -8
+  34              		.cfi_offset 14, -4
+  35 0002 051C     		mov	r5, r0
+  67:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     uint8 indexU8;
+  68:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  69:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     LCD_Char_1_IsReady();
+  36              		.loc 1 69 0
+  37 0004 FFF7FEFF 		bl	LCD_Char_1_IsReady
+  38              	.LVL1:
+  70:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Set starting address in the LCD Module */
+  71:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Optionally: Read the current address to restore at a later time */
+  72:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     LCD_Char_1_WriteControl(LCD_Char_1_CGRAM_0);
+  39              		.loc 1 72 0
+  40 0008 4020     		mov	r0, #64
+  41 000a FFF7FEFF 		bl	LCD_Char_1_WriteControl
+  42              	.LVL2:
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 3
+
+
+  73:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  74:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /* Load in the 64 bytes of CustomChar Data */
+  75:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     for(indexU8 = 0u; indexU8 < LCD_Char_1_CUSTOM_CHAR_SET_LEN; indexU8++)
+  43              		.loc 1 75 0
+  44 000e 0024     		mov	r4, #0
+  45 0010 04E0     		b	.L2
+  46              	.LVL3:
+  47              	.L3:
+  76:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     {
+  77:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         /* Delay between each write */
+  78:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         LCD_Char_1_WriteData(customData[indexU8]);
+  48              		.loc 1 78 0 discriminator 3
+  49 0012 285D     		ldrb	r0, [r5, r4]
+  50 0014 FFF7FEFF 		bl	LCD_Char_1_WriteData
+  51              	.LVL4:
+  75:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     {
+  52              		.loc 1 75 0 discriminator 3
+  53 0018 0134     		add	r4, r4, #1
+  54              	.LVL5:
+  55 001a E4B2     		uxtb	r4, r4
+  56              	.LVL6:
+  57              	.L2:
+  75:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     {
+  58              		.loc 1 75 0 is_stmt 0 discriminator 1
+  59 001c 3F2C     		cmp	r4, #63
+  60 001e F8D9     		bls	.L3
+  79:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     }
+  80:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  81:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     LCD_Char_1_IsReady();
+  61              		.loc 1 81 0 is_stmt 1
+  62 0020 FFF7FEFF 		bl	LCD_Char_1_IsReady
+  63              	.LVL7:
+  82:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     LCD_Char_1_WriteControl(LCD_Char_1_DDRAM_0);
+  64              		.loc 1 82 0
+  65 0024 8020     		mov	r0, #128
+  66 0026 FFF7FEFF 		bl	LCD_Char_1_WriteControl
+  67              	.LVL8:
+  83:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** }
+  68              		.loc 1 83 0
+  69              		@ sp needed
+  70              	.LVL9:
+  71              	.LVL10:
+  72 002a 38BD     		pop	{r3, r4, r5, pc}
+  73              		.cfi_endproc
+  74              	.LFE0:
+  75              		.size	LCD_Char_1_LoadCustomFonts, .-LCD_Char_1_LoadCustomFonts
+  76              		.global	__aeabi_uidiv
+  77              		.global	__aeabi_uidivmod
+  78              		.section	.text.LCD_Char_1_DrawHorizontalBG,"ax",%progbits
+  79              		.align	2
+  80              		.global	LCD_Char_1_DrawHorizontalBG
+  81              		.code	16
+  82              		.thumb_func
+  83              		.type	LCD_Char_1_DrawHorizontalBG, %function
+  84              	LCD_Char_1_DrawHorizontalBG:
+  85              	.LFB1:
+  84:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 4
+
+
+  85:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  86:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** #if (LCD_Char_1_CUSTOM_CHAR_SET == LCD_Char_1_HORIZONTAL_BG)
+  87:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+  88:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     /*******************************************************************************
+  89:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     * Function Name: LCD_Char_1_DrawHorizontalBG
+  90:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     ********************************************************************************
+  91:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *
+  92:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     * Summary:
+  93:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *  Draws the horizontal bargraph.
+  94:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *
+  95:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     * Parameters:
+  96:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *  row:            The row in which the bar graph starts.
+  97:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *  column:         The column in which the bar graph starts.
+  98:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *  maxCharacters:  The max length of the graph in whole characters.
+  99:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *  value:          The current length or height of the graph in pixels.
+ 100:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *
+ 101:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     * Return:
+ 102:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *  void.
+ 103:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *
+ 104:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     *******************************************************************************/
+ 105:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     void LCD_Char_1_DrawHorizontalBG(uint8 row, uint8 column, uint8 maxCharacters, uint8 value) \
+ 106:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                                                             
+ 107:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     {
+  86              		.loc 1 107 0
+  87              		.cfi_startproc
+  88              	.LVL11:
+  89 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  90              		.cfi_def_cfa_offset 20
+  91              		.cfi_offset 4, -20
+  92              		.cfi_offset 5, -16
+  93              		.cfi_offset 6, -12
+  94              		.cfi_offset 7, -8
+  95              		.cfi_offset 14, -4
+  96 0002 83B0     		sub	sp, sp, #12
+  97              		.cfi_def_cfa_offset 32
+  98 0004 0090     		str	r0, [sp]
+  99 0006 0191     		str	r1, [sp, #4]
+ 100 0008 161C     		mov	r6, r2
+ 101 000a 1C1C     		mov	r4, r3
+ 108:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         /* 8-bit Counter */
+ 109:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         uint8 count8;
+ 110:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         uint8 fullChars;
+ 111:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         uint8 remainingPixels;
+ 112:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ 113:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         /* Number of full characters to draw */
+ 114:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         fullChars = value / LCD_Char_1_CHARACTER_WIDTH;
+ 102              		.loc 1 114 0
+ 103 000c 181C     		mov	r0, r3
+ 104              	.LVL12:
+ 105 000e 0521     		mov	r1, #5
+ 106              	.LVL13:
+ 107 0010 FFF7FEFF 		bl	__aeabi_uidiv
+ 108              	.LVL14:
+ 109 0014 C5B2     		uxtb	r5, r0
+ 110              	.LVL15:
+ 115:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ 116:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         /* Number of remaining pixels to draw */
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 5
+
+
+ 117:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         remainingPixels = value % LCD_Char_1_CHARACTER_WIDTH;
+ 111              		.loc 1 117 0
+ 112 0016 201C     		mov	r0, r4
+ 113 0018 0521     		mov	r1, #5
+ 114 001a FFF7FEFF 		bl	__aeabi_uidivmod
+ 115              	.LVL16:
+ 116 001e CFB2     		uxtb	r7, r1
+ 117              	.LVL17:
+ 118:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ 119:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         /* Ensure that the maximum character limit is followed. */
+ 120:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         if(fullChars >= maxCharacters)
+ 118              		.loc 1 120 0
+ 119 0020 B542     		cmp	r5, r6
+ 120 0022 00D3     		bcc	.L5
+ 121:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         {
+ 122:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****             fullChars = maxCharacters;
+ 121              		.loc 1 122 0
+ 122 0024 351C     		mov	r5, r6
+ 123              	.LVL18:
+ 124              	.L5:
+ 123:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         }
+ 124:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ 125:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         /* Put Cursor at start position */
+ 126:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         LCD_Char_1_Position(row, column);
+ 125              		.loc 1 126 0
+ 126 0026 0098     		ldr	r0, [sp]
+ 127 0028 0199     		ldr	r1, [sp, #4]
+ 128 002a FFF7FEFF 		bl	LCD_Char_1_Position
+ 129              	.LVL19:
+ 127:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ 128:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         /* Write full characters */
+ 129:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         for(count8 = 0u; count8 < fullChars; count8++)
+ 130              		.loc 1 129 0
+ 131 002e 0024     		mov	r4, #0
+ 132 0030 04E0     		b	.L6
+ 133              	.LVL20:
+ 134              	.L7:
+ 130:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         {
+ 131:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****             LCD_Char_1_WriteData(LCD_Char_1_CUSTOM_5);
+ 135              		.loc 1 131 0 discriminator 3
+ 136 0032 0520     		mov	r0, #5
+ 137 0034 FFF7FEFF 		bl	LCD_Char_1_WriteData
+ 138              	.LVL21:
+ 129:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         {
+ 139              		.loc 1 129 0 discriminator 3
+ 140 0038 0134     		add	r4, r4, #1
+ 141              	.LVL22:
+ 142 003a E4B2     		uxtb	r4, r4
+ 143              	.LVL23:
+ 144              	.L6:
+ 129:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         {
+ 145              		.loc 1 129 0 is_stmt 0 discriminator 1
+ 146 003c AC42     		cmp	r4, r5
+ 147 003e F8D3     		bcc	.L7
+ 132:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         }
+ 133:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ 134:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         if(fullChars < maxCharacters)
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 6
+
+
+ 148              		.loc 1 134 0 is_stmt 1
+ 149 0040 B542     		cmp	r5, r6
+ 150 0042 11D2     		bcs	.L4
+ 135:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         {
+ 136:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****             /* Write remaining pixels */
+ 137:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****             LCD_Char_1_WriteData(remainingPixels);
+ 151              		.loc 1 137 0
+ 152 0044 381C     		mov	r0, r7
+ 153 0046 FFF7FEFF 		bl	LCD_Char_1_WriteData
+ 154              	.LVL24:
+ 138:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c **** 
+ 139:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****             if(fullChars < (maxCharacters - 1u))
+ 155              		.loc 1 139 0
+ 156 004a 731E     		sub	r3, r6, #1
+ 157 004c 9D42     		cmp	r5, r3
+ 158 004e 06D3     		bcc	.L12
+ 159 0050 0AE0     		b	.L4
+ 160              	.L10:
+ 140:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****             {
+ 141:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                 /* Fill with whitespace to end of bar graph */
+ 142:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                 for(count8 = 0u; count8 < (maxCharacters - fullChars - 1u); count8++)
+ 143:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                 {
+ 144:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                     LCD_Char_1_WriteData(LCD_Char_1_CUSTOM_0);
+ 161              		.loc 1 144 0 discriminator 3
+ 162 0052 0020     		mov	r0, #0
+ 163 0054 FFF7FEFF 		bl	LCD_Char_1_WriteData
+ 164              	.LVL25:
+ 142:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                 {
+ 165              		.loc 1 142 0 discriminator 3
+ 166 0058 0134     		add	r4, r4, #1
+ 167              	.LVL26:
+ 168 005a E4B2     		uxtb	r4, r4
+ 169              	.LVL27:
+ 170 005c 00E0     		b	.L9
+ 171              	.L12:
+ 172 005e 0024     		mov	r4, #0
+ 173              	.LVL28:
+ 174              	.L9:
+ 142:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                 {
+ 175              		.loc 1 142 0 is_stmt 0 discriminator 1
+ 176 0060 731B     		sub	r3, r6, r5
+ 177 0062 013B     		sub	r3, r3, #1
+ 178 0064 9C42     		cmp	r4, r3
+ 179 0066 F4D3     		bcc	.L10
+ 180              	.L4:
+ 145:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****                 }
+ 146:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****             }
+ 147:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****         }
+ 148:.\Generated_Source\PSoC4/LCD_Char_1_BarGraph.c ****     }
+ 181              		.loc 1 148 0 is_stmt 1
+ 182 0068 03B0     		add	sp, sp, #12
+ 183              		@ sp needed
+ 184              	.LVL29:
+ 185              	.LVL30:
+ 186              	.LVL31:
+ 187 006a F0BD     		pop	{r4, r5, r6, r7, pc}
+ 188              		.cfi_endproc
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 7
+
+
+ 189              	.LFE1:
+ 190              		.size	LCD_Char_1_DrawHorizontalBG, .-LCD_Char_1_DrawHorizontalBG
+ 191              		.global	LCD_Char_1_customFonts
+ 192              		.section	.rodata
+ 193              		.align	2
+ 194              		.type	LCD_Char_1_customFonts, %object
+ 195              		.size	LCD_Char_1_customFonts, 64
+ 196              	LCD_Char_1_customFonts:
+ 197 0000 00       		.byte	0
+ 198 0001 00       		.byte	0
+ 199 0002 00       		.byte	0
+ 200 0003 00       		.byte	0
+ 201 0004 00       		.byte	0
+ 202 0005 00       		.byte	0
+ 203 0006 00       		.byte	0
+ 204 0007 00       		.byte	0
+ 205 0008 10       		.byte	16
+ 206 0009 10       		.byte	16
+ 207 000a 10       		.byte	16
+ 208 000b 10       		.byte	16
+ 209 000c 10       		.byte	16
+ 210 000d 10       		.byte	16
+ 211 000e 10       		.byte	16
+ 212 000f 10       		.byte	16
+ 213 0010 18       		.byte	24
+ 214 0011 18       		.byte	24
+ 215 0012 18       		.byte	24
+ 216 0013 18       		.byte	24
+ 217 0014 18       		.byte	24
+ 218 0015 18       		.byte	24
+ 219 0016 18       		.byte	24
+ 220 0017 18       		.byte	24
+ 221 0018 1C       		.byte	28
+ 222 0019 1C       		.byte	28
+ 223 001a 1C       		.byte	28
+ 224 001b 1C       		.byte	28
+ 225 001c 1C       		.byte	28
+ 226 001d 1C       		.byte	28
+ 227 001e 1C       		.byte	28
+ 228 001f 1C       		.byte	28
+ 229 0020 1E       		.byte	30
+ 230 0021 1E       		.byte	30
+ 231 0022 1E       		.byte	30
+ 232 0023 1E       		.byte	30
+ 233 0024 1E       		.byte	30
+ 234 0025 1E       		.byte	30
+ 235 0026 1E       		.byte	30
+ 236 0027 1E       		.byte	30
+ 237 0028 1F       		.byte	31
+ 238 0029 1F       		.byte	31
+ 239 002a 1F       		.byte	31
+ 240 002b 1F       		.byte	31
+ 241 002c 1F       		.byte	31
+ 242 002d 1F       		.byte	31
+ 243 002e 1F       		.byte	31
+ 244 002f 1F       		.byte	31
+ 245 0030 00       		.byte	0
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 8
+
+
+ 246 0031 00       		.byte	0
+ 247 0032 00       		.byte	0
+ 248 0033 00       		.byte	0
+ 249 0034 00       		.byte	0
+ 250 0035 00       		.byte	0
+ 251 0036 00       		.byte	0
+ 252 0037 00       		.byte	0
+ 253 0038 00       		.byte	0
+ 254 0039 00       		.byte	0
+ 255 003a 00       		.byte	0
+ 256 003b 00       		.byte	0
+ 257 003c 00       		.byte	0
+ 258 003d 00       		.byte	0
+ 259 003e 00       		.byte	0
+ 260 003f 00       		.byte	0
+ 261              		.text
+ 262              	.Letext0:
+ 263              		.file 2 ".\\Generated_Source\\PSoC4\\LCD_Char_1.h"
+ 264              		.file 3 ".\\Generated_Source\\PSoC4\\cytypes.h"
+ 265              		.section	.debug_info,"",%progbits
+ 266              	.Ldebug_info0:
+ 267 0000 41020000 		.4byte	0x241
+ 268 0004 0400     		.2byte	0x4
+ 269 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 270 000a 04       		.byte	0x4
+ 271 000b 01       		.uleb128 0x1
+ 272 000c B5000000 		.4byte	.LASF25
+ 273 0010 01       		.byte	0x1
+ 274 0011 22000000 		.4byte	.LASF26
+ 275 0015 53020000 		.4byte	.LASF27
+ 276 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 277 001d 00000000 		.4byte	0
+ 278 0021 00000000 		.4byte	.Ldebug_line0
+ 279 0025 02       		.uleb128 0x2
+ 280 0026 01       		.byte	0x1
+ 281 0027 06       		.byte	0x6
+ 282 0028 6B010000 		.4byte	.LASF0
+ 283 002c 02       		.uleb128 0x2
+ 284 002d 01       		.byte	0x1
+ 285 002e 08       		.byte	0x8
+ 286 002f 4D010000 		.4byte	.LASF1
+ 287 0033 02       		.uleb128 0x2
+ 288 0034 02       		.byte	0x2
+ 289 0035 05       		.byte	0x5
+ 290 0036 0F000000 		.4byte	.LASF2
+ 291 003a 02       		.uleb128 0x2
+ 292 003b 02       		.byte	0x2
+ 293 003c 07       		.byte	0x7
+ 294 003d A9010000 		.4byte	.LASF3
+ 295 0041 02       		.uleb128 0x2
+ 296 0042 04       		.byte	0x4
+ 297 0043 05       		.byte	0x5
+ 298 0044 8C000000 		.4byte	.LASF4
+ 299 0048 02       		.uleb128 0x2
+ 300 0049 04       		.byte	0x4
+ 301 004a 07       		.byte	0x7
+ 302 004b 20020000 		.4byte	.LASF5
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 9
+
+
+ 303 004f 02       		.uleb128 0x2
+ 304 0050 08       		.byte	0x8
+ 305 0051 05       		.byte	0x5
+ 306 0052 7E000000 		.4byte	.LASF6
+ 307 0056 02       		.uleb128 0x2
+ 308 0057 08       		.byte	0x8
+ 309 0058 07       		.byte	0x7
+ 310 0059 77010000 		.4byte	.LASF7
+ 311 005d 03       		.uleb128 0x3
+ 312 005e 04       		.byte	0x4
+ 313 005f 05       		.byte	0x5
+ 314 0060 696E7400 		.ascii	"int\000"
+ 315 0064 02       		.uleb128 0x2
+ 316 0065 04       		.byte	0x4
+ 317 0066 07       		.byte	0x7
+ 318 0067 8E010000 		.4byte	.LASF8
+ 319 006b 04       		.uleb128 0x4
+ 320 006c 72000000 		.4byte	.LASF28
+ 321 0070 03       		.byte	0x3
+ 322 0071 C2       		.byte	0xc2
+ 323 0072 2C000000 		.4byte	0x2c
+ 324 0076 02       		.uleb128 0x2
+ 325 0077 04       		.byte	0x4
+ 326 0078 04       		.byte	0x4
+ 327 0079 78000000 		.4byte	.LASF9
+ 328 007d 02       		.uleb128 0x2
+ 329 007e 08       		.byte	0x8
+ 330 007f 04       		.byte	0x4
+ 331 0080 32020000 		.4byte	.LASF10
+ 332 0084 02       		.uleb128 0x2
+ 333 0085 01       		.byte	0x1
+ 334 0086 08       		.byte	0x8
+ 335 0087 D0010000 		.4byte	.LASF11
+ 336 008b 05       		.uleb128 0x5
+ 337 008c 51000000 		.4byte	.LASF12
+ 338 0090 01       		.byte	0x1
+ 339 0091 41       		.byte	0x41
+ 340 0092 00000000 		.4byte	.LFB0
+ 341 0096 2C000000 		.4byte	.LFE0-.LFB0
+ 342 009a 01       		.uleb128 0x1
+ 343 009b 9C       		.byte	0x9c
+ 344 009c FE000000 		.4byte	0xfe
+ 345 00a0 06       		.uleb128 0x6
+ 346 00a1 95000000 		.4byte	.LASF14
+ 347 00a5 01       		.byte	0x1
+ 348 00a6 41       		.byte	0x41
+ 349 00a7 FE000000 		.4byte	0xfe
+ 350 00ab 00000000 		.4byte	.LLST0
+ 351 00af 07       		.uleb128 0x7
+ 352 00b0 00000000 		.4byte	.LASF18
+ 353 00b4 01       		.byte	0x1
+ 354 00b5 43       		.byte	0x43
+ 355 00b6 6B000000 		.4byte	0x6b
+ 356 00ba 2C000000 		.4byte	.LLST1
+ 357 00be 08       		.uleb128 0x8
+ 358 00bf 08000000 		.4byte	.LVL1
+ 359 00c3 09020000 		.4byte	0x209
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 10
+
+
+ 360 00c7 09       		.uleb128 0x9
+ 361 00c8 0E000000 		.4byte	.LVL2
+ 362 00cc 10020000 		.4byte	0x210
+ 363 00d0 DB000000 		.4byte	0xdb
+ 364 00d4 0A       		.uleb128 0xa
+ 365 00d5 01       		.uleb128 0x1
+ 366 00d6 50       		.byte	0x50
+ 367 00d7 02       		.uleb128 0x2
+ 368 00d8 08       		.byte	0x8
+ 369 00d9 40       		.byte	0x40
+ 370 00da 00       		.byte	0
+ 371 00db 08       		.uleb128 0x8
+ 372 00dc 18000000 		.4byte	.LVL4
+ 373 00e0 21020000 		.4byte	0x221
+ 374 00e4 08       		.uleb128 0x8
+ 375 00e5 24000000 		.4byte	.LVL7
+ 376 00e9 09020000 		.4byte	0x209
+ 377 00ed 0B       		.uleb128 0xb
+ 378 00ee 2A000000 		.4byte	.LVL8
+ 379 00f2 10020000 		.4byte	0x210
+ 380 00f6 0A       		.uleb128 0xa
+ 381 00f7 01       		.uleb128 0x1
+ 382 00f8 50       		.byte	0x50
+ 383 00f9 02       		.uleb128 0x2
+ 384 00fa 09       		.byte	0x9
+ 385 00fb 80       		.byte	0x80
+ 386 00fc 00       		.byte	0
+ 387 00fd 00       		.byte	0
+ 388 00fe 0C       		.uleb128 0xc
+ 389 00ff 04       		.byte	0x4
+ 390 0100 04010000 		.4byte	0x104
+ 391 0104 0D       		.uleb128 0xd
+ 392 0105 6B000000 		.4byte	0x6b
+ 393 0109 0E       		.uleb128 0xe
+ 394 010a ED010000 		.4byte	.LASF13
+ 395 010e 01       		.byte	0x1
+ 396 010f 69       		.byte	0x69
+ 397 0110 00000000 		.4byte	.LFB1
+ 398 0114 6C000000 		.4byte	.LFE1-.LFB1
+ 399 0118 01       		.uleb128 0x1
+ 400 0119 9C       		.byte	0x9c
+ 401 011a DC010000 		.4byte	0x1dc
+ 402 011e 0F       		.uleb128 0xf
+ 403 011f 726F7700 		.ascii	"row\000"
+ 404 0123 01       		.byte	0x1
+ 405 0124 69       		.byte	0x69
+ 406 0125 6B000000 		.4byte	0x6b
+ 407 0129 56000000 		.4byte	.LLST2
+ 408 012d 06       		.uleb128 0x6
+ 409 012e 08000000 		.4byte	.LASF15
+ 410 0132 01       		.byte	0x1
+ 411 0133 69       		.byte	0x69
+ 412 0134 6B000000 		.4byte	0x6b
+ 413 0138 77000000 		.4byte	.LLST3
+ 414 013c 06       		.uleb128 0x6
+ 415 013d 9B010000 		.4byte	.LASF16
+ 416 0141 01       		.byte	0x1
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 11
+
+
+ 417 0142 69       		.byte	0x69
+ 418 0143 6B000000 		.4byte	0x6b
+ 419 0147 98000000 		.4byte	.LLST4
+ 420 014b 06       		.uleb128 0x6
+ 421 014c 6C000000 		.4byte	.LASF17
+ 422 0150 01       		.byte	0x1
+ 423 0151 69       		.byte	0x69
+ 424 0152 6B000000 		.4byte	0x6b
+ 425 0156 B9000000 		.4byte	.LLST5
+ 426 015a 07       		.uleb128 0x7
+ 427 015b 39020000 		.4byte	.LASF19
+ 428 015f 01       		.byte	0x1
+ 429 0160 6D       		.byte	0x6d
+ 430 0161 6B000000 		.4byte	0x6b
+ 431 0165 DA000000 		.4byte	.LLST6
+ 432 0169 07       		.uleb128 0x7
+ 433 016a 43010000 		.4byte	.LASF20
+ 434 016e 01       		.byte	0x1
+ 435 016f 6E       		.byte	0x6e
+ 436 0170 6B000000 		.4byte	0x6b
+ 437 0174 0F010000 		.4byte	.LLST7
+ 438 0178 07       		.uleb128 0x7
+ 439 0179 5B010000 		.4byte	.LASF21
+ 440 017d 01       		.byte	0x1
+ 441 017e 6F       		.byte	0x6f
+ 442 017f 6B000000 		.4byte	0x6b
+ 443 0183 22010000 		.4byte	.LLST8
+ 444 0187 09       		.uleb128 0x9
+ 445 0188 2E000000 		.4byte	.LVL19
+ 446 018c 32020000 		.4byte	0x232
+ 447 0190 A5010000 		.4byte	0x1a5
+ 448 0194 0A       		.uleb128 0xa
+ 449 0195 01       		.uleb128 0x1
+ 450 0196 51       		.byte	0x51
+ 451 0197 04       		.uleb128 0x4
+ 452 0198 91       		.byte	0x91
+ 453 0199 64       		.sleb128 -28
+ 454 019a 94       		.byte	0x94
+ 455 019b 01       		.byte	0x1
+ 456 019c 0A       		.uleb128 0xa
+ 457 019d 01       		.uleb128 0x1
+ 458 019e 50       		.byte	0x50
+ 459 019f 04       		.uleb128 0x4
+ 460 01a0 7D       		.byte	0x7d
+ 461 01a1 00       		.sleb128 0
+ 462 01a2 94       		.byte	0x94
+ 463 01a3 01       		.byte	0x1
+ 464 01a4 00       		.byte	0
+ 465 01a5 09       		.uleb128 0x9
+ 466 01a6 38000000 		.4byte	.LVL21
+ 467 01aa 21020000 		.4byte	0x221
+ 468 01ae B8010000 		.4byte	0x1b8
+ 469 01b2 0A       		.uleb128 0xa
+ 470 01b3 01       		.uleb128 0x1
+ 471 01b4 50       		.byte	0x50
+ 472 01b5 01       		.uleb128 0x1
+ 473 01b6 35       		.byte	0x35
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 12
+
+
+ 474 01b7 00       		.byte	0
+ 475 01b8 09       		.uleb128 0x9
+ 476 01b9 4A000000 		.4byte	.LVL24
+ 477 01bd 21020000 		.4byte	0x221
+ 478 01c1 CC010000 		.4byte	0x1cc
+ 479 01c5 0A       		.uleb128 0xa
+ 480 01c6 01       		.uleb128 0x1
+ 481 01c7 50       		.byte	0x50
+ 482 01c8 02       		.uleb128 0x2
+ 483 01c9 77       		.byte	0x77
+ 484 01ca 00       		.sleb128 0
+ 485 01cb 00       		.byte	0
+ 486 01cc 0B       		.uleb128 0xb
+ 487 01cd 58000000 		.4byte	.LVL25
+ 488 01d1 21020000 		.4byte	0x221
+ 489 01d5 0A       		.uleb128 0xa
+ 490 01d6 01       		.uleb128 0x1
+ 491 01d7 50       		.byte	0x50
+ 492 01d8 01       		.uleb128 0x1
+ 493 01d9 30       		.byte	0x30
+ 494 01da 00       		.byte	0
+ 495 01db 00       		.byte	0
+ 496 01dc 10       		.uleb128 0x10
+ 497 01dd 6B000000 		.4byte	0x6b
+ 498 01e1 EC010000 		.4byte	0x1ec
+ 499 01e5 11       		.uleb128 0x11
+ 500 01e6 EC010000 		.4byte	0x1ec
+ 501 01ea 3F       		.byte	0x3f
+ 502 01eb 00       		.byte	0
+ 503 01ec 02       		.uleb128 0x2
+ 504 01ed 04       		.byte	0x4
+ 505 01ee 07       		.byte	0x7
+ 506 01ef 19000000 		.4byte	.LASF22
+ 507 01f3 12       		.uleb128 0x12
+ 508 01f4 09020000 		.4byte	.LASF29
+ 509 01f8 01       		.byte	0x1
+ 510 01f9 15       		.byte	0x15
+ 511 01fa 04020000 		.4byte	0x204
+ 512 01fe 05       		.uleb128 0x5
+ 513 01ff 03       		.byte	0x3
+ 514 0200 00000000 		.4byte	LCD_Char_1_customFonts
+ 515 0204 0D       		.uleb128 0xd
+ 516 0205 DC010000 		.4byte	0x1dc
+ 517 0209 13       		.uleb128 0x13
+ 518 020a 40020000 		.4byte	.LASF30
+ 519 020e 02       		.byte	0x2
+ 520 020f 3F       		.byte	0x3f
+ 521 0210 14       		.uleb128 0x14
+ 522 0211 D5010000 		.4byte	.LASF23
+ 523 0215 02       		.byte	0x2
+ 524 0216 3A       		.byte	0x3a
+ 525 0217 21020000 		.4byte	0x221
+ 526 021b 15       		.uleb128 0x15
+ 527 021c 6B000000 		.4byte	0x6b
+ 528 0220 00       		.byte	0
+ 529 0221 14       		.uleb128 0x14
+ 530 0222 A0000000 		.4byte	.LASF24
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 13
+
+
+ 531 0226 02       		.byte	0x2
+ 532 0227 3B       		.byte	0x3b
+ 533 0228 32020000 		.4byte	0x232
+ 534 022c 15       		.uleb128 0x15
+ 535 022d 6B000000 		.4byte	0x6b
+ 536 0231 00       		.byte	0
+ 537 0232 16       		.uleb128 0x16
+ 538 0233 BC010000 		.4byte	.LASF31
+ 539 0237 02       		.byte	0x2
+ 540 0238 3D       		.byte	0x3d
+ 541 0239 15       		.uleb128 0x15
+ 542 023a 6B000000 		.4byte	0x6b
+ 543 023e 15       		.uleb128 0x15
+ 544 023f 6B000000 		.4byte	0x6b
+ 545 0243 00       		.byte	0
+ 546 0244 00       		.byte	0
+ 547              		.section	.debug_abbrev,"",%progbits
+ 548              	.Ldebug_abbrev0:
+ 549 0000 01       		.uleb128 0x1
+ 550 0001 11       		.uleb128 0x11
+ 551 0002 01       		.byte	0x1
+ 552 0003 25       		.uleb128 0x25
+ 553 0004 0E       		.uleb128 0xe
+ 554 0005 13       		.uleb128 0x13
+ 555 0006 0B       		.uleb128 0xb
+ 556 0007 03       		.uleb128 0x3
+ 557 0008 0E       		.uleb128 0xe
+ 558 0009 1B       		.uleb128 0x1b
+ 559 000a 0E       		.uleb128 0xe
+ 560 000b 55       		.uleb128 0x55
+ 561 000c 17       		.uleb128 0x17
+ 562 000d 11       		.uleb128 0x11
+ 563 000e 01       		.uleb128 0x1
+ 564 000f 10       		.uleb128 0x10
+ 565 0010 17       		.uleb128 0x17
+ 566 0011 00       		.byte	0
+ 567 0012 00       		.byte	0
+ 568 0013 02       		.uleb128 0x2
+ 569 0014 24       		.uleb128 0x24
+ 570 0015 00       		.byte	0
+ 571 0016 0B       		.uleb128 0xb
+ 572 0017 0B       		.uleb128 0xb
+ 573 0018 3E       		.uleb128 0x3e
+ 574 0019 0B       		.uleb128 0xb
+ 575 001a 03       		.uleb128 0x3
+ 576 001b 0E       		.uleb128 0xe
+ 577 001c 00       		.byte	0
+ 578 001d 00       		.byte	0
+ 579 001e 03       		.uleb128 0x3
+ 580 001f 24       		.uleb128 0x24
+ 581 0020 00       		.byte	0
+ 582 0021 0B       		.uleb128 0xb
+ 583 0022 0B       		.uleb128 0xb
+ 584 0023 3E       		.uleb128 0x3e
+ 585 0024 0B       		.uleb128 0xb
+ 586 0025 03       		.uleb128 0x3
+ 587 0026 08       		.uleb128 0x8
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 14
+
+
+ 588 0027 00       		.byte	0
+ 589 0028 00       		.byte	0
+ 590 0029 04       		.uleb128 0x4
+ 591 002a 16       		.uleb128 0x16
+ 592 002b 00       		.byte	0
+ 593 002c 03       		.uleb128 0x3
+ 594 002d 0E       		.uleb128 0xe
+ 595 002e 3A       		.uleb128 0x3a
+ 596 002f 0B       		.uleb128 0xb
+ 597 0030 3B       		.uleb128 0x3b
+ 598 0031 0B       		.uleb128 0xb
+ 599 0032 49       		.uleb128 0x49
+ 600 0033 13       		.uleb128 0x13
+ 601 0034 00       		.byte	0
+ 602 0035 00       		.byte	0
+ 603 0036 05       		.uleb128 0x5
+ 604 0037 2E       		.uleb128 0x2e
+ 605 0038 01       		.byte	0x1
+ 606 0039 3F       		.uleb128 0x3f
+ 607 003a 19       		.uleb128 0x19
+ 608 003b 03       		.uleb128 0x3
+ 609 003c 0E       		.uleb128 0xe
+ 610 003d 3A       		.uleb128 0x3a
+ 611 003e 0B       		.uleb128 0xb
+ 612 003f 3B       		.uleb128 0x3b
+ 613 0040 0B       		.uleb128 0xb
+ 614 0041 27       		.uleb128 0x27
+ 615 0042 19       		.uleb128 0x19
+ 616 0043 11       		.uleb128 0x11
+ 617 0044 01       		.uleb128 0x1
+ 618 0045 12       		.uleb128 0x12
+ 619 0046 06       		.uleb128 0x6
+ 620 0047 40       		.uleb128 0x40
+ 621 0048 18       		.uleb128 0x18
+ 622 0049 9742     		.uleb128 0x2117
+ 623 004b 19       		.uleb128 0x19
+ 624 004c 01       		.uleb128 0x1
+ 625 004d 13       		.uleb128 0x13
+ 626 004e 00       		.byte	0
+ 627 004f 00       		.byte	0
+ 628 0050 06       		.uleb128 0x6
+ 629 0051 05       		.uleb128 0x5
+ 630 0052 00       		.byte	0
+ 631 0053 03       		.uleb128 0x3
+ 632 0054 0E       		.uleb128 0xe
+ 633 0055 3A       		.uleb128 0x3a
+ 634 0056 0B       		.uleb128 0xb
+ 635 0057 3B       		.uleb128 0x3b
+ 636 0058 0B       		.uleb128 0xb
+ 637 0059 49       		.uleb128 0x49
+ 638 005a 13       		.uleb128 0x13
+ 639 005b 02       		.uleb128 0x2
+ 640 005c 17       		.uleb128 0x17
+ 641 005d 00       		.byte	0
+ 642 005e 00       		.byte	0
+ 643 005f 07       		.uleb128 0x7
+ 644 0060 34       		.uleb128 0x34
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 15
+
+
+ 645 0061 00       		.byte	0
+ 646 0062 03       		.uleb128 0x3
+ 647 0063 0E       		.uleb128 0xe
+ 648 0064 3A       		.uleb128 0x3a
+ 649 0065 0B       		.uleb128 0xb
+ 650 0066 3B       		.uleb128 0x3b
+ 651 0067 0B       		.uleb128 0xb
+ 652 0068 49       		.uleb128 0x49
+ 653 0069 13       		.uleb128 0x13
+ 654 006a 02       		.uleb128 0x2
+ 655 006b 17       		.uleb128 0x17
+ 656 006c 00       		.byte	0
+ 657 006d 00       		.byte	0
+ 658 006e 08       		.uleb128 0x8
+ 659 006f 898201   		.uleb128 0x4109
+ 660 0072 00       		.byte	0
+ 661 0073 11       		.uleb128 0x11
+ 662 0074 01       		.uleb128 0x1
+ 663 0075 31       		.uleb128 0x31
+ 664 0076 13       		.uleb128 0x13
+ 665 0077 00       		.byte	0
+ 666 0078 00       		.byte	0
+ 667 0079 09       		.uleb128 0x9
+ 668 007a 898201   		.uleb128 0x4109
+ 669 007d 01       		.byte	0x1
+ 670 007e 11       		.uleb128 0x11
+ 671 007f 01       		.uleb128 0x1
+ 672 0080 31       		.uleb128 0x31
+ 673 0081 13       		.uleb128 0x13
+ 674 0082 01       		.uleb128 0x1
+ 675 0083 13       		.uleb128 0x13
+ 676 0084 00       		.byte	0
+ 677 0085 00       		.byte	0
+ 678 0086 0A       		.uleb128 0xa
+ 679 0087 8A8201   		.uleb128 0x410a
+ 680 008a 00       		.byte	0
+ 681 008b 02       		.uleb128 0x2
+ 682 008c 18       		.uleb128 0x18
+ 683 008d 9142     		.uleb128 0x2111
+ 684 008f 18       		.uleb128 0x18
+ 685 0090 00       		.byte	0
+ 686 0091 00       		.byte	0
+ 687 0092 0B       		.uleb128 0xb
+ 688 0093 898201   		.uleb128 0x4109
+ 689 0096 01       		.byte	0x1
+ 690 0097 11       		.uleb128 0x11
+ 691 0098 01       		.uleb128 0x1
+ 692 0099 31       		.uleb128 0x31
+ 693 009a 13       		.uleb128 0x13
+ 694 009b 00       		.byte	0
+ 695 009c 00       		.byte	0
+ 696 009d 0C       		.uleb128 0xc
+ 697 009e 0F       		.uleb128 0xf
+ 698 009f 00       		.byte	0
+ 699 00a0 0B       		.uleb128 0xb
+ 700 00a1 0B       		.uleb128 0xb
+ 701 00a2 49       		.uleb128 0x49
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 16
+
+
+ 702 00a3 13       		.uleb128 0x13
+ 703 00a4 00       		.byte	0
+ 704 00a5 00       		.byte	0
+ 705 00a6 0D       		.uleb128 0xd
+ 706 00a7 26       		.uleb128 0x26
+ 707 00a8 00       		.byte	0
+ 708 00a9 49       		.uleb128 0x49
+ 709 00aa 13       		.uleb128 0x13
+ 710 00ab 00       		.byte	0
+ 711 00ac 00       		.byte	0
+ 712 00ad 0E       		.uleb128 0xe
+ 713 00ae 2E       		.uleb128 0x2e
+ 714 00af 01       		.byte	0x1
+ 715 00b0 3F       		.uleb128 0x3f
+ 716 00b1 19       		.uleb128 0x19
+ 717 00b2 03       		.uleb128 0x3
+ 718 00b3 0E       		.uleb128 0xe
+ 719 00b4 3A       		.uleb128 0x3a
+ 720 00b5 0B       		.uleb128 0xb
+ 721 00b6 3B       		.uleb128 0x3b
+ 722 00b7 0B       		.uleb128 0xb
+ 723 00b8 27       		.uleb128 0x27
+ 724 00b9 19       		.uleb128 0x19
+ 725 00ba 11       		.uleb128 0x11
+ 726 00bb 01       		.uleb128 0x1
+ 727 00bc 12       		.uleb128 0x12
+ 728 00bd 06       		.uleb128 0x6
+ 729 00be 40       		.uleb128 0x40
+ 730 00bf 18       		.uleb128 0x18
+ 731 00c0 9642     		.uleb128 0x2116
+ 732 00c2 19       		.uleb128 0x19
+ 733 00c3 01       		.uleb128 0x1
+ 734 00c4 13       		.uleb128 0x13
+ 735 00c5 00       		.byte	0
+ 736 00c6 00       		.byte	0
+ 737 00c7 0F       		.uleb128 0xf
+ 738 00c8 05       		.uleb128 0x5
+ 739 00c9 00       		.byte	0
+ 740 00ca 03       		.uleb128 0x3
+ 741 00cb 08       		.uleb128 0x8
+ 742 00cc 3A       		.uleb128 0x3a
+ 743 00cd 0B       		.uleb128 0xb
+ 744 00ce 3B       		.uleb128 0x3b
+ 745 00cf 0B       		.uleb128 0xb
+ 746 00d0 49       		.uleb128 0x49
+ 747 00d1 13       		.uleb128 0x13
+ 748 00d2 02       		.uleb128 0x2
+ 749 00d3 17       		.uleb128 0x17
+ 750 00d4 00       		.byte	0
+ 751 00d5 00       		.byte	0
+ 752 00d6 10       		.uleb128 0x10
+ 753 00d7 01       		.uleb128 0x1
+ 754 00d8 01       		.byte	0x1
+ 755 00d9 49       		.uleb128 0x49
+ 756 00da 13       		.uleb128 0x13
+ 757 00db 01       		.uleb128 0x1
+ 758 00dc 13       		.uleb128 0x13
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 17
+
+
+ 759 00dd 00       		.byte	0
+ 760 00de 00       		.byte	0
+ 761 00df 11       		.uleb128 0x11
+ 762 00e0 21       		.uleb128 0x21
+ 763 00e1 00       		.byte	0
+ 764 00e2 49       		.uleb128 0x49
+ 765 00e3 13       		.uleb128 0x13
+ 766 00e4 2F       		.uleb128 0x2f
+ 767 00e5 0B       		.uleb128 0xb
+ 768 00e6 00       		.byte	0
+ 769 00e7 00       		.byte	0
+ 770 00e8 12       		.uleb128 0x12
+ 771 00e9 34       		.uleb128 0x34
+ 772 00ea 00       		.byte	0
+ 773 00eb 03       		.uleb128 0x3
+ 774 00ec 0E       		.uleb128 0xe
+ 775 00ed 3A       		.uleb128 0x3a
+ 776 00ee 0B       		.uleb128 0xb
+ 777 00ef 3B       		.uleb128 0x3b
+ 778 00f0 0B       		.uleb128 0xb
+ 779 00f1 49       		.uleb128 0x49
+ 780 00f2 13       		.uleb128 0x13
+ 781 00f3 3F       		.uleb128 0x3f
+ 782 00f4 19       		.uleb128 0x19
+ 783 00f5 02       		.uleb128 0x2
+ 784 00f6 18       		.uleb128 0x18
+ 785 00f7 00       		.byte	0
+ 786 00f8 00       		.byte	0
+ 787 00f9 13       		.uleb128 0x13
+ 788 00fa 2E       		.uleb128 0x2e
+ 789 00fb 00       		.byte	0
+ 790 00fc 3F       		.uleb128 0x3f
+ 791 00fd 19       		.uleb128 0x19
+ 792 00fe 03       		.uleb128 0x3
+ 793 00ff 0E       		.uleb128 0xe
+ 794 0100 3A       		.uleb128 0x3a
+ 795 0101 0B       		.uleb128 0xb
+ 796 0102 3B       		.uleb128 0x3b
+ 797 0103 0B       		.uleb128 0xb
+ 798 0104 27       		.uleb128 0x27
+ 799 0105 19       		.uleb128 0x19
+ 800 0106 3C       		.uleb128 0x3c
+ 801 0107 19       		.uleb128 0x19
+ 802 0108 00       		.byte	0
+ 803 0109 00       		.byte	0
+ 804 010a 14       		.uleb128 0x14
+ 805 010b 2E       		.uleb128 0x2e
+ 806 010c 01       		.byte	0x1
+ 807 010d 3F       		.uleb128 0x3f
+ 808 010e 19       		.uleb128 0x19
+ 809 010f 03       		.uleb128 0x3
+ 810 0110 0E       		.uleb128 0xe
+ 811 0111 3A       		.uleb128 0x3a
+ 812 0112 0B       		.uleb128 0xb
+ 813 0113 3B       		.uleb128 0x3b
+ 814 0114 0B       		.uleb128 0xb
+ 815 0115 27       		.uleb128 0x27
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 18
+
+
+ 816 0116 19       		.uleb128 0x19
+ 817 0117 3C       		.uleb128 0x3c
+ 818 0118 19       		.uleb128 0x19
+ 819 0119 01       		.uleb128 0x1
+ 820 011a 13       		.uleb128 0x13
+ 821 011b 00       		.byte	0
+ 822 011c 00       		.byte	0
+ 823 011d 15       		.uleb128 0x15
+ 824 011e 05       		.uleb128 0x5
+ 825 011f 00       		.byte	0
+ 826 0120 49       		.uleb128 0x49
+ 827 0121 13       		.uleb128 0x13
+ 828 0122 00       		.byte	0
+ 829 0123 00       		.byte	0
+ 830 0124 16       		.uleb128 0x16
+ 831 0125 2E       		.uleb128 0x2e
+ 832 0126 01       		.byte	0x1
+ 833 0127 3F       		.uleb128 0x3f
+ 834 0128 19       		.uleb128 0x19
+ 835 0129 03       		.uleb128 0x3
+ 836 012a 0E       		.uleb128 0xe
+ 837 012b 3A       		.uleb128 0x3a
+ 838 012c 0B       		.uleb128 0xb
+ 839 012d 3B       		.uleb128 0x3b
+ 840 012e 0B       		.uleb128 0xb
+ 841 012f 27       		.uleb128 0x27
+ 842 0130 19       		.uleb128 0x19
+ 843 0131 3C       		.uleb128 0x3c
+ 844 0132 19       		.uleb128 0x19
+ 845 0133 00       		.byte	0
+ 846 0134 00       		.byte	0
+ 847 0135 00       		.byte	0
+ 848              		.section	.debug_loc,"",%progbits
+ 849              	.Ldebug_loc0:
+ 850              	.LLST0:
+ 851 0000 00000000 		.4byte	.LVL0
+ 852 0004 07000000 		.4byte	.LVL1-1
+ 853 0008 0100     		.2byte	0x1
+ 854 000a 50       		.byte	0x50
+ 855 000b 07000000 		.4byte	.LVL1-1
+ 856 000f 2A000000 		.4byte	.LVL10
+ 857 0013 0100     		.2byte	0x1
+ 858 0015 55       		.byte	0x55
+ 859 0016 2A000000 		.4byte	.LVL10
+ 860 001a 2C000000 		.4byte	.LFE0
+ 861 001e 0400     		.2byte	0x4
+ 862 0020 F3       		.byte	0xf3
+ 863 0021 01       		.uleb128 0x1
+ 864 0022 50       		.byte	0x50
+ 865 0023 9F       		.byte	0x9f
+ 866 0024 00000000 		.4byte	0
+ 867 0028 00000000 		.4byte	0
+ 868              	.LLST1:
+ 869 002c 0E000000 		.4byte	.LVL2
+ 870 0030 12000000 		.4byte	.LVL3
+ 871 0034 0200     		.2byte	0x2
+ 872 0036 30       		.byte	0x30
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 19
+
+
+ 873 0037 9F       		.byte	0x9f
+ 874 0038 12000000 		.4byte	.LVL3
+ 875 003c 1A000000 		.4byte	.LVL5
+ 876 0040 0100     		.2byte	0x1
+ 877 0042 54       		.byte	0x54
+ 878 0043 1C000000 		.4byte	.LVL6
+ 879 0047 2A000000 		.4byte	.LVL9
+ 880 004b 0100     		.2byte	0x1
+ 881 004d 54       		.byte	0x54
+ 882 004e 00000000 		.4byte	0
+ 883 0052 00000000 		.4byte	0
+ 884              	.LLST2:
+ 885 0056 00000000 		.4byte	.LVL11
+ 886 005a 0E000000 		.4byte	.LVL12
+ 887 005e 0100     		.2byte	0x1
+ 888 0060 50       		.byte	0x50
+ 889 0061 0E000000 		.4byte	.LVL12
+ 890 0065 6C000000 		.4byte	.LFE1
+ 891 0069 0400     		.2byte	0x4
+ 892 006b F3       		.byte	0xf3
+ 893 006c 01       		.uleb128 0x1
+ 894 006d 50       		.byte	0x50
+ 895 006e 9F       		.byte	0x9f
+ 896 006f 00000000 		.4byte	0
+ 897 0073 00000000 		.4byte	0
+ 898              	.LLST3:
+ 899 0077 00000000 		.4byte	.LVL11
+ 900 007b 10000000 		.4byte	.LVL13
+ 901 007f 0100     		.2byte	0x1
+ 902 0081 51       		.byte	0x51
+ 903 0082 10000000 		.4byte	.LVL13
+ 904 0086 6C000000 		.4byte	.LFE1
+ 905 008a 0400     		.2byte	0x4
+ 906 008c F3       		.byte	0xf3
+ 907 008d 01       		.uleb128 0x1
+ 908 008e 51       		.byte	0x51
+ 909 008f 9F       		.byte	0x9f
+ 910 0090 00000000 		.4byte	0
+ 911 0094 00000000 		.4byte	0
+ 912              	.LLST4:
+ 913 0098 00000000 		.4byte	.LVL11
+ 914 009c 13000000 		.4byte	.LVL14-1
+ 915 00a0 0100     		.2byte	0x1
+ 916 00a2 52       		.byte	0x52
+ 917 00a3 13000000 		.4byte	.LVL14-1
+ 918 00a7 6C000000 		.4byte	.LFE1
+ 919 00ab 0400     		.2byte	0x4
+ 920 00ad F3       		.byte	0xf3
+ 921 00ae 01       		.uleb128 0x1
+ 922 00af 52       		.byte	0x52
+ 923 00b0 9F       		.byte	0x9f
+ 924 00b1 00000000 		.4byte	0
+ 925 00b5 00000000 		.4byte	0
+ 926              	.LLST5:
+ 927 00b9 00000000 		.4byte	.LVL11
+ 928 00bd 13000000 		.4byte	.LVL14-1
+ 929 00c1 0100     		.2byte	0x1
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 20
+
+
+ 930 00c3 53       		.byte	0x53
+ 931 00c4 13000000 		.4byte	.LVL14-1
+ 932 00c8 6C000000 		.4byte	.LFE1
+ 933 00cc 0400     		.2byte	0x4
+ 934 00ce F3       		.byte	0xf3
+ 935 00cf 01       		.uleb128 0x1
+ 936 00d0 53       		.byte	0x53
+ 937 00d1 9F       		.byte	0x9f
+ 938 00d2 00000000 		.4byte	0
+ 939 00d6 00000000 		.4byte	0
+ 940              	.LLST6:
+ 941 00da 2E000000 		.4byte	.LVL19
+ 942 00de 32000000 		.4byte	.LVL20
+ 943 00e2 0200     		.2byte	0x2
+ 944 00e4 30       		.byte	0x30
+ 945 00e5 9F       		.byte	0x9f
+ 946 00e6 32000000 		.4byte	.LVL20
+ 947 00ea 3A000000 		.4byte	.LVL22
+ 948 00ee 0100     		.2byte	0x1
+ 949 00f0 54       		.byte	0x54
+ 950 00f1 3C000000 		.4byte	.LVL23
+ 951 00f5 5A000000 		.4byte	.LVL26
+ 952 00f9 0100     		.2byte	0x1
+ 953 00fb 54       		.byte	0x54
+ 954 00fc 5C000000 		.4byte	.LVL27
+ 955 0100 6A000000 		.4byte	.LVL29
+ 956 0104 0100     		.2byte	0x1
+ 957 0106 54       		.byte	0x54
+ 958 0107 00000000 		.4byte	0
+ 959 010b 00000000 		.4byte	0
+ 960              	.LLST7:
+ 961 010f 16000000 		.4byte	.LVL15
+ 962 0113 6A000000 		.4byte	.LVL30
+ 963 0117 0100     		.2byte	0x1
+ 964 0119 55       		.byte	0x55
+ 965 011a 00000000 		.4byte	0
+ 966 011e 00000000 		.4byte	0
+ 967              	.LLST8:
+ 968 0122 20000000 		.4byte	.LVL17
+ 969 0126 6A000000 		.4byte	.LVL31
+ 970 012a 0100     		.2byte	0x1
+ 971 012c 57       		.byte	0x57
+ 972 012d 00000000 		.4byte	0
+ 973 0131 00000000 		.4byte	0
+ 974              		.section	.debug_aranges,"",%progbits
+ 975 0000 24000000 		.4byte	0x24
+ 976 0004 0200     		.2byte	0x2
+ 977 0006 00000000 		.4byte	.Ldebug_info0
+ 978 000a 04       		.byte	0x4
+ 979 000b 00       		.byte	0
+ 980 000c 0000     		.2byte	0
+ 981 000e 0000     		.2byte	0
+ 982 0010 00000000 		.4byte	.LFB0
+ 983 0014 2C000000 		.4byte	.LFE0-.LFB0
+ 984 0018 00000000 		.4byte	.LFB1
+ 985 001c 6C000000 		.4byte	.LFE1-.LFB1
+ 986 0020 00000000 		.4byte	0
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 21
+
+
+ 987 0024 00000000 		.4byte	0
+ 988              		.section	.debug_ranges,"",%progbits
+ 989              	.Ldebug_ranges0:
+ 990 0000 00000000 		.4byte	.LFB0
+ 991 0004 2C000000 		.4byte	.LFE0
+ 992 0008 00000000 		.4byte	.LFB1
+ 993 000c 6C000000 		.4byte	.LFE1
+ 994 0010 00000000 		.4byte	0
+ 995 0014 00000000 		.4byte	0
+ 996              		.section	.debug_line,"",%progbits
+ 997              	.Ldebug_line0:
+ 998 0000 CB000000 		.section	.debug_str,"MS",%progbits,1
+ 998      02006200 
+ 998      00000201 
+ 998      FB0E0D00 
+ 998      01010101 
+ 999              	.LASF18:
+ 1000 0000 696E6465 		.ascii	"indexU8\000"
+ 1000      78553800 
+ 1001              	.LASF15:
+ 1002 0008 636F6C75 		.ascii	"column\000"
+ 1002      6D6E00
+ 1003              	.LASF2:
+ 1004 000f 73686F72 		.ascii	"short int\000"
+ 1004      7420696E 
+ 1004      7400
+ 1005              	.LASF22:
+ 1006 0019 73697A65 		.ascii	"sizetype\000"
+ 1006      74797065 
+ 1006      00
+ 1007              	.LASF26:
+ 1008 0022 2E5C4765 		.ascii	".\\Generated_Source\\PSoC4\\LCD_Char_1_BarGraph.c\000"
+ 1008      6E657261 
+ 1008      7465645F 
+ 1008      536F7572 
+ 1008      63655C50 
+ 1009              	.LASF12:
+ 1010 0051 4C43445F 		.ascii	"LCD_Char_1_LoadCustomFonts\000"
+ 1010      43686172 
+ 1010      5F315F4C 
+ 1010      6F616443 
+ 1010      7573746F 
+ 1011              	.LASF17:
+ 1012 006c 76616C75 		.ascii	"value\000"
+ 1012      6500
+ 1013              	.LASF28:
+ 1014 0072 75696E74 		.ascii	"uint8\000"
+ 1014      3800
+ 1015              	.LASF9:
+ 1016 0078 666C6F61 		.ascii	"float\000"
+ 1016      7400
+ 1017              	.LASF6:
+ 1018 007e 6C6F6E67 		.ascii	"long long int\000"
+ 1018      206C6F6E 
+ 1018      6720696E 
+ 1018      7400
+ 1019              	.LASF4:
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 22
+
+
+ 1020 008c 6C6F6E67 		.ascii	"long int\000"
+ 1020      20696E74 
+ 1020      00
+ 1021              	.LASF14:
+ 1022 0095 63757374 		.ascii	"customData\000"
+ 1022      6F6D4461 
+ 1022      746100
+ 1023              	.LASF24:
+ 1024 00a0 4C43445F 		.ascii	"LCD_Char_1_WriteData\000"
+ 1024      43686172 
+ 1024      5F315F57 
+ 1024      72697465 
+ 1024      44617461 
+ 1025              	.LASF25:
+ 1026 00b5 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1026      4320342E 
+ 1026      392E3320 
+ 1026      32303135 
+ 1026      30333033 
+ 1027 00e8 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 1027      20726576 
+ 1027      6973696F 
+ 1027      6E203232 
+ 1027      31323230 
+ 1028 011b 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1028      66756E63 
+ 1028      74696F6E 
+ 1028      2D736563 
+ 1028      74696F6E 
+ 1029              	.LASF20:
+ 1030 0143 66756C6C 		.ascii	"fullChars\000"
+ 1030      43686172 
+ 1030      7300
+ 1031              	.LASF1:
+ 1032 014d 756E7369 		.ascii	"unsigned char\000"
+ 1032      676E6564 
+ 1032      20636861 
+ 1032      7200
+ 1033              	.LASF21:
+ 1034 015b 72656D61 		.ascii	"remainingPixels\000"
+ 1034      696E696E 
+ 1034      67506978 
+ 1034      656C7300 
+ 1035              	.LASF0:
+ 1036 016b 7369676E 		.ascii	"signed char\000"
+ 1036      65642063 
+ 1036      68617200 
+ 1037              	.LASF7:
+ 1038 0177 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1038      206C6F6E 
+ 1038      6720756E 
+ 1038      7369676E 
+ 1038      65642069 
+ 1039              	.LASF8:
+ 1040 018e 756E7369 		.ascii	"unsigned int\000"
+ 1040      676E6564 
+ 1040      20696E74 
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 23
+
+
+ 1040      00
+ 1041              	.LASF16:
+ 1042 019b 6D617843 		.ascii	"maxCharacters\000"
+ 1042      68617261 
+ 1042      63746572 
+ 1042      7300
+ 1043              	.LASF3:
+ 1044 01a9 73686F72 		.ascii	"short unsigned int\000"
+ 1044      7420756E 
+ 1044      7369676E 
+ 1044      65642069 
+ 1044      6E7400
+ 1045              	.LASF31:
+ 1046 01bc 4C43445F 		.ascii	"LCD_Char_1_Position\000"
+ 1046      43686172 
+ 1046      5F315F50 
+ 1046      6F736974 
+ 1046      696F6E00 
+ 1047              	.LASF11:
+ 1048 01d0 63686172 		.ascii	"char\000"
+ 1048      00
+ 1049              	.LASF23:
+ 1050 01d5 4C43445F 		.ascii	"LCD_Char_1_WriteControl\000"
+ 1050      43686172 
+ 1050      5F315F57 
+ 1050      72697465 
+ 1050      436F6E74 
+ 1051              	.LASF13:
+ 1052 01ed 4C43445F 		.ascii	"LCD_Char_1_DrawHorizontalBG\000"
+ 1052      43686172 
+ 1052      5F315F44 
+ 1052      72617748 
+ 1052      6F72697A 
+ 1053              	.LASF29:
+ 1054 0209 4C43445F 		.ascii	"LCD_Char_1_customFonts\000"
+ 1054      43686172 
+ 1054      5F315F63 
+ 1054      7573746F 
+ 1054      6D466F6E 
+ 1055              	.LASF5:
+ 1056 0220 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1056      20756E73 
+ 1056      69676E65 
+ 1056      6420696E 
+ 1056      7400
+ 1057              	.LASF10:
+ 1058 0232 646F7562 		.ascii	"double\000"
+ 1058      6C6500
+ 1059              	.LASF19:
+ 1060 0239 636F756E 		.ascii	"count8\000"
+ 1060      743800
+ 1061              	.LASF30:
+ 1062 0240 4C43445F 		.ascii	"LCD_Char_1_IsReady\000"
+ 1062      43686172 
+ 1062      5F315F49 
+ 1062      73526561 
+ 1062      647900
+ARM GAS  C:\Users\Nick\AppData\Local\Temp\ccMOh2IU.s 			page 24
+
+
+ 1063              	.LASF27:
+ 1064 0253 433A5C55 		.ascii	"C:\\Users\\Nick\\Desktop\\Workspace01\\track.cydsn\000"
+ 1064      73657273 
+ 1064      5C4E6963 
+ 1064      6B5C4465 
+ 1064      736B746F 
+ 1065              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

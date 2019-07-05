@@ -1,0 +1,24 @@
+# track
+# 2019-04-03 08:29:11Z
+
+# IO_2@[IOP=(3)][IoId=(2)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 2
+# IO_3@[IOP=(3)][IoId=(3)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 3
+dont_use_location 0 1
+dont_use_location 1 0
+dont_use_location 1 1
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_io "\LCD_Char_1:LCDPort(0)\" iocell 2 0
+set_io "\LCD_Char_1:LCDPort(1)\" iocell 2 1
+set_io "\LCD_Char_1:LCDPort(2)\" iocell 2 2
+set_io "\LCD_Char_1:LCDPort(3)\" iocell 2 3
+set_io "\LCD_Char_1:LCDPort(4)\" iocell 2 4
+set_io "\LCD_Char_1:LCDPort(5)\" iocell 2 5
+set_io "\LCD_Char_1:LCDPort(6)\" iocell 2 6
+set_io "PWM_OUT1(0)" iocell 3 7
+set_io "PWM_OUT2(0)" iocell 0 0
+set_io "Pin_1(0)" iocell 3 1
+set_io "Pin_2(0)" iocell 3 0
+set_io "Pin_3(0)" iocell 2 7
+set_location "\ADC_SAR_Seq_1:cy_psoc4_sar\" p4sarcell -1 -1 0

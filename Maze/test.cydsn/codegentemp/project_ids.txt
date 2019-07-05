@@ -1,0 +1,5 @@
+C:\Three2\8_KeChuang4E(2-8)\code\test1\test.cydsn\test.cyprj|be2db93c-32f3-42f0-b037-385c355300db
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|b0b06357-f73d-4412-9369-db476f87a11a
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|6139a946-d1f2-4083-891a-d43f6830fa3b
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|fa4c4623-acc6-4386-a411-745f12c43e92
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|6e95f54f-7ca3-4b1f-a602-1771b5d5c702

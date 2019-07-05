@@ -1,0 +1,5 @@
+C:\Three2\8_KeChuang4E(2-8)\code\BlueT\BlueT.cydsn\BlueT.cyprj|a15dbd85-e385-4bd0-a3c3-6b9e66b6879e
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|1062f0b3-12a9-40cc-ac7f-07f6b6b22249
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|d897606b-08c4-4ac0-a9e5-0eaa67e68c5a
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|61c5c383-ec0f-4b25-a51f-a1a66b040b4a
+C:\software\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|0610fbcb-ca9f-4637-b868-fc04376c9731
